@@ -37,3 +37,22 @@ SELECT name
 FROM station
 ORDER BY name ASC;
 
+
+7. Leave Review
+
+INSERT INTO REVIEW
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+
+8. Get Reviews
+
+SELECT rid, station_name, shopping, connection_speed, comment, approval_status
+FROM review
+ORDER BY (?) ASC
+
+
+9. Get Review
+
+SELECT *
+FROM review
+WHERE rid = (?);

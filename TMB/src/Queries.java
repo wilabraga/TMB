@@ -1,5 +1,6 @@
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Time;
 import java.util.ArrayList;
 
 public class Queries {
@@ -90,5 +91,54 @@ public class Queries {
 			names.add((String) arr[0]);
 		}
 		return names;
+	}
+	
+	public static void addReview(String ID, int rID, int shopping, int connectionSpeed, String comment, String adminID, String status, Time timestamp, String stationName) {
+		String query = ""
+				+ "INSERT INTO review "
+				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, ID);
+			psmt.setInt(2, rID);
+			psmt.setInt(3, shopping);
+			psmt.setInt(4, connectionSpeed);
+			psmt.setString(5, comment);
+			psmt.setString(6, adminID);
+			psmt.setString(7, status);
+			psmt.setTime(8, timestamp);
+			psmt.setString(9, stationName);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
+	
+	public static ArrayList<Object[]> getReviews(String order) {
+		String query = ""
+				+ "SELECT rid, station_name, shopping, connection_speed, comment, approval_status "
+				+ "FROM review "
+				+ "ORDER BY (?) ASC;";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, order);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return TMB.executePreparedQuery("rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+	}
+	
+	public static Object[] getReview(int rid, String... attributes) {
+		String query = ""
+				+ "SELECT *"
+				+ "FROM review "
+				+ "WHERE rid = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setInt(1, rid);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return TMB.executePreparedQuery(attributes).get(0);
 	}
 }
