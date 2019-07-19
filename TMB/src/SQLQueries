@@ -87,6 +87,85 @@ ORDER BY line_name ASC;
 
 14. Average Ratings
 
-SELECT AVG(shopping), AVG(connection_speed)
+SELECT AVG(shopping) AS avg_shopping, AVG(connection_speed) AS avg_speed
 FROM review
 WHERE station_name = (?) AND approval_status = "Approved";
+
+
+15. Get Number of Stops
+
+SELECT COUNT(station_name) AS num_stations
+FROM station_on_line
+WHERE line_name = (?);
+
+
+16. Get Stations from Line
+
+SELECT station_name, order_number
+FROM station_on_line
+WHERE line_name = (?)
+ORDER BY (?) ASC;
+
+
+17. Get User Info
+
+SELECT *
+FROM user
+WHERE ID = (?);
+
+
+18. Update User Info
+
+UPDATE user
+SET ID = (?), first_name = (?), last_name = (?), password = (?), passenger_email = (?)
+WHERE ID = (?);
+
+
+19. Delete User Account
+
+DELETE FROM user
+WHERE ID = (?);
+
+DELETE FROM review
+WHERE passenger_ID = (?);
+
+DELETE FROM card
+WHERE user_ID = (?);
+
+DELETE FROM trip
+WHERE user_ID = (?);
+
+
+20. Buy Card
+
+INSERT INTO card
+VALUES ((?), (?), (?), (?), (?));
+
+
+21. Get User's Valid Cards
+
+SELECT *
+FROM card
+WHERE user_ID = (?) AND uses_left > 0 AND expiration_date >= CURDATE();
+
+
+22. Embark
+
+UPDATE card
+SET uses_left = uses_left - 1
+WHERE user_ID = (?) AND type = (?) AND purchase_date_time = (?));		      
+
+INSERT INTO trip
+VALUES ((?), (?), (?), (?), (?), (?), (?));
+
+
+23. Get Trips
+
+SELECT *
+FROM trip
+WHERE user_ID = (?) AND type = (?) AND purchase_date_time = (?))
+ORDER BY (?) ASC;
+
+
+24. Update Trip
+
