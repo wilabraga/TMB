@@ -141,4 +141,36 @@ public class Queries {
 		}
 		return TMB.executePreparedQuery(attributes).get(0);
 	}
+	
+	public static void updateReview(int rid, int shopping, int connectionSpeed, String comment, String status, Time timestamp) {
+		String query = ""
+				+ "UPDATE review "
+				+ "SET shopping = (?), connection_speed = (?), comment = (?), approval_status = (?), edit_timestamp = (?) "
+				+ "WHERE rid = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setInt(1, shopping);
+			psmt.setInt(2, connectionSpeed);
+			psmt.setString(3, comment);
+			psmt.setString(4, status);
+			psmt.setTime(5, timestamp);
+			psmt.setInt(6, rid);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
+	
+	public static void deleteReview(int rid) {
+		String query = ""
+				+ "DELETE FROM review "
+				+ "WHERE rid = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setInt(1, rid);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
 }

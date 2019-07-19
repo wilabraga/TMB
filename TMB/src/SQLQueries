@@ -56,3 +56,16 @@ ORDER BY (?) ASC
 SELECT *
 FROM review
 WHERE rid = (?);
+
+
+10. Update Review
+
+UPDATE review
+SET shopping = (?), connection_speed = (?), comment = (?), approval_status = (?), edit_timestamp = (?)
+WHERE rid = (?);
+
+
+11. Delete Review
+
+DELETE FROM review
+WHERE rid = (?);
