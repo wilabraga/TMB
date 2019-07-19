@@ -10,6 +10,12 @@ public class Main {
 		//TMB.printResult(result);
 		System.out.println(Queries.getUserIDs());
 		System.out.println(Queries.getPassword(Queries.getUserIDs().get(2)));
+		System.out.println(Queries.isAdmin("1"));
+		System.out.println(Queries.isAdmin("2"));
+		//Queries.addUser("5", "w", "m", "b", "aaa", "##@@");
+		System.out.println(Queries.getUserName("1")[0]);
+		System.out.println(Queries.getUserName("1")[1]);
+		System.out.println(Queries.getStationNames());
 		TMB.closeDatabase();
 	}
 }

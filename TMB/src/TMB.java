@@ -99,6 +99,16 @@ public class TMB {
 		}
 	}
 	
+	public static void executePreparedModification() {
+		try {
+			PreparedStatement psmt = (PreparedStatement) statement;
+			psmt.execute();
+			closeStatement();
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+	
 	public static void printResult(ArrayList<Object[]> result) {
 		for (Object[] arr: result) {
 			for (Object o: arr) {

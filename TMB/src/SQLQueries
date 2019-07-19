@@ -1,10 +1,39 @@
 1. Get User IDs
 
 SELECT ID
-FROM USER;
+FROM user;
+
 
 2. Get Password
 
 SELECT password
-FROM USER
+FROM user
 WHERE ID = (?);
+
+
+3. Is Admin
+
+SELECT ID
+FROM admin
+WHERE ID = (?);
+
+
+4. Create User
+
+INSERT INTO USER
+VALUES (?, ?, ?, ?, ?, ?);
+
+
+5. Get First and Last Names
+
+SELECT first_name, last_name
+FROM user
+WHERE ID = (?);
+
+
+6. Get Station Names
+
+SELECT name
+FROM station
+ORDER BY name ASC;
+
