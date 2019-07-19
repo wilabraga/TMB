@@ -69,3 +69,24 @@ WHERE rid = (?);
 
 DELETE FROM review
 WHERE rid = (?);
+
+
+12. Get Station
+
+SELECT *
+FROM station
+WHERE name = (?);
+
+
+13. Get Lines From Station
+
+SELECT line_name
+FROM station_on_line
+WHERE station_name = (?)
+ORDER BY line_name ASC;
+
+14. Average Ratings
+
+SELECT AVG(shopping), AVG(connection_speed)
+FROM review
+WHERE station_name = (?) AND approval_status = "Approved";

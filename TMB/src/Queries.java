@@ -173,4 +173,54 @@ public class Queries {
 		}
 		TMB.executePreparedModification();
 	}
+	
+	public static Object[] getStation(String name, String... attributes) {
+		String query = ""
+				+ "SELECT *"
+				+ "FROM station "
+				+ "WHERE name = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, name);
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return TMB.executePreparedQuery(attributes).get(0);
+	}
+	
+	public static ArrayList<String> getLinesFromStation(String stationName) {
+		String query = ""
+				+ "SELECT line_name "
+				+ "FROM station_on_line "
+				+ "WHERE station_name = (?) "
+				+ "ORDER BY line_name ASC;";
+		ArrayList<String> names = new ArrayList<>();
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, stationName);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		ArrayList<Object[]> result = TMB.executePreparedQuery("line_name");
+		for (Object[] arr: result) {
+			names.add((String) arr[0]);
+		}
+		return names;
+	}
+	
+	public static int[] getAvgRatings(String stationName) {
+		String query = ""
+				+ "SELECT AVG(shopping), AVG(connection_speed) "
+				+ "FROM review "
+				+ "WHERE station_name = (?) AND approval_status = 'Approved';";
+		ArrayList<int[]> ratings = new ArrayList<>();
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, stationName);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		Object[] result = TMB.executePreparedQuery("line_name").get(0);
+		return new int[] {(int) result[0], (int) result[1]};
+	}
 }
