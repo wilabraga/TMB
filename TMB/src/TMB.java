@@ -42,4 +42,9 @@ public class TMB {
 			System.out.println();
 		}
 	}
+	
+	public static void closeDatabase() throws SQLException {
+		statement.close();
+		conn.close();
+	}
 }
