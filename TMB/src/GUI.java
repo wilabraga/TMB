@@ -18,6 +18,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.sql.Time;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
@@ -56,7 +57,9 @@ public class GUI {
 	public String userlastname;
 	public String userID;
 	public boolean isAdmin;
+	//REVIEW SHTUFF
 	public String[] stars = {"--","1","2","3","4","5"};
+	public int nextID;
 	private JTextField txtOldComment;
 	public String reviewstationname;
 	public String reviewshopping;
@@ -100,6 +103,7 @@ public class GUI {
 	public GUI() {
 		initialize();
 		frame.setVisible(true);
+		nextID = 1;
 	}
 
 	/**
@@ -486,7 +490,7 @@ public class GUI {
 		
 		ArrayList<String> stations = Queries.getStationNames();
 		comboBox = new JComboBox();
-		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Station","test1"}));
+		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Station"}));
 		for (String station: stations) {
 			comboBox.addItem(station);
 		}
@@ -546,7 +550,11 @@ public class GUI {
 					JOptionPane.showMessageDialog(panelLeaveReview, "Please complete both star reviews.");
 				}
 				else {
-					Queries.addReview(userID, rID, shopping, connectionSpeed, comment, adminID, status, timestamp, stationName);
+					Time d = new Time(System.currentTimeMillis());
+					int shop = Integer.parseInt(reviewshopping);
+					int conn = Integer.parseInt(reviewconnectionspeed);
+					Queries.addReview(userID, nextID, shop, conn, reviewcomment, null, "Pending", d, reviewstationname);
+					nextID++;
 					panelPassengerLanding.setVisible(true);
 					panelLeaveReview.setVisible(false);
 				}
@@ -574,6 +582,12 @@ public class GUI {
 		ButtonGroup rdbtnViewReviews = new ButtonGroup();
 		
 		JRadioButton rdbtnID = new JRadioButton("");
+		rdbtnID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String s = e.getActionCommand();
+				JOptionPane.showMessageDialog(panelViewReviews, s);
+			}
+		});
 		rdbtnID.setBounds(26, 34, 37, 23);
 		panelViewReviews.add(rdbtnID);
 		
