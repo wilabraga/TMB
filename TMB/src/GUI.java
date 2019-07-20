@@ -572,9 +572,18 @@ public class GUI {
 		viewreviews.setBounds(16, 6, 243, 16);
 		panelViewReviews.add(viewreviews);
 		
+		//creating attribute arrays
+		int revcount = 0;
+		ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+		ArrayList<Object[]> revs = new ArrayList<>();
+		for (Object[] t: temp) {
+			if (((String) t[0]).equals(userID)) {
+				revs.add(t);
+				revcount++;
+			}
+		}
 		
-		
-		Object rowData[][] = new Object[20][6];
+		Object rowData[][] = new Object[revcount][6];
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
 		JTable table = new JTable(rowData, columnNames);
@@ -586,15 +595,6 @@ public class GUI {
 		panelViewReviews.add(scrollPane, BorderLayout.CENTER);
 		
 		ButtonGroup rdbtnViewReviews = new ButtonGroup();
-		
-		//creating attribute arrays
-		ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
-		ArrayList<Object[]> revs = new ArrayList<>();
-		for (Object[] t: temp) {
-			if (true) {
-				revs.add(t);
-			}
-		}
 		
 		//putting data in table
 		for (int i = 0; i < revs.size(); i++) {
