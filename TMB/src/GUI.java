@@ -611,7 +611,7 @@ public class GUI {
 		//while (userID == null) {
 			//suck off otis
 		//}
-		int revcount = 0;
+		/*int revcount = 0;
 		ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
 		ArrayList<Object[]> revs = new ArrayList<>();
 		
@@ -635,7 +635,7 @@ public class GUI {
 			rData[i][3] = (Integer) tuple[4];
 			rData[i][4] = (String) tuple[5];
 			rData[i][5] = (String) tuple[6];
-		}
+		}*/
 		
 		Object[][] rData = new Object[20][6];
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
