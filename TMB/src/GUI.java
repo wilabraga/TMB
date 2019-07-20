@@ -95,6 +95,7 @@ public class GUI {
 	public JLabel lblWelcomename;
 	public JLabel lblWelcomeName;
 	private JTable table_1;
+	public JLabel viewreviews;
 	
 	
 
@@ -431,6 +432,7 @@ public class GUI {
 		panelPassengerLanding.add(btnViewReviews);
 		btnViewReviews.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				viewreviews.setText(userfirstname + " " + userlastname + "'s Reviews");
 				//creating attribute arrays
 				revcount = 0;
 				ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
@@ -581,7 +583,7 @@ public class GUI {
 	
 		//View Reviews
 		
-		JLabel viewreviews = new JLabel(userfirstname + " " + userlastname + "'s Reviews");
+		viewreviews = new JLabel(userfirstname + " " + userlastname + "'s Reviews");
 		viewreviews.setBounds(16, 6, 243, 16);
 		panelViewReviews.add(viewreviews);
 		
