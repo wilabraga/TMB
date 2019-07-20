@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class Queries {
 	
@@ -426,7 +427,7 @@ public class Queries {
 		TMB.executePreparedModification();
 	}
 	
-	public static Timestamp getCurrentTimestamp() {
+	public static Timestamp getCurrentTimestamp() {	
 		String query = ""
 				+ "SELECT current_timestamp();";
 		TMB.makeStatement();

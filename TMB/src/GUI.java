@@ -43,7 +43,6 @@ public class GUI {
 	private JPanel panelRegistration;
 	private JPanel panelPassengerLanding;
 	private JPanel panelLeaveReview;
-	private JPanel panelViewReviews;
 	public String loginidattempt;
 	public String loginpwattempt;
 	public String registerfirst;
@@ -98,7 +97,7 @@ public class GUI {
 	private JTable table_1;
 	public JLabel viewreviews;
 	
-	
+
 
 
 
@@ -133,11 +132,6 @@ public class GUI {
 		frame.getContentPane().add(panelPassengerLanding, "name_75573884258365");
 		panelPassengerLanding.setLayout(null);
 		panelPassengerLanding.setVisible(false);
-		
-		JPanel panelViewReviews = new JPanel();
-		frame.getContentPane().add(panelViewReviews, "name_76504429508073");
-		panelViewReviews.setLayout(null);
-		panelViewReviews.setVisible(false);
 	
         
         JPanel panelEditReview = new JPanel();
@@ -147,7 +141,7 @@ public class GUI {
         
         JPanel panelLeaveReview2 = new JPanel();
         frame.getContentPane().add(panelLeaveReview2, "name_112539121522733");
-        panelViewReviews.setVisible(false);
+        //panelViewReviews.setVisible(false);
         
         JPanel panelStationInfo = new JPanel();
         frame.getContentPane().add(panelStationInfo, "name_116178640692044");
@@ -433,7 +427,7 @@ public class GUI {
 		panelPassengerLanding.add(btnViewReviews);
 		btnViewReviews.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				viewreviews.setText(userfirstname + " " + userlastname + "'s Reviews");
+				JPanel panelViewReviews = makeViewReviewPanel();
 				
 				/*creating attribute arrays
 				revcount = 0;
@@ -601,85 +595,85 @@ public class GUI {
 	
 		//View Reviews
 		
-		viewreviews = new JLabel(userfirstname + " " + userlastname + "'s Reviews");
-		viewreviews.setBounds(16, 6, 243, 16);
-		panelViewReviews.add(viewreviews);
-		
-		Object[][] rData = new Object[20][6];
-		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
-		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
-		JTable table = new JTable(rData, columnNames);
-		//JOptionPane.showMessageDialog(panelViewReviews, rData[0][1]);
-		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setLocation(6, 54);
-		scrollPane.setSize(444, 218);
-		panelViewReviews.add(scrollPane, BorderLayout.CENTER);
-		
-		ButtonGroup rdbtnViewReviews = new ButtonGroup();
+//		viewreviews = new JLabel(userfirstname + " " + userlastname + "'s Reviews");
+//		viewreviews.setBounds(16, 6, 243, 16);
+//		panelViewReviews.add(viewreviews);
+//		
+//		Object[][] rData = new Object[20][6];
+//		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
+//		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
+//		JTable table = new JTable(rData, columnNames);
+//		//JOptionPane.showMessageDialog(panelViewReviews, rData[0][1]);
+//		JScrollPane scrollPane = new JScrollPane(table);
+//		scrollPane.setLocation(6, 54);
+//		scrollPane.setSize(444, 218);
+//		panelViewReviews.add(scrollPane, BorderLayout.CENTER);
+//		
+//		ButtonGroup rdbtnViewReviews = new ButtonGroup();
 		
 		
 		
 		//TABLE STUFF HERE
 		
-		JRadioButton rdbtnID = new JRadioButton("");
-		rdbtnID.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				JRadioButton s = (JRadioButton) e.getSource();
-				
-				if (s.equals(rdbtnID)) {
-					//creating attribute arrays
-					int revcount = 0;
-					ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
-					ArrayList<Object[]> revs = new ArrayList<>();
-					
-					for (Object[] t: temp) {
-						if (((String) t[0]).equals(userID)) {
-							revs.add(t);
-							revcount++;
-						}
-					}
-					//rData = new Object[revcount][6];
-					JOptionPane.showMessageDialog(panelViewReviews, userID);
-					
-					//putting data in table
-					for (int i = 0; i < revs.size(); i++) {
-						Object[] tuple = revs.get(i);
-						//JOptionPane.showMessageDialog(panelPassengerLanding, tuple[2]);
-						
-						rData[i][0] = (Integer) tuple[1];
-						rData[i][1] = (String) tuple[2];
-						rData[i][2] = (Integer) tuple[3];
-						rData[i][3] = (Integer) tuple[4];
-						rData[i][4] = (String) tuple[5];
-						rData[i][5] = (String) tuple[6];
-					}
-				}
-			}
-		});
-		rdbtnID.setBounds(26, 34, 37, 23);
-		panelViewReviews.add(rdbtnID);
-		
-		JRadioButton rdbtnStation = new JRadioButton("");
-		rdbtnStation.setBounds(90, 34, 51, 23);
-		panelViewReviews.add(rdbtnStation);
-		
-		JRadioButton rdbtnShopping = new JRadioButton("");
-		rdbtnShopping.setBounds(170, 34, 37, 23);
-		panelViewReviews.add(rdbtnShopping);
-		
-		JRadioButton rdbtnConnectionSpeed = new JRadioButton("");
-		rdbtnConnectionSpeed.setBounds(242, 34, 28, 23);
-		panelViewReviews.add(rdbtnConnectionSpeed);
-		
-		JRadioButton rdbtnApprovalStatus = new JRadioButton("");
-		rdbtnApprovalStatus.setBounds(394, 34, 28, 23);
-		panelViewReviews.add(rdbtnApprovalStatus);
-		
-		rdbtnViewReviews.add(rdbtnID);
-		rdbtnViewReviews.add(rdbtnStation);
-		rdbtnViewReviews.add(rdbtnShopping);
-		rdbtnViewReviews.add(rdbtnConnectionSpeed);
-		rdbtnViewReviews.add(rdbtnApprovalStatus);
+//		JRadioButton rdbtnID = new JRadioButton("");
+//		rdbtnID.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				JRadioButton s = (JRadioButton) e.getSource();
+//				
+//				if (s.equals(rdbtnID)) {
+//					//creating attribute arrays
+//					int revcount = 0;
+//					ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+//					ArrayList<Object[]> revs = new ArrayList<>();
+//					
+//					for (Object[] t: temp) {
+//						if (((String) t[0]).equals(userID)) {
+//							revs.add(t);
+//							revcount++;
+//						}
+//					}
+//					//rData = new Object[revcount][6];
+//					JOptionPane.showMessageDialog(panelViewReviews, userID);
+//					
+//					//putting data in table
+//					for (int i = 0; i < revs.size(); i++) {
+//						Object[] tuple = revs.get(i);
+//						//JOptionPane.showMessageDialog(panelPassengerLanding, tuple[2]);
+//						
+//						rData[i][0] = (Integer) tuple[1];
+//						rData[i][1] = (String) tuple[2];
+//						rData[i][2] = (Integer) tuple[3];
+//						rData[i][3] = (Integer) tuple[4];
+//						rData[i][4] = (String) tuple[5];
+//						rData[i][5] = (String) tuple[6];
+//					}
+//				}
+//			}
+//		});
+//		rdbtnID.setBounds(26, 34, 37, 23);
+//		panelViewReviews.add(rdbtnID);
+//		
+//		JRadioButton rdbtnStation = new JRadioButton("");
+//		rdbtnStation.setBounds(90, 34, 51, 23);
+//		panelViewReviews.add(rdbtnStation);
+//		
+//		JRadioButton rdbtnShopping = new JRadioButton("");
+//		rdbtnShopping.setBounds(170, 34, 37, 23);
+//		panelViewReviews.add(rdbtnShopping);
+//		
+//		JRadioButton rdbtnConnectionSpeed = new JRadioButton("");
+//		rdbtnConnectionSpeed.setBounds(242, 34, 28, 23);
+//		panelViewReviews.add(rdbtnConnectionSpeed);
+//		
+//		JRadioButton rdbtnApprovalStatus = new JRadioButton("");
+//		rdbtnApprovalStatus.setBounds(394, 34, 28, 23);
+//		panelViewReviews.add(rdbtnApprovalStatus);
+//		
+//		rdbtnViewReviews.add(rdbtnID);
+//		rdbtnViewReviews.add(rdbtnStation);
+//		rdbtnViewReviews.add(rdbtnShopping);
+//		rdbtnViewReviews.add(rdbtnConnectionSpeed);
+//		rdbtnViewReviews.add(rdbtnApprovalStatus);
        
        
         
@@ -1434,4 +1428,113 @@ public class GUI {
 		panelStationInfoAD.add(scrollPane8, BorderLayout.CENTER);
 		
 	}
-}	
+	private JPanel makeViewReviewPanel() {
+		JPanel panelViewReviews = new JPanel();
+		frame.getContentPane().add(panelViewReviews, "name_76504429508073");
+		panelViewReviews.setLayout(null);
+		panelViewReviews.setVisible(false);
+		viewreviews = new JLabel(userfirstname + " " + userlastname + "'s Reviews");
+		viewreviews.setBounds(16, 6, 243, 16);
+		panelViewReviews.add(viewreviews);
+		
+		Object[][] rData = new Object[20][6];
+		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
+		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
+		JTable table = new JTable(rData, columnNames);
+		//JOptionPane.showMessageDialog(panelViewReviews, rData[0][1]);
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setLocation(6, 54);
+		scrollPane.setSize(444, 218);
+		panelViewReviews.add(scrollPane, BorderLayout.CENTER);
+		
+		int revcount = 0;
+		ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+		ArrayList<Object[]> revs = new ArrayList<>();
+		
+		for (Object[] t: temp) {
+			if (((String) t[0]).equals(userID)) {
+				revs.add(t);
+				revcount++;
+			}
+		}
+		//rData = new Object[revcount][6];
+		JOptionPane.showMessageDialog(panelViewReviews, userID);
+		
+		//putting data in table
+		for (int i = 0; i < revs.size(); i++) {
+			Object[] tuple = revs.get(i);
+			//JOptionPane.showMessageDialog(panelPassengerLanding, tuple[2]);
+			
+			rData[i][0] = (Integer) tuple[1];
+			rData[i][1] = (String) tuple[2];
+			rData[i][2] = (Integer) tuple[3];
+			rData[i][3] = (Integer) tuple[4];
+			rData[i][4] = (String) tuple[5];
+			rData[i][5] = (String) tuple[6];
+		}
+		
+		ButtonGroup rdbtnViewReviews = new ButtonGroup();
+		
+		JRadioButton rdbtnID = new JRadioButton("");
+		rdbtnID.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JRadioButton s = (JRadioButton) e.getSource();
+				
+				if (s.equals(rdbtnID)) {
+					//creating attribute arrays
+					int revcount = 0;
+					ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+					ArrayList<Object[]> revs = new ArrayList<>();
+					
+					for (Object[] t: temp) {
+						if (((String) t[0]).equals(userID)) {
+							revs.add(t);
+							revcount++;
+						}
+					}
+					//rData = new Object[revcount][6];
+					
+					//putting data in table
+					for (int i = 0; i < revs.size(); i++) {
+						Object[] tuple = revs.get(i);
+						//JOptionPane.showMessageDialog(panelPassengerLanding, tuple[2]);
+						
+						rData[i][0] = (Integer) tuple[1];
+						rData[i][1] = (String) tuple[2];
+						rData[i][2] = (Integer) tuple[3];
+						rData[i][3] = (Integer) tuple[4];
+						rData[i][4] = (String) tuple[5];
+						rData[i][5] = (String) tuple[6];
+					}
+				}
+			}
+		});
+		
+		rdbtnID.setBounds(26, 34, 37, 23);
+		panelViewReviews.add(rdbtnID);
+		
+		JRadioButton rdbtnStation = new JRadioButton("");
+		rdbtnStation.setBounds(90, 34, 51, 23);
+		panelViewReviews.add(rdbtnStation);
+		
+		JRadioButton rdbtnShopping = new JRadioButton("");
+		rdbtnShopping.setBounds(170, 34, 37, 23);
+		panelViewReviews.add(rdbtnShopping);
+		
+		JRadioButton rdbtnConnectionSpeed = new JRadioButton("");
+		rdbtnConnectionSpeed.setBounds(242, 34, 28, 23);
+		panelViewReviews.add(rdbtnConnectionSpeed);
+		
+		JRadioButton rdbtnApprovalStatus = new JRadioButton("");
+		rdbtnApprovalStatus.setBounds(394, 34, 28, 23);
+		panelViewReviews.add(rdbtnApprovalStatus);
+		
+		rdbtnViewReviews.add(rdbtnID);
+		rdbtnViewReviews.add(rdbtnStation);
+		rdbtnViewReviews.add(rdbtnShopping);
+		rdbtnViewReviews.add(rdbtnConnectionSpeed);
+		rdbtnViewReviews.add(rdbtnApprovalStatus);
+		
+		return panelViewReviews;
+	}
+}
