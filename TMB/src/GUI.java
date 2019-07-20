@@ -605,38 +605,6 @@ public class GUI {
 		viewreviews.setBounds(16, 6, 243, 16);
 		panelViewReviews.add(viewreviews);
 		
-		//rData = new Object[3][6];
-		
-		//creating attribute arrays
-		//while (userID == null) {
-			//suck off otis
-		//}
-		/*int revcount = 0;
-		ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
-		ArrayList<Object[]> revs = new ArrayList<>();
-		
-		for (Object[] t: temp) {
-			if (((String) t[0]).equals(userID)) {
-				revs.add(t);
-				revcount++;
-			}
-		}
-		rData = new Object[revcount][6];
-		JOptionPane.showMessageDialog(panelViewReviews, userID);
-		
-		//putting data in table
-		for (int i = 0; i < revs.size(); i++) {
-			Object[] tuple = revs.get(i);
-			//JOptionPane.showMessageDialog(panelPassengerLanding, tuple[2]);
-			
-			rData[i][0] = (Integer) tuple[1];
-			rData[i][1] = (String) tuple[2];
-			rData[i][2] = (Integer) tuple[3];
-			rData[i][3] = (Integer) tuple[4];
-			rData[i][4] = (String) tuple[5];
-			rData[i][5] = (String) tuple[6];
-		}*/
-		
 		Object[][] rData = new Object[20][6];
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
@@ -648,8 +616,6 @@ public class GUI {
 		
 		ButtonGroup rdbtnViewReviews = new ButtonGroup();
 		
-		
-		
 		//TABLE STUFF HERE
 		
 		JRadioButton rdbtnID = new JRadioButton("");
@@ -659,18 +625,17 @@ public class GUI {
 				
 				if (s.equals(rdbtnID)) {
 					//creating attribute arrays
-					int revcount = 0;
+					//int revcount = 0;
 					ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
 					ArrayList<Object[]> revs = new ArrayList<>();
 					
 					for (Object[] t: temp) {
 						if (((String) t[0]).equals(userID)) {
 							revs.add(t);
-							revcount++;
+							//revcount++;
 						}
 					}
 					//rData = new Object[revcount][6];
-					JOptionPane.showMessageDialog(panelViewReviews, userID);
 					
 					//putting data in table
 					for (int i = 0; i < revs.size(); i++) {
