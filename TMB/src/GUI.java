@@ -434,6 +434,7 @@ public class GUI {
 		btnViewReviews.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				viewreviews.setText(userfirstname + " " + userlastname + "'s Reviews");
+				
 				//creating attribute arrays
 				revcount = 0;
 				ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
@@ -450,6 +451,7 @@ public class GUI {
 				//putting data in table
 				for (int i = 0; i < revs.size(); i++) {
 					Object[] tuple = revs.get(i);
+					JOptionPane.showMessageDialog(panelPassengerLanding, tuple[2]);
 					
 					rData[i][0] = (Integer) tuple[1];
 					rData[i][1] = (String) tuple[2];
