@@ -608,9 +608,9 @@ public class GUI {
 		//rData = new Object[3][6];
 		
 		//creating attribute arrays
-		while (userID == null) {
+		//while (userID == null) {
 			//suck off otis
-		}
+		//}
 		int revcount = 0;
 		ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
 		ArrayList<Object[]> revs = new ArrayList<>();
@@ -640,7 +640,7 @@ public class GUI {
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
 		JTable table = new JTable(rData, columnNames);
-		JOptionPane.showMessageDialog(panelViewReviews, rData[0][1]);
+		//JOptionPane.showMessageDialog(panelViewReviews, rData[0][1]);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 54);
 		scrollPane.setSize(444, 218);
@@ -849,7 +849,7 @@ public class GUI {
 		txtFirstName.setColumns(10);
 		
 		txtMiddlein = new JTextField();
-		txtMiddlein.setText((String)(Queries.getUserInfo(userID,"minit")[0]));
+		//txtMiddlein.setText((String)(Queries.getUserInfo(userID,"minit")[0]));
 		txtMiddlein.setBounds(159, 46, 130, 26);
 		panelEditProfile.add(txtMiddlein);
 		txtMiddlein.setColumns(10);
@@ -865,7 +865,7 @@ public class GUI {
 		panelEditProfile.add(lblEmail);
 		
 		txtEmail_1 = new JTextField();
-		txtEmail_1.setText((String)(Queries.getUserInfo(userID,"passenger_email")[0]));
+		//txtEmail_1.setText((String)(Queries.getUserInfo(userID,"passenger_email")[0]));
 		txtEmail_1.setBounds(90, 79, 130, 26);
 		panelEditProfile.add(txtEmail_1);
 		txtEmail_1.setColumns(10);
@@ -889,13 +889,13 @@ public class GUI {
 		panelEditProfile.add(lblConfirmPassword);
 		
 		txtPassword_1 = new JTextField();
-		txtPassword_1.setText((String)(Queries.getUserInfo(userID,"password")[0]));
+		//txtPassword_1.setText((String)(Queries.getUserInfo(userID,"password")[0]));
 		txtPassword_1.setBounds(27, 193, 130, 26);
 		panelEditProfile.add(txtPassword_1);
 		txtPassword_1.setColumns(10);
 		
 		txtPassword_2 = new JTextField();
-		txtPassword_2.setText((String)(Queries.getUserInfo(userID,"password")[0]));
+		//txtPassword_2.setText((String)(Queries.getUserInfo(userID,"password")[0]));
 		txtPassword_2.setBounds(253, 188, 130, 26);
 		panelEditProfile.add(txtPassword_2);
 		txtPassword_2.setColumns(10);
