@@ -485,4 +485,71 @@ public class Queries {
 		}
 		TMB.executePreparedModification();
 	}
+	
+	public static void addStation(String name, String status, String state, String address, int zipcode, String city) {
+		String query = ""
+				+ "INSERT INTO station "
+				+ "VALUES ((?), (?), (?), (?), (?), (?));";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, name);
+			psmt.setString(2, status);
+			psmt.setString(3, state);
+			psmt.setString(4, address);
+			psmt.setInt(5, zipcode);
+			psmt.setString(6, city);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
+	
+	public static ArrayList<String> getLineNames() {
+		String query = ""
+				+ "SELECT name "
+				+ "FROM line;";
+		TMB.makeStatement();
+		ArrayList<Object[]> result = TMB.executeQuery(query, "name");
+		ArrayList<String> names = new ArrayList<>();
+		for (Object[] arr: result) {
+			names.add((String) arr[0]);
+		}
+		return names;
+	}
+	
+	public static void addLineToStation(String stationName, String lineName, int orderNumber) {
+		String query = ""
+				+ "INSERT INTO station_on_line "
+				+ "VALUES ((?), (?), (?));";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, stationName);
+			psmt.setString(2, lineName);
+			psmt.setInt(3, orderNumber);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
+	
+	public static ArrayList<Integer> getLineOrderNumbers(String lineName) {
+		String query = ""
+				+ "SELECT order_number "
+				+ "FROM station_on_line "
+				+ "WHERE line_name = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, lineName);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		ArrayList<Object[]> result = TMB.executePreparedQuery("order_number");
+		ArrayList<Integer> numbers = new ArrayList<>();
+		for (Object[] arr: result) {
+			numbers.add((Integer) arr[0]);
+		}
+		return numbers;
+	}
+	
+	
 }

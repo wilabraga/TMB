@@ -51,7 +51,7 @@ public class GUI {
 	public String registerid;
 	public String registerpw;
 	public String registerpw2;
-	//SESSION INFORMATION
+	//SESSION INFORMATION --JB
 	public String userfirstname;
 	public String userlastname;
 	public String userID;
@@ -356,7 +356,21 @@ public class GUI {
 				if (registerpw.length()<8) {
 					JOptionPane.showMessageDialog(panelRegistration, "Password must have at least 8 characters!");
 				}
-				if (registerpw.contentEquals(registerpw2) && registerpw.length()>=8){
+				//MAKE SURE ID DOESN'T EXIST
+				ArrayList<String> ids = Queries.getUserIDs();
+				boolean idExists = false;
+				for(String id: ids) {
+					if (id.contentEquals(loginidattempt)) {
+						idExists = true;
+					}
+				}
+				if (idExists) {
+					JOptionPane.showMessageDialog(panelRegistration, "User ID already exists!");
+				}
+				if (registerpw.contentEquals(registerpw2) && registerpw.length()>=8 && !idExists){
+					//ADDING TO DATABASE --JB
+					Queries.addUser(registerid, registerfirst, registermi, registerlast, registerpw, registeremail);
+					JOptionPane.showMessageDialog(panelRegistration, "Registration Successful!");
 					panelRegistration.setVisible(false);
 					panelPassengerLanding.setVisible(true);
 				}
