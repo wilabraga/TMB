@@ -604,12 +604,10 @@ public class GUI {
 		
 		
 		
-		//rowData = new Object[revcount][6];
+		rData = new Object[1][6];
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
 		JTable table = new JTable(rData, columnNames);
-		//MyModel mod = new MyModel();
-		//table.setModel(mod);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 54);
 		scrollPane.setSize(444, 218);
@@ -1361,26 +1359,4 @@ public class GUI {
 		panelStationInfoAD.add(scrollPane8, BorderLayout.CENTER);
 		
 	}
-}
-
-final class MyModel extends AbstractTableModel{
-
-	@Override
-	public int getColumnCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getRowCount() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public Object getValueAt(int arg0, int arg1) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-}
-	
+}	
