@@ -577,7 +577,8 @@ public class GUI {
 		ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
 		ArrayList<Object[]> revs = new ArrayList<>();
 		for (Object[] t: temp) {
-			if (true) {
+			JOptionPane.showMessageDialog(panelViewReviews, t[0]);
+			if (((String) t[0]).equals(userID)) {
 				revs.add(t);
 				revcount++;
 			}
