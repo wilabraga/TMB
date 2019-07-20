@@ -581,7 +581,8 @@ public class GUI {
 		
 		ButtonGroup rdbtnViewReviews = new ButtonGroup();
 		
-		JRadioButton rdbtnID = new JRadioButton("1");
+		JRadioButton rdbtnID = new JRadioButton("");
+		rdbtnID.setName("1");
 		rdbtnID.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JRadioButton s = (JRadioButton) e.getSource();
@@ -592,23 +593,23 @@ public class GUI {
 		rdbtnID.setBounds(26, 34, 37, 23);
 		panelViewReviews.add(rdbtnID);
 		
-		JRadioButton rdbtnStation = new JRadioButton("2");
+		JRadioButton rdbtnStation = new JRadioButton("");
 		rdbtnStation.setBounds(90, 34, 51, 23);
 		panelViewReviews.add(rdbtnStation);
 		
-		JRadioButton rdbtnShopping = new JRadioButton("3");
+		JRadioButton rdbtnShopping = new JRadioButton("");
 		rdbtnShopping.setBounds(170, 34, 37, 23);
 		panelViewReviews.add(rdbtnShopping);
 		
-		JRadioButton rdbtnConnectionSpeed = new JRadioButton("4");
+		JRadioButton rdbtnConnectionSpeed = new JRadioButton("");
 		rdbtnConnectionSpeed.setBounds(242, 34, 28, 23);
 		panelViewReviews.add(rdbtnConnectionSpeed);
 		
-		JRadioButton rdbtnComment = new JRadioButton("5");
+		JRadioButton rdbtnComment = new JRadioButton("");
 		rdbtnComment.setBounds(321, 34, 28, 23);
 		panelViewReviews.add(rdbtnComment);
 		
-		JRadioButton rdbtnApprovalStatus = new JRadioButton("6");
+		JRadioButton rdbtnApprovalStatus = new JRadioButton("");
 		rdbtnApprovalStatus.setBounds(394, 34, 28, 23);
 		panelViewReviews.add(rdbtnApprovalStatus);
 		
