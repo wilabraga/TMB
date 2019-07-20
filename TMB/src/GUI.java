@@ -544,19 +544,20 @@ public class GUI {
 					reviewcomment = txtComment.getText(); 
 				}
 				if (reviewstationname.equals("Station")){
-					JOptionPane.showMessageDialog(panelLeaveReview, "Station must be selected");
+					JOptionPane.showMessageDialog(panelLeaveReview2, "Station must be selected");
 				}
 				else if (reviewshopping.equals("--") || reviewconnectionspeed.equals("--")){
-					JOptionPane.showMessageDialog(panelLeaveReview, "Please complete both star reviews.");
+					JOptionPane.showMessageDialog(panelLeaveReview2, "Please complete both star reviews.");
 				}
 				else {
+					//ADD REVIEW TO DATABASE
 					Time d = new Time(System.currentTimeMillis());
 					int shop = Integer.parseInt(reviewshopping);
 					int conn = Integer.parseInt(reviewconnectionspeed);
 					Queries.addReview(userID, nextID, shop, conn, reviewcomment, null, "Pending", d, reviewstationname);
 					nextID++;
 					panelPassengerLanding.setVisible(true);
-					panelLeaveReview.setVisible(false);
+					panelLeaveReview2.setVisible(false);
 				}
 			}
 		});
@@ -582,13 +583,24 @@ public class GUI {
 		ButtonGroup rdbtnViewReviews = new ButtonGroup();
 		
 		JRadioButton rdbtnID = new JRadioButton("");
-		rdbtnID.setName("1");
 		rdbtnID.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JRadioButton s = (JRadioButton) e.getSource();
-				String n = s.getName();
-				boolean bob = (s.equals(rdbtnID));
-				JOptionPane.showMessageDialog(panelViewReviews, "" + bob);
+				
+				if (s.equals(rdbtnID)) {
+					ArrayList<Object[]> revs = Queries.getReviews("rid", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+					
+					for (int i = 0; i < revs.size(); i++) {
+						Object[] tuple = revs.get(i);
+						
+						rowData[i][0] = (Integer) tuple[0];
+						rowData[i][1] = (String) tuple[1];
+						rowData[i][2] = (Integer) tuple[2];
+						rowData[i][3] = (Integer) tuple[3];
+						rowData[i][4] = (String) tuple[4];
+						rowData[i][5] = (String) tuple[5];
+					}
+				}
 			}
 		});
 		rdbtnID.setBounds(26, 34, 37, 23);
@@ -606,10 +618,6 @@ public class GUI {
 		rdbtnConnectionSpeed.setBounds(242, 34, 28, 23);
 		panelViewReviews.add(rdbtnConnectionSpeed);
 		
-		JRadioButton rdbtnComment = new JRadioButton("");
-		rdbtnComment.setBounds(321, 34, 28, 23);
-		panelViewReviews.add(rdbtnComment);
-		
 		JRadioButton rdbtnApprovalStatus = new JRadioButton("");
 		rdbtnApprovalStatus.setBounds(394, 34, 28, 23);
 		panelViewReviews.add(rdbtnApprovalStatus);
@@ -618,8 +626,6 @@ public class GUI {
 		rdbtnViewReviews.add(rdbtnStation);
 		rdbtnViewReviews.add(rdbtnShopping);
 		rdbtnViewReviews.add(rdbtnConnectionSpeed);
-		rdbtnViewReviews.add(rdbtnComment);
-		rdbtnViewReviews.add(rdbtnComment);
        
        
         
