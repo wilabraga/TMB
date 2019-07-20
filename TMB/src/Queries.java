@@ -116,9 +116,9 @@ public class Queries {
 		TMB.executePreparedModification();
 	}
 	
-	public static ArrayList<Object[]> getReviews(String order) {
+	public static ArrayList<Object[]> getReviews(String order, String... attributes) {
 		String query = ""
-				+ "SELECT rid, station_name, shopping, connection_speed, comment, approval_status "
+				+ "SELECT * "
 				+ "FROM review "
 				+ "ORDER BY (?) ASC;";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
@@ -127,28 +127,29 @@ public class Queries {
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
-		return TMB.executePreparedQuery("rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+		return TMB.executePreparedQuery(attributes);
 	}
 	
-	public static Object[] getReview(int rid, String... attributes) {
+	public static Object[] getReview(String ID, int rid, String... attributes) {
 		String query = ""
 				+ "SELECT *"
 				+ "FROM review "
-				+ "WHERE rid = (?);";
+				+ "WHERE passenger_ID = (?) AND rid = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
-			psmt.setInt(1, rid);
+			psmt.setString(1, ID);
+			psmt.setInt(2, rid);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		return TMB.executePreparedQuery(attributes).get(0);
 	}
 	
-	public static void updateReview(int rid, int shopping, int connectionSpeed, String comment, String status, Time timestamp) {
+	public static void updateReview(String ID, int rid, int shopping, int connectionSpeed, String comment, String status, Time timestamp) {
 		String query = ""
 				+ "UPDATE review "
 				+ "SET shopping = (?), connection_speed = (?), comment = (?), approval_status = (?), edit_timestamp = (?) "
-				+ "WHERE rid = (?);";
+				+ "WHERE passenger_ID = (?) AND rid = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setInt(1, shopping);
@@ -156,20 +157,22 @@ public class Queries {
 			psmt.setString(3, comment);
 			psmt.setString(4, status);
 			psmt.setTime(5, timestamp);
-			psmt.setInt(6, rid);
+			psmt.setString(6, ID);
+			psmt.setInt(7, rid);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}
 		TMB.executePreparedModification();
 	}
 	
-	public static void deleteReview(int rid) {
+	public static void deleteReview(String ID, int rid) {
 		String query = ""
 				+ "DELETE FROM review "
-				+ "WHERE rid = (?);";
+				+ "WHERE passenger_ID = (?) AND rid = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
-			psmt.setInt(1, rid);
+			psmt.setString(1, ID);
+			psmt.setInt(2, rid);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -399,11 +402,11 @@ public class Queries {
 		TMB.executePreparedModification();
 	}
 	
-	public static ArrayList<Object[]> getUserValidCards(String ID, String type, Timestamp purchaseDate, String order, String... attributes) {
+	public static ArrayList<Object[]> getTrips(String ID, String type, Timestamp purchaseDate, String order, String... attributes) {
 		String query = ""
 				+ "SELECT * "
 				+ "FROM trip "
-				+ "WHERE user_ID = (?) AND type = (?) AND purchase_date_time = (?)) "
+				+ "WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?) "
 				+ "ORDER BY (?) ASC;";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
@@ -415,5 +418,88 @@ public class Queries {
 			System.out.println(e.getMessage());
 		}
 		return TMB.executePreparedQuery(attributes);
+	}
+	
+	public static String getTripStartStation(String ID, String type, Timestamp purchaseDate, Timestamp startDate) {
+		String query = ""
+				+ "SELECT from_station_name "
+				+ "FROM trip "
+				+ "WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?) AND start_date_time = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, ID);
+			psmt.setString(2, type);
+			psmt.setTimestamp(3, purchaseDate);
+			psmt.setTimestamp(4, startDate);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return (String) TMB.executePreparedQuery("from_station_name").get(0)[0];
+	}
+	
+	public static void updateTrip(String ID, String type, Timestamp purchaseDate, Timestamp startDate, Timestamp endDate, String endStation) {
+		String query = ""
+				+ "UPDATE trip "
+				+ "SET end_date_time = (?) AND to_station_name = (?) "
+				+ "WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?) AND start_date_time = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setTimestamp(1, endDate);
+			psmt.setString(2, endStation);
+			psmt.setString(3, ID);
+			psmt.setString(4, type);
+			psmt.setTimestamp(5, purchaseDate);
+			psmt.setTimestamp(6, startDate);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
+	
+	public static Timestamp getCurrentTimestamp() {
+		String query = ""
+				+ "SELECT current_timestamp();";
+		TMB.makeStatement();
+		return (Timestamp) TMB.executeQuery(query).get(0)[0];
+	}
+	
+	public static ArrayList<Object[]> getPendingReviews(String... attributes) {
+		String query = ""
+				+ "SELECT * "
+				+ "FROM review "
+				+ "WHERE approval_status = 'Pending';";
+		TMB.makeStatement();
+		return TMB.executeQuery(query, attributes);
+	}
+	
+	public static void updateReviewStatus(String ID, int rid, String status) {
+		String query = ""
+				+ "UPDATE review "
+				+ "SET approval_status = (?) "
+				+ "WHERE passenger_ID = (?) AND rid = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, status);
+			psmt.setString(2, ID);
+			psmt.setInt(3, rid);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
+	
+	public static void updateAdminID(String originalID, String newID) {
+		String query = ""
+				+ "UPDATE admin "
+				+ "SET ID = (?) "
+				+ "WHERE ID = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, newID);
+			psmt.setString(2, originalID);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
 	}
 }

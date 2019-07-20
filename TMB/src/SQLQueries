@@ -46,7 +46,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 8. Get Reviews
 
-SELECT rid, station_name, shopping, connection_speed, comment, approval_status
+SELECT *
 FROM review
 ORDER BY (?) ASC
 
@@ -55,20 +55,20 @@ ORDER BY (?) ASC
 
 SELECT *
 FROM review
-WHERE rid = (?);
+WHERE passenger_id = (?) AND rid = (?);
 
 
 10. Update Review
 
 UPDATE review
 SET shopping = (?), connection_speed = (?), comment = (?), approval_status = (?), edit_timestamp = (?)
-WHERE rid = (?);
+WHERE passenger_id = (?) AND rid = (?);
 
 
 11. Delete Review
 
 DELETE FROM review
-WHERE rid = (?);
+WHERE passenger_id = (?) AND rid = (?);
 
 
 12. Get Station
@@ -163,9 +163,45 @@ VALUES ((?), (?), (?), (?), (?), (?), (?));
 
 SELECT *
 FROM trip
-WHERE user_ID = (?) AND type = (?) AND purchase_date_time = (?))
+WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?)
 ORDER BY (?) ASC;
 
 
-24. Update Trip
+24. Get Trip Start Station
 
+SELECT from_station_name
+FROM trip
+WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?) AND start_date_time = (?);
+
+
+25. Update Station
+
+UPDATE trip
+SET end_date_time = (?) AND to_station_name = (?)
+WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?) AND start_date_time = (?);
+
+
+26. Get Current Timestamp
+
+SELECT current_timestamp();
+
+
+27. Get Pending Reviews
+
+SELECT *
+FROM review
+WHERE approval_status = 'Pending';
+
+
+28. Update Review Status
+
+UPDATE review
+SET approval_status = (?)
+WHERE passenger_ID = (?) AND rid = (?);
+
+
+29. Update Admin ID
+
+UPDATE admin
+SET ID = (?)
+WHERE ID = (?)
