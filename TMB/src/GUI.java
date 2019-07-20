@@ -59,7 +59,7 @@ public class GUI {
 	public String userID;
 	public boolean isAdmin;
 	//REVIEW SHTUFF
-	public Object[][] rowData;
+	public Object[][] rData;
 	public ArrayList<Object[]> revs;
 	public int revcount;
 	public String[] stars = {"--","1","2","3","4","5"};
@@ -445,18 +445,18 @@ public class GUI {
 						revcount++;
 					}
 				}
-				rowData = new Object[revcount][6];
+				rData = new Object[revcount][6];
 				
 				//putting data in table
 				for (int i = 0; i < revs.size(); i++) {
 					Object[] tuple = revs.get(i);
 					
-					rowData[i][0] = (Integer) tuple[1];
-					rowData[i][1] = (String) tuple[2];
-					rowData[i][2] = (Integer) tuple[3];
-					rowData[i][3] = (Integer) tuple[4];
-					rowData[i][4] = (String) tuple[5];
-					rowData[i][5] = (String) tuple[6];
+					rData[i][0] = (Integer) tuple[1];
+					rData[i][1] = (String) tuple[2];
+					rData[i][2] = (Integer) tuple[3];
+					rData[i][3] = (Integer) tuple[4];
+					rData[i][4] = (String) tuple[5];
+					rData[i][5] = (String) tuple[6];
 				}
 
 				panelViewReviews.setVisible(true);
@@ -607,7 +607,7 @@ public class GUI {
 		//rowData = new Object[revcount][6];
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
-		JTable table = new JTable(rowData, columnNames);
+		JTable table = new JTable(rData, columnNames);
 		//MyModel mod = new MyModel();
 		//table.setModel(mod);
 		JScrollPane scrollPane = new JScrollPane(table);
