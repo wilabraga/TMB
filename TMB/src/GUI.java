@@ -840,19 +840,19 @@ public class GUI {
 		panelEditProfile.add(lblName_1);
 		
 		txtFirstName = new JTextField();
-		txtFirstName.setText("FIRSTNAME");
+		txtFirstName.setText(userfirstname);
 		txtFirstName.setBounds(5, 46, 130, 26);
 		panelEditProfile.add(txtFirstName);
 		txtFirstName.setColumns(10);
 		
 		txtMiddlein = new JTextField();
-		txtMiddlein.setText("MIDDLEIN");
+		txtMiddlein.setText((String)(Queries.getUserInfo(userID,"minit")[0]));
 		txtMiddlein.setBounds(159, 46, 130, 26);
 		panelEditProfile.add(txtMiddlein);
 		txtMiddlein.setColumns(10);
 		
 		txtLastname = new JTextField();
-		txtLastname.setText("LASTNAME");
+		txtLastname.setText(userlastname);
 		txtLastname.setBounds(301, 46, 130, 26);
 		panelEditProfile.add(txtLastname);
 		txtLastname.setColumns(10);
@@ -862,7 +862,7 @@ public class GUI {
 		panelEditProfile.add(lblEmail);
 		
 		txtEmail_1 = new JTextField();
-		txtEmail_1.setText("EMAIL");
+		txtEmail_1.setText((String)(Queries.getUserInfo(userID,"passenger_email")[0]));
 		txtEmail_1.setBounds(90, 79, 130, 26);
 		panelEditProfile.add(txtEmail_1);
 		txtEmail_1.setColumns(10);
@@ -872,7 +872,7 @@ public class GUI {
 		panelEditProfile.add(lblUserId);
 		
 		txtUserid = new JTextField();
-		txtUserid.setText("USERID");
+		txtUserid.setText(userID);
 		txtUserid.setBounds(100, 122, 130, 26);
 		panelEditProfile.add(txtUserid);
 		txtUserid.setColumns(10);
@@ -886,22 +886,70 @@ public class GUI {
 		panelEditProfile.add(lblConfirmPassword);
 		
 		txtPassword_1 = new JTextField();
-		txtPassword_1.setText("PASSWORD");
+		txtPassword_1.setText((String)(Queries.getUserInfo(userID,"password")[0]));
 		txtPassword_1.setBounds(27, 193, 130, 26);
 		panelEditProfile.add(txtPassword_1);
 		txtPassword_1.setColumns(10);
 		
 		txtPassword_2 = new JTextField();
-		txtPassword_2.setText("PASSWORD");
+		txtPassword_2.setText((String)(Queries.getUserInfo(userID,"password")[0]));
 		txtPassword_2.setBounds(253, 188, 130, 26);
 		panelEditProfile.add(txtPassword_2);
 		txtPassword_2.setColumns(10);
 		
 		JButton btnDelete = new JButton("Delete");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Queries.deleteUser((String)Queries.getUserInfo(userID,"ID")[0]);
+			}
+		});
 		btnDelete.setBounds(34, 229, 117, 29);
 		panelEditProfile.add(btnDelete);
 		
 		JButton btnUpdate = new JButton("Update");
+		btnUpdate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+					String s = e.getActionCommand();
+					if (s.equals("Update")){
+						registerfirst = txtFirstName.getText();
+						registermi = txtMiddlein.getText();
+						registerlast = txtLastname.getText();
+						registeremail = txtEmail_1.getText();
+						registerid = txtUserid.getText();
+						registerpw = txtPassword_1.getText();
+						registerpw2 = txtPassword_2.getText(); 
+					}
+					if (registerpw.contentEquals(registerpw2) == false){
+						JOptionPane.showMessageDialog(panelRegistration, "Passwords do not match!");
+					}
+					if (registerpw.length()<8) {
+						JOptionPane.showMessageDialog(panelRegistration, "Password must have at least 8 characters!");
+					}
+					//MAKE SURE ID DOESN'T EXIST
+					ArrayList<String> ids = Queries.getUserIDs();
+					boolean idExists = false;
+					for(String id: ids) {
+						if (id.equals(registerid)) {
+							idExists = true;
+						}
+					}
+					if (idExists) {
+						JOptionPane.showMessageDialog(panelRegistration, "User ID already exists!");
+					}
+					if (registerpw.contentEquals(registerpw2) && registerpw.length()>=8 && !idExists){
+						//ADDING TO DATABASE --JB
+						Queries.addUser(registerid, registerfirst, registermi, registerlast, registerpw, registeremail);
+						
+						userfirstname = registerfirst;
+						userlastname = registerlast;
+						userID = registerid;
+						lblWelcomename.setText("Welcome " + userfirstname + " " + userlastname);
+						JOptionPane.showMessageDialog(panelEditProfile, "Update Successful!");
+						panelEditProfile.setVisible(false);
+						panelPassengerLanding.setVisible(true);
+					}
+				}
+		});
 		btnUpdate.setBounds(249, 229, 117, 29);
 		panelEditProfile.add(btnUpdate);
 		
