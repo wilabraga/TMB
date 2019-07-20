@@ -365,7 +365,7 @@ public class GUI {
 				ArrayList<String> ids = Queries.getUserIDs();
 				boolean idExists = false;
 				for(String id: ids) {
-					if (id.contentEquals(loginidattempt)) {
+					if (id.equals(registerid)) {
 						idExists = true;
 					}
 				}
@@ -929,10 +929,22 @@ public class GUI {
 		panelAdminLanding.add(lblAdmin);
 		
 		JButton btnViewTripsAD = new JButton("View Trips");
+		btnViewTripsAD.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelViewTrips.setVisible(true);
+				panelAdminLanding.setVisible(false);
+			}
+		});
 		btnViewTripsAD.setBounds(31, 34, 117, 51);
 		panelAdminLanding.add(btnViewTripsAD);
 		
 		JButton btnBuyCard = new JButton("Buy Card");
+		btnBuyCard.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelBuyCard.setVisible(true);
+				panelAdminLanding.setVisible(false);
+			}
+		});
 		btnBuyCard.setBounds(31, 95, 117, 51);
 		panelAdminLanding.add(btnBuyCard);
 		
