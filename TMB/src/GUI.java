@@ -602,6 +602,7 @@ public class GUI {
 						revcount++;
 					}
 				}
+				//stuff
 				
 				//putting data in table
 				for (int i = 0; i < revs.size(); i++) {
