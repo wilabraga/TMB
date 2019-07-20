@@ -365,7 +365,7 @@ public class GUI {
 				ArrayList<String> ids = Queries.getUserIDs();
 				boolean idExists = false;
 				for(String id: ids) {
-					if (id.contentEquals(loginidattempt)) {
+					if (id.equals(registerid)) {
 						idExists = true;
 					}
 				}
@@ -375,6 +375,11 @@ public class GUI {
 				if (registerpw.contentEquals(registerpw2) && registerpw.length()>=8 && !idExists){
 					//ADDING TO DATABASE --JB
 					Queries.addUser(registerid, registerfirst, registermi, registerlast, registerpw, registeremail);
+					
+					userfirstname = registerfirst;
+					userlastname = registerlast;
+					userID = registerid;
+					lblWelcomename.setText("Welcome " + userfirstname + " " + userlastname);
 					JOptionPane.showMessageDialog(panelRegistration, "Registration Successful!");
 					panelRegistration.setVisible(false);
 					panelPassengerLanding.setVisible(true);
