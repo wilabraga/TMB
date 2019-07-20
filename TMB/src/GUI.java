@@ -636,6 +636,7 @@ public class GUI {
 		rdbtnViewReviews.add(rdbtnStation);
 		rdbtnViewReviews.add(rdbtnShopping);
 		rdbtnViewReviews.add(rdbtnConnectionSpeed);
+		rdbtnViewReviews.add(rdbtnApprovalStatus);
        
        
         
