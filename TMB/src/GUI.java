@@ -574,7 +574,8 @@ public class GUI {
 		
 		
 		
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }};
+		Object rowData[][] = {};
+		//{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
 		JTable table = new JTable(rowData, columnNames);
 		JScrollPane scrollPane = new JScrollPane(table);
@@ -594,7 +595,7 @@ public class GUI {
 					ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
 					ArrayList<Object[]> revs = new ArrayList<>();
 					for (Object[] t: temp) {
-						if (t[0] == userID) {
+						if (t[0].equals(userID)) {
 							revs.add(t);
 						}
 					}
