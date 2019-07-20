@@ -261,7 +261,7 @@ public class GUI {
 						if (loginpwattempt.equals(Queries.getPassword(loginidattempt))) {
 							isAdmin = Queries.isAdmin(loginidattempt);
 							userfirstname = Queries.getUserName(loginidattempt)[0];
-							JOptionPane.showMessageDialog(panelLogin, Queries.getUserName(loginidattempt)[0]);
+							//JOptionPane.showMessageDialog(panelLogin, Queries.getUserName(loginidattempt)[0]);
 							userlastname = Queries.getUserName(loginidattempt)[1];
 							userID = loginidattempt;
 							
