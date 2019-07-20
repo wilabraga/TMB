@@ -738,6 +738,10 @@ public class GUI {
 		btnTjove.setBounds(245, 170, 117, 77);
 		panelBuyCard.add(btnTjove);
 		
+		JLabel lblBuyCard = new JLabel("Buy Card");
+		lblBuyCard.setBounds(22, 6, 61, 16);
+		panelBuyCard.add(lblBuyCard);
+		
 		//GO ON A TRIP
 		
 	

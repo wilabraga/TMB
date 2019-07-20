@@ -14,7 +14,7 @@ public class TMB {
 	public static void accessTMB() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/tmb", "root", "root");
+			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/tmb", "root", "");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

@@ -5,7 +5,7 @@ import java.util.ArrayList;
 public class Main {
 
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		//TMB.accessTMB();
+		TMB.accessTMB();
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -15,6 +15,6 @@ public class Main {
 				}
 			}
 		});
-		//TMB.closeDatabase();
+		TMB.closeDatabase();
 	}
 }
