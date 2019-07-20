@@ -59,14 +59,43 @@ public class GUI {
 	public JComboBox comboBox;
 	public JComboBox shoppingstars;
 	public JComboBox csstars;
+	private JTextField txtFirstName;
+	private JTextField txtMiddlein;
+	private JTextField txtLastname;
+	private JTextField txtEmail_1;
+	private JTextField txtUserid;
+	private JTextField txtPassword_1;
+	private JTextField txtPassword_2;
+	private JTextField txtFirstname;
+	private JTextField txtMiddlein_1;
+	private JTextField txtLastname_1;
+	private JTextField txtUserid_1;
+	private JTextField txtPassword_3;
+	private JTextField txtPassword_4;
 	
 	
+
+	/**
+	 * Launch the application.
+	 */
+	public static void main(String[] args) {
+		EventQueue.invokeLater(new Runnable() {
+			public void run() {
+				try {
+					GUI window = new GUI();
+					window.frame.setVisible(true);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+
 	/**
 	 * Create the application.
 	 */
 	public GUI() {
 		initialize();
-		frame.setVisible(true);
 	}
 
 	/**
@@ -97,7 +126,7 @@ public class GUI {
 		frame.getContentPane().add(panelViewReviews, "name_76504429508073");
 		panelViewReviews.setLayout(null);
 		panelViewReviews.setVisible(false);
-		
+	
         
         JPanel panelEditReview = new JPanel();
         frame.getContentPane().add(panelEditReview, "name_110293474217147");
@@ -112,6 +141,11 @@ public class GUI {
         frame.getContentPane().add(panelStationInfo, "name_116178640692044");
         panelStationInfo.setLayout(null);
         panelStationInfo.setVisible(false);
+        
+		JPanel panelLineSummary = new JPanel();
+		frame.getContentPane().add(panelLineSummary, "name_116847732626867");
+		panelLineSummary.setLayout(null);
+		panelLineSummary.setVisible(false);
 		
 		//Login
 		
@@ -502,6 +536,375 @@ public class GUI {
 		panelStationInfo.add(scrollPane2, BorderLayout.CENTER);
 		
 		
+		
+		
+		
+		
+		//LINE SUMMARY 
+		
+
+		
+		JLabel lblLineLine = new JLabel("Line : LINE#");
+		lblLineLine.setBounds(6, 6, 145, 16);
+		panelLineSummary.add(lblLineLine);
+		
+		JLabel lblStops = new JLabel("# Stops");
+		lblStops.setBounds(366, 6, 61, 16);
+		panelLineSummary.add(lblStops);
+		
+		Object rowData3[][] = { { "Row1-Column1", "Row1-Column2"}};
+		Object columnNames3[] = { "Station", "Order"};
+		JTable table3 = new JTable(rowData3, columnNames3);
+		JScrollPane scrollPane3 = new JScrollPane(table3);
+		scrollPane3.setLocation(6, 34);
+		scrollPane3.setSize(434, 238);
+		panelLineSummary.add(scrollPane3, BorderLayout.CENTER);
+		
+		
+		
+		// Edit Profile
+		
+		JPanel panelEditProfile = new JPanel();
+		frame.getContentPane().add(panelEditProfile, "name_117153285834010");
+		panelEditProfile.setLayout(null);
+		panelEditProfile.setVisible(false);
+		
+		JLabel lblEditProfile = new JLabel("Edit Profile");
+		lblEditProfile.setBounds(17, 6, 118, 16);
+		panelEditProfile.add(lblEditProfile);
+		
+		JLabel lblName_1 = new JLabel("Name");
+		lblName_1.setBounds(17, 23, 61, 16);
+		panelEditProfile.add(lblName_1);
+		
+		txtFirstName = new JTextField();
+		txtFirstName.setText("FIRSTNAME");
+		txtFirstName.setBounds(5, 46, 130, 26);
+		panelEditProfile.add(txtFirstName);
+		txtFirstName.setColumns(10);
+		
+		txtMiddlein = new JTextField();
+		txtMiddlein.setText("MIDDLEIN");
+		txtMiddlein.setBounds(159, 46, 130, 26);
+		panelEditProfile.add(txtMiddlein);
+		txtMiddlein.setColumns(10);
+		
+		txtLastname = new JTextField();
+		txtLastname.setText("LASTNAME");
+		txtLastname.setBounds(301, 46, 130, 26);
+		panelEditProfile.add(txtLastname);
+		txtLastname.setColumns(10);
+		
+		JLabel lblEmail = new JLabel("Email");
+		lblEmail.setBounds(17, 84, 61, 16);
+		panelEditProfile.add(lblEmail);
+		
+		txtEmail_1 = new JTextField();
+		txtEmail_1.setText("EMAIL");
+		txtEmail_1.setBounds(90, 79, 130, 26);
+		panelEditProfile.add(txtEmail_1);
+		txtEmail_1.setColumns(10);
+		
+		JLabel lblUserId = new JLabel("User ID");
+		lblUserId.setBounds(17, 127, 61, 16);
+		panelEditProfile.add(lblUserId);
+		
+		txtUserid = new JTextField();
+		txtUserid.setText("USERID");
+		txtUserid.setBounds(100, 122, 130, 26);
+		panelEditProfile.add(txtUserid);
+		txtUserid.setColumns(10);
+		
+		JLabel lblPassword_1 = new JLabel("Password");
+		lblPassword_1.setBounds(27, 165, 61, 16);
+		panelEditProfile.add(lblPassword_1);
+		
+		JLabel lblConfirmPassword = new JLabel("Confirm Password");
+		lblConfirmPassword.setBounds(270, 165, 130, 16);
+		panelEditProfile.add(lblConfirmPassword);
+		
+		txtPassword_1 = new JTextField();
+		txtPassword_1.setText("PASSWORD");
+		txtPassword_1.setBounds(27, 193, 130, 26);
+		panelEditProfile.add(txtPassword_1);
+		txtPassword_1.setColumns(10);
+		
+		txtPassword_2 = new JTextField();
+		txtPassword_2.setText("PASSWORD");
+		txtPassword_2.setBounds(253, 188, 130, 26);
+		panelEditProfile.add(txtPassword_2);
+		txtPassword_2.setColumns(10);
+		
+		JButton btnDelete = new JButton("Delete");
+		btnDelete.setBounds(34, 229, 117, 29);
+		panelEditProfile.add(btnDelete);
+		
+		JButton btnUpdate = new JButton("Update");
+		btnUpdate.setBounds(249, 229, 117, 29);
+		panelEditProfile.add(btnUpdate);
+		
+		
+		
+		// BUY CARD
+		
+		JPanel panelBuyCard = new JPanel();
+		frame.getContentPane().add(panelBuyCard, "name_118269236130479");
+		panelBuyCard.setLayout(null);
+		panelBuyCard.setVisible(false);
+		
+		JLabel lblBuyCard = new JLabel("BuyCard");
+		lblBuyCard.setBounds(6, 6, 61, 16);
+		panelBuyCard.add(lblBuyCard);
+		
+		JButton btnTmes = new JButton("T-mes");
+		btnTmes.setBounds(40, 58, 117, 77);
+		panelBuyCard.add(btnTmes);
+		
+		JButton btnT = new JButton("T-10");
+		btnT.setBounds(245, 58, 117, 71);
+		panelBuyCard.add(btnT);
+		
+		JButton btnT_1 = new JButton("T-50/30");
+		btnT_1.setBounds(40, 170, 117, 71);
+		panelBuyCard.add(btnT_1);
+		
+		JButton btnTjove = new JButton("T-jove");
+		btnTjove.setBounds(245, 170, 117, 77);
+		panelBuyCard.add(btnTjove);
+		
+		//GO ON A TRIP
+		
+		
+		JPanel panelGoOnATrip = new JPanel();
+		frame.getContentPane().add(panelGoOnATrip, "name_118392332897193");
+		panelGoOnATrip.setLayout(null);
+		panelGoOnATrip.setVisible(false);
+		
+		JLabel lblGoonatrip = new JLabel("Go on a Trip");
+		lblGoonatrip.setBounds(17, 6, 187, 16);
+		panelGoOnATrip.add(lblGoonatrip);
+		
+		JLabel lblStartStation = new JLabel("Start Station");
+		lblStartStation.setBounds(60, 50, 144, 16);
+		panelGoOnATrip.add(lblStartStation);
+		
+		JLabel lblCardUsed = new JLabel("Card Used");
+		lblCardUsed.setBounds(60, 151, 109, 16);
+		panelGoOnATrip.add(lblCardUsed);
+		
+		JComboBox comboBoxStation = new JComboBox();
+		comboBoxStation.setBounds(290, 46, 52, 27);
+		panelGoOnATrip.add(comboBoxStation);
+		
+		JComboBox comboBoxCard = new JComboBox();
+		comboBoxCard.setBounds(290, 151, 52, 27);
+		panelGoOnATrip.add(comboBoxCard);
+		
+		JButton btnEmbark = new JButton("Embark");
+		btnEmbark.setBounds(235, 203, 153, 55);
+		panelGoOnATrip.add(btnEmbark);
+		
+
+		
+		
+		//MY TRIPS
+		
+		JPanel panelViewTrips = new JPanel();
+		frame.getContentPane().add(panelViewTrips, "name_118708450389034");
+		panelViewTrips.setLayout(null);
+		
+		JLabel lblMyTrips = new JLabel("My Trips");
+		lblMyTrips.setBounds(6, 6, 61, 16);
+		panelViewTrips.add(lblMyTrips);
+		panelViewTrips.setVisible(false);
+		
+		Object rowData4[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5"}};
+		Object columnNames4[] = { "Start DateTime", "End DateTime", "CardUsed", "From", "To"};
+		JTable table4 = new JTable(rowData4, columnNames4);
+		JScrollPane scrollPane4 = new JScrollPane(table4);
+		scrollPane4.setLocation(6, 23);
+		scrollPane4.setSize(444, 249);
+		panelViewTrips.add(scrollPane4, BorderLayout.CENTER);
+		
+		
+		
+		//UPDATE TRIP
+		
+		JPanel panelUpdateTrip = new JPanel();
+		frame.getContentPane().add(panelUpdateTrip, "name_118936376777311");
+		panelUpdateTrip.setLayout(null);
+		
+		JLabel lblUpdateTrip = new JLabel("Update Trip");
+		lblUpdateTrip.setBounds(6, 6, 142, 16);
+		panelUpdateTrip.add(lblUpdateTrip);
+		
+		JLabel lblStartStationUpdate = new JLabel("Start Station     STATION NAME");
+		lblStartStationUpdate.setBounds(40, 48, 223, 16);
+		panelUpdateTrip.add(lblStartStationUpdate);
+		
+		JLabel lblEndStation = new JLabel("End Station");
+		lblEndStation.setBounds(40, 106, 108, 16);
+		panelUpdateTrip.add(lblEndStation);
+		
+		JComboBox comboBoxEndStation = new JComboBox();
+		comboBoxEndStation.setBounds(237, 102, 52, 27);
+		panelUpdateTrip.add(comboBoxEndStation);
+		
+		JLabel lblCardUsedUpdate = new JLabel("Card Used      CARD USED");
+		lblCardUsedUpdate.setBounds(40, 180, 330, 16);
+		panelUpdateTrip.add(lblCardUsedUpdate);
+		
+		JButton btnUpdateTrip = new JButton("Update");
+		btnUpdateTrip.setBounds(263, 222, 117, 50);
+		panelUpdateTrip.add(btnUpdateTrip);
+		
+		
+		
+		
+		//ADMIN LANDING
+		
+		JPanel panelAdminLanding = new JPanel();
+		frame.getContentPane().add(panelAdminLanding, "name_119110396471857");
+		panelAdminLanding.setLayout(null);
+		
+		JLabel lblWelcomeName = new JLabel("Welcome NAME");
+		lblWelcomeName.setBounds(6, 6, 128, 16);
+		panelAdminLanding.add(lblWelcomeName);
+		
+		JLabel lblAdmin = new JLabel("Admin");
+		lblAdmin.setBounds(365, 6, 61, 16);
+		panelAdminLanding.add(lblAdmin);
+		
+		JButton btnViewTripsAD = new JButton("View Trips");
+		btnViewTripsAD.setBounds(31, 34, 117, 51);
+		panelAdminLanding.add(btnViewTripsAD);
+		
+		JButton btnBuyCard = new JButton("Buy Card");
+		btnBuyCard.setBounds(31, 95, 117, 51);
+		panelAdminLanding.add(btnBuyCard);
+		
+		JButton btnGoOnTrip_1 = new JButton("Go on Trip");
+		btnGoOnTrip_1.setBounds(31, 158, 117, 51);
+		panelAdminLanding.add(btnGoOnTrip_1);
+		
+		JButton btnReviewPassengerReviews = new JButton("Review Passenger Reviews");
+		btnReviewPassengerReviews.setBounds(31, 225, 194, 47);
+		panelAdminLanding.add(btnReviewPassengerReviews);
+		
+		JButton btnEditProfile = new JButton("Edit Profile");
+		btnEditProfile.setBounds(276, 30, 117, 59);
+		panelAdminLanding.add(btnEditProfile);
+		
+		JButton btnAddStation = new JButton("Add Station");
+		btnAddStation.setBounds(276, 107, 117, 59);
+		panelAdminLanding.add(btnAddStation);
+		
+		JButton btnAddLine = new JButton("Add Line");
+		btnAddLine.setBounds(276, 178, 117, 51);
+		panelAdminLanding.add(btnAddLine);
+		
+		
+		//Pending reviews
+		
+		JPanel panelPendingReviews = new JPanel();
+		frame.getContentPane().add(panelPendingReviews, "name_119320537598432");
+		panelPendingReviews.setLayout(null);
+		
+		
+		JLabel lblPendingReviews = new JLabel("Pending Reviews");
+		lblPendingReviews.setBounds(6, 6, 128, 16);
+		panelPendingReviews.add(lblPendingReviews);
+
+		Object rowData5[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5"}};
+		Object columnNames5[] = { "User", "Station", "Shopping", "Connection Speed", "Comment"};
+		JTable table5 = new JTable(rowData5, columnNames5);
+		JScrollPane scrollPane5 = new JScrollPane(table5);
+		scrollPane5.setLocation(6, 23);
+		scrollPane5.setSize(356, 249);
+		panelPendingReviews.add(scrollPane5, BorderLayout.CENTER);
+		
+		JButton btnApprove = new JButton("AP");
+		btnApprove.setBounds(356, 35, 49, 29);
+		panelPendingReviews.add(btnApprove);
+		
+		JButton btnRej = new JButton("REJ");
+		btnRej.setBounds(395, 35, 49, 29);
+		panelPendingReviews.add(btnRej);
+		
+		
+		//ADMIN EDIT PROFILE
+		
+		JPanel panelEditProfileAD = new JPanel();
+		frame.getContentPane().add(panelEditProfileAD, "name_119594530220165");
+		panelEditProfileAD.setLayout(null);
+		
+		JLabel lblEditProfile_1 = new JLabel("Edit Profile");
+		lblEditProfile_1.setBounds(6, 6, 124, 16);
+		panelEditProfileAD.add(lblEditProfile_1);
+		
+		JLabel lblAdmin_1 = new JLabel("Admin");
+		lblAdmin_1.setBounds(383, 6, 61, 16);
+		panelEditProfileAD.add(lblAdmin_1);
+		
+		JLabel lblName_2 = new JLabel("Name");
+		lblName_2.setBounds(6, 38, 61, 16);
+		panelEditProfileAD.add(lblName_2);
+		
+		txtFirstname = new JTextField();
+		txtFirstname.setText("FIRSTNAME");
+		txtFirstname.setBounds(16, 57, 130, 26);
+		panelEditProfileAD.add(txtFirstname);
+		txtFirstname.setColumns(10);
+		
+		txtMiddlein_1 = new JTextField();
+		txtMiddlein_1.setText("MIDDLEIN");
+		txtMiddlein_1.setBounds(158, 57, 130, 26);
+		panelEditProfileAD.add(txtMiddlein_1);
+		txtMiddlein_1.setColumns(10);
+		
+		txtLastname_1 = new JTextField();
+		txtLastname_1.setText("LASTNAME");
+		txtLastname_1.setBounds(314, 57, 130, 26);
+		panelEditProfileAD.add(txtLastname_1);
+		txtLastname_1.setColumns(10);
+		
+		JLabel lblUserId_1 = new JLabel("User ID");
+		lblUserId_1.setBounds(6, 95, 61, 16);
+		panelEditProfileAD.add(lblUserId_1);
+		
+		txtUserid_1 = new JTextField();
+		txtUserid_1.setText("USERID");
+		txtUserid_1.setBounds(103, 95, 130, 26);
+		panelEditProfileAD.add(txtUserid_1);
+		txtUserid_1.setColumns(10);
+		
+		JLabel lblPassword_2 = new JLabel("Password");
+		lblPassword_2.setBounds(6, 147, 61, 16);
+		panelEditProfileAD.add(lblPassword_2);
+		
+		JLabel lblConfirmPassword_1 = new JLabel("Confirm Password");
+		lblConfirmPassword_1.setBounds(218, 147, 146, 16);
+		panelEditProfileAD.add(lblConfirmPassword_1);
+		
+		txtPassword_3 = new JTextField();
+		txtPassword_3.setText("Password");
+		txtPassword_3.setBounds(218, 169, 130, 26);
+		panelEditProfileAD.add(txtPassword_3);
+		txtPassword_3.setColumns(10);
+		
+		txtPassword_4 = new JTextField();
+		txtPassword_4.setText("Password");
+		txtPassword_4.setBounds(6, 169, 130, 26);
+		panelEditProfileAD.add(txtPassword_4);
+		txtPassword_4.setColumns(10);
+		
+		JButton btnDelete_1 = new JButton("Delete");
+		btnDelete_1.setBounds(33, 218, 117, 54);
+		panelEditProfileAD.add(btnDelete_1);
+		
+		JButton btnUpdate_1 = new JButton("Update");
+		btnUpdate_1.setBounds(228, 218, 117, 54);
+		panelEditProfileAD.add(btnUpdate_1);
         
 		
 	}

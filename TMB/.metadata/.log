@@ -1,0 +1,26 @@
+!SESSION 2019-07-20 11:13:43.699 -----------------------------------------------
+eclipse.buildId=4.12.0.I20190605-1800
+java.version=11.0.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product -product org.eclipse.epp.package.java.product -keyring /Users/katelynhelms/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.java.product -data /Users/katelynhelms/Desktop/CS4400TMB/TMB/TMB -product org.eclipse.epp.package.java.product -keyring /Users/katelynhelms/.eclipse_keyring
+
+!ENTRY org.eclipse.core.net 1 0 2019-07-20 11:13:46.210
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.egit.core 1 0 2019-07-20 11:13:46.249
+!MESSAGE Using Apache MINA sshd as ssh client.
+!SESSION 2019-07-20 11:16:37.189 -----------------------------------------------
+eclipse.buildId=4.12.0.I20190605-1800
+java.version=11.0.1
+java.vendor=AdoptOpenJDK
+BootLoader constants: OS=macosx, ARCH=x86_64, WS=cocoa, NL=en_US
+Framework arguments:  -product org.eclipse.epp.package.java.product -product org.eclipse.epp.package.java.product -product org.eclipse.epp.package.java.product -product org.eclipse.epp.package.java.product -keyring /Users/katelynhelms/.eclipse_keyring
+Command-line arguments:  -os macosx -ws cocoa -arch x86_64 -product org.eclipse.epp.package.java.product -product org.eclipse.epp.package.java.product -product org.eclipse.epp.package.java.product -data /Users/katelynhelms/Desktop/CS4400TMB/TMB/TMB -product org.eclipse.epp.package.java.product -keyring /Users/katelynhelms/.eclipse_keyring
+
+!ENTRY org.eclipse.core.net 1 0 2019-07-20 11:16:39.503
+!MESSAGE System property http.nonProxyHosts has been set to local|*.local|169.254/16|*.169.254/16 by an external source. This value will be overwritten using the values from the preferences
+
+!ENTRY org.eclipse.egit.core 1 0 2019-07-20 11:16:39.531
+!MESSAGE Using Apache MINA sshd as ssh client.
