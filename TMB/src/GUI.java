@@ -836,8 +836,7 @@ public class GUI {
 		lblName_1.setBounds(17, 23, 61, 16);
 		panelEditProfile.add(lblName_1);
 		
-		txtFirstName = new JTextField();
-		txtFirstName.setText(userfirstname);
+		txtFirstName = new JTextField(userfirstname);
 		txtFirstName.setBounds(5, 46, 130, 26);
 		panelEditProfile.add(txtFirstName);
 		txtFirstName.setColumns(10);
@@ -848,8 +847,7 @@ public class GUI {
 		panelEditProfile.add(txtMiddlein);
 		txtMiddlein.setColumns(10);
 		
-		txtLastname = new JTextField();
-		txtLastname.setText(userlastname);
+		txtLastname = new JTextField("test");
 		txtLastname.setBounds(301, 46, 130, 26);
 		panelEditProfile.add(txtLastname);
 		txtLastname.setColumns(10);
@@ -868,8 +866,7 @@ public class GUI {
 		lblUserId.setBounds(17, 127, 61, 16);
 		panelEditProfile.add(lblUserId);
 		
-		txtUserid = new JTextField();
-		txtUserid.setText(userID);
+		txtUserid = new JTextField(userID);
 		txtUserid.setBounds(100, 122, 130, 26);
 		panelEditProfile.add(txtUserid);
 		txtUserid.setColumns(10);
