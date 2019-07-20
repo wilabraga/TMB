@@ -587,7 +587,8 @@ public class GUI {
 			public void actionPerformed(ActionEvent e) {
 				JRadioButton s = (JRadioButton) e.getSource();
 				String n = s.getName();
-				JOptionPane.showMessageDialog(panelViewReviews, n);
+				boolean bob = (s.equals(rdbtnID));
+				JOptionPane.showMessageDialog(panelViewReviews, "" + bob);
 			}
 		});
 		rdbtnID.setBounds(26, 34, 37, 23);
