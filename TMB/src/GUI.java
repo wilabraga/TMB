@@ -484,8 +484,13 @@ public class GUI {
 		lblLeaveAReview.setBounds(35, 10, 93, 16);
 		panelLeaveReview2.add(lblLeaveAReview);
 		
+		ArrayList<String> stations = Queries.getStationNames();
 		comboBox = new JComboBox();
 		comboBox.setModel(new DefaultComboBoxModel(new String[] {"Station","test1"}));
+		for (String station: stations) {
+			comboBox.addItem(station);
+		}
+		
 		comboBox.setBounds(35, 38, 143, 27);
 		panelLeaveReview2.add(comboBox);
 		
@@ -540,7 +545,8 @@ public class GUI {
 				else if (reviewshopping.equals("--") || reviewconnectionspeed.equals("--")){
 					JOptionPane.showMessageDialog(panelLeaveReview, "Please complete both star reviews.");
 				}
-				else{
+				else {
+					Queries.addReview(userID, rID, shopping, connectionSpeed, comment, adminID, status, timestamp, stationName);
 					panelPassengerLanding.setVisible(true);
 					panelLeaveReview.setVisible(false);
 				}
