@@ -59,6 +59,8 @@ public class GUI {
 	public String userID;
 	public boolean isAdmin;
 	//REVIEW SHTUFF
+	public ArrayList<Object[]> revs;
+	public int revcount;
 	public String[] stars = {"--","1","2","3","4","5"};
 	public int nextID;
 	private JTextField txtOldComment;
@@ -429,6 +431,17 @@ public class GUI {
 		panelPassengerLanding.add(btnViewReviews);
 		btnViewReviews.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//creating attribute arrays
+				revcount = 0;
+				ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+				revs = new ArrayList<>();
+				
+				for (Object[] t: temp) {
+					if (((String) t[0]).equals(userID)) {
+						revs.add(t);
+						revcount++;
+					}
+				}
 				panelViewReviews.setVisible(true);
 				panelPassengerLanding.setVisible(false);
 			}
@@ -572,18 +585,7 @@ public class GUI {
 		viewreviews.setBounds(16, 6, 243, 16);
 		panelViewReviews.add(viewreviews);
 		
-		//creating attribute arrays
-		int revcount = 0;
-		ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
-		ArrayList<Object[]> revs = new ArrayList<>();
-		for (Object[] t: temp) {
-			JOptionPane.showMessageDialog(panelViewReviews, userID);
-			
-			if (((String) t[0]).equals(userID)) {
-				revs.add(t);
-				revcount++;
-			}
-		}
+		
 		
 		Object rowData[][] = new Object[revcount][6];
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
