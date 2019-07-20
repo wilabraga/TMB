@@ -15,6 +15,6 @@ public class Main {
 				}
 			}
 		});
-		TMB.closeDatabase();
+		//TMB.closeDatabase();
 	}
 }

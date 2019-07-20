@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Dimension;
+import javax.swing.ButtonGroup;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
@@ -17,7 +18,9 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
+import javax.swing.JRadioButton;
 
 
 public class GUI {
@@ -48,8 +51,11 @@ public class GUI {
 	public String registerid;
 	public String registerpw;
 	public String registerpw2;
+	//SESSION INFORMATION
 	public String userfirstname;
 	public String userlastname;
+	public String userID;
+	public boolean isAdmin;
 	public String[] stars = {"--","1","2","3","4","5"};
 	private JTextField txtOldComment;
 	public String reviewstationname;
@@ -243,6 +249,34 @@ public class GUI {
 				if (s.equals("Login")){
 					loginidattempt = txtid.getText();
 					loginpwattempt = txtpw.getText();
+					ArrayList<String> ids = Queries.getUserIDs();
+					boolean idExists = false;
+					for(String id: ids) {
+						if (id.equals(loginidattempt)) {
+							idExists = true;
+						}
+					}
+					
+					if (idExists) {
+						if (loginpwattempt.equals(Queries.getPassword(loginidattempt))) {
+							isAdmin = Queries.isAdmin(loginidattempt);
+							userfirstname = Queries.getUserName(loginidattempt)[0];
+							userlastname = Queries.getUserName(loginidattempt)[1];
+							userID = loginidattempt;
+							
+							if (isAdmin) {
+								panelAdminLanding.setVisible(true);
+								panelLogin.setVisible(false);
+							} else {
+								panelPassengerLanding.setVisible(true);
+								panelLogin.setVisible(false);
+							}
+						} else {
+							JOptionPane.showMessageDialog(panelLogin, "Incorrect password!");
+						}
+					} else {
+						JOptionPane.showMessageDialog(panelLogin, "User ID does not exist! Haven't created an account yet? Click 'register'!");
+					}
 				}
 			}
 		});
@@ -502,11 +536,42 @@ public class GUI {
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
 		JTable table = new JTable(rowData, columnNames);
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setLocation(6, 23);
-		scrollPane.setSize(444, 249);
+		scrollPane.setLocation(6, 54);
+		scrollPane.setSize(444, 218);
 		panelViewReviews.add(scrollPane, BorderLayout.CENTER);
 		
+		ButtonGroup rdbtnViewReviews = new ButtonGroup();
 		
+		JRadioButton rdbtnID = new JRadioButton("");
+		rdbtnID.setBounds(26, 34, 37, 23);
+		panelViewReviews.add(rdbtnID);
+		
+		JRadioButton rdbtnStation = new JRadioButton("");
+		rdbtnStation.setBounds(90, 34, 51, 23);
+		panelViewReviews.add(rdbtnStation);
+		
+		JRadioButton rdbtnShopping = new JRadioButton("");
+		rdbtnShopping.setBounds(170, 34, 37, 23);
+		panelViewReviews.add(rdbtnShopping);
+		
+		JRadioButton rdbtnConnectionSpeed = new JRadioButton("");
+		rdbtnConnectionSpeed.setBounds(242, 34, 28, 23);
+		panelViewReviews.add(rdbtnConnectionSpeed);
+		
+		JRadioButton rdbtnComment = new JRadioButton("");
+		rdbtnComment.setBounds(321, 34, 28, 23);
+		panelViewReviews.add(rdbtnComment);
+		
+		JRadioButton rdbtnApprovalStatus = new JRadioButton("");
+		rdbtnApprovalStatus.setBounds(394, 34, 28, 23);
+		panelViewReviews.add(rdbtnApprovalStatus);
+		
+		rdbtnViewReviews.add(rdbtnID);
+		rdbtnViewReviews.add(rdbtnStation);
+		rdbtnViewReviews.add(rdbtnShopping);
+		rdbtnViewReviews.add(rdbtnConnectionSpeed);
+		rdbtnViewReviews.add(rdbtnComment);
+		rdbtnViewReviews.add(rdbtnComment);
        
        
         
@@ -634,11 +699,23 @@ public class GUI {
 		Object columnNames3[] = { "Station", "Order"};
 		JTable table3 = new JTable(rowData3, columnNames3);
 		JScrollPane scrollPane3 = new JScrollPane(table3);
-		scrollPane3.setLocation(6, 34);
-		scrollPane3.setSize(434, 238);
+		scrollPane3.setLocation(6, 50);
+		scrollPane3.setSize(434, 2228);
 		panelLineSummary.add(scrollPane3, BorderLayout.CENTER);
 		
+		JRadioButton rdbtnStationLS = new JRadioButton("");
+		rdbtnStationLS.setBounds(93, 26, 46, 23);
+		panelLineSummary.add(rdbtnStationLS);
 		
+		JRadioButton rdbtnOrder = new JRadioButton("");
+		rdbtnOrder.setBounds(275, 26, 33, 23);
+		panelLineSummary.add(rdbtnOrder);
+		
+		ButtonGroup rdbtnLineSummary = new ButtonGroup();
+		rdbtnLineSummary.add(rdbtnStationLS);
+		rdbtnLineSummary.add(rdbtnOrder);
+		
+			
 		
 		// Edit Profile
 		
