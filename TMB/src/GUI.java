@@ -263,7 +263,7 @@ public class GUI {
 						if (loginpwattempt.equals(Queries.getPassword(loginidattempt))) {
 							isAdmin = Queries.isAdmin(loginidattempt);
 							userfirstname = Queries.getUserName(loginidattempt)[0];
-							JOptionPane.showMessageDialog(panelLogin, Queries.getUserName(loginidattempt)[0]);
+							//JOptionPane.showMessageDialog(panelLogin, Queries.getUserName(loginidattempt)[0]);
 							userlastname = Queries.getUserName(loginidattempt)[1];
 							userID = loginidattempt;
 							
@@ -375,6 +375,11 @@ public class GUI {
 				if (registerpw.contentEquals(registerpw2) && registerpw.length()>=8 && !idExists){
 					//ADDING TO DATABASE --JB
 					Queries.addUser(registerid, registerfirst, registermi, registerlast, registerpw, registeremail);
+					
+					userfirstname = registerfirst;
+					userlastname = registerlast;
+					userID = registerid;
+					lblWelcomename.setText("Welcome " + userfirstname + " " + userlastname);
 					JOptionPane.showMessageDialog(panelRegistration, "Registration Successful!");
 					panelRegistration.setVisible(false);
 					panelPassengerLanding.setVisible(true);
