@@ -554,6 +554,7 @@ public class GUI {
 					Time d = new Time(System.currentTimeMillis());
 					int shop = Integer.parseInt(reviewshopping);
 					int conn = Integer.parseInt(reviewconnectionspeed);
+					JOptionPane.showMessageDialog(panelLeaveReview2, d + " " + shop + conn + " " + nextID);
 					Queries.addReview(userID, nextID, shop, conn, reviewcomment, null, "Pending", d, reviewstationname);
 					nextID++;
 					panelPassengerLanding.setVisible(true);
@@ -588,17 +589,25 @@ public class GUI {
 				JRadioButton s = (JRadioButton) e.getSource();
 				
 				if (s.equals(rdbtnID)) {
-					ArrayList<Object[]> revs = Queries.getReviews("rid", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+					//creating attribute arrays
+					ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+					ArrayList<Object[]> revs = new ArrayList<>();
+					for (Object[] t: temp) {
+						if (t[0] == userID) {
+							revs.add(t);
+						}
+					}
 					
+					//putting data in table
 					for (int i = 0; i < revs.size(); i++) {
 						Object[] tuple = revs.get(i);
 						
-						rowData[i][0] = (Integer) tuple[0];
-						rowData[i][1] = (String) tuple[1];
-						rowData[i][2] = (Integer) tuple[2];
-						rowData[i][3] = (Integer) tuple[3];
-						rowData[i][4] = (String) tuple[4];
-						rowData[i][5] = (String) tuple[5];
+						rowData[i][0] = (Integer) tuple[1];
+						rowData[i][1] = (String) tuple[2];
+						rowData[i][2] = (Integer) tuple[3];
+						rowData[i][3] = (Integer) tuple[4];
+						rowData[i][4] = (String) tuple[5];
+						rowData[i][5] = (String) tuple[6];
 					}
 				}
 			}
