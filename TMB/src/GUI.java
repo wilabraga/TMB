@@ -17,6 +17,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 
@@ -48,8 +49,11 @@ public class GUI {
 	public String registerid;
 	public String registerpw;
 	public String registerpw2;
+	//SESSION INFORMATION
 	public String userfirstname;
 	public String userlastname;
+	public String userID;
+	public boolean isAdmin;
 	public String[] stars = {"--","1","2","3","4","5"};
 	private JTextField txtOldComment;
 	public String reviewstationname;
@@ -243,6 +247,34 @@ public class GUI {
 				if (s.equals("Login")){
 					loginidattempt = txtid.getText();
 					loginpwattempt = txtpw.getText();
+					ArrayList<String> ids = Queries.getUserIDs();
+					boolean idExists = false;
+					for(String id: ids) {
+						if (id.contentEquals(loginidattempt)) {
+							idExists = true;
+						}
+					}
+					
+					if (idExists) {
+						if (loginpwattempt.contentEquals(Queries.getPassword(loginidattempt))) {
+							isAdmin = Queries.isAdmin(loginidattempt);
+							userfirstname = Queries.getUserName(loginidattempt)[0];
+							userlastname = Queries.getUserName(loginidattempt)[1];
+							userID = loginidattempt;
+							
+							if (isAdmin) {
+								panelAdminLanding.setVisible(true);
+								panelLogin.setVisible(false);
+							} else {
+								panelPassengerLanding.setVisible(true);
+								panelLogin.setVisible(false);
+							}
+						} else {
+							JOptionPane.showMessageDialog(panelLogin, "Incorrect password!");
+						}
+					} else {
+						JOptionPane.showMessageDialog(panelLogin, "User ID does not exist! Haven't created an account yet? Click 'register'!");
+					}
 				}
 			}
 		});
