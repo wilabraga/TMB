@@ -581,7 +581,7 @@ public class GUI {
 	
 		//View Reviews
 		
-		JLabel viewreviews = new JLabel("NAME'S REVIEWS");
+		JLabel viewreviews = new JLabel(userfirstname + " " + userlastname + "'s Reviews");
 		viewreviews.setBounds(16, 6, 243, 16);
 		panelViewReviews.add(viewreviews);
 		
