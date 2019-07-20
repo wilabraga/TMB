@@ -486,7 +486,7 @@ public class Queries {
 		TMB.executePreparedModification();
 	}
 	
-	public static void addStation(String name, String status, String state, String address, int zipcode, String city) {
+	public static void addStation(String name, String status, String state, String address, int zipcode, String city, String ID, Timestamp date) {
 		String query = ""
 				+ "INSERT INTO station "
 				+ "VALUES ((?), (?), (?), (?), (?), (?));";
@@ -498,6 +498,18 @@ public class Queries {
 			psmt.setString(4, address);
 			psmt.setInt(5, zipcode);
 			psmt.setString(6, city);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+		query = ""
+				+ "INSERT INTO admin_add_station "
+				+ "VALUES ((?), (?), (?));";
+		psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, name);
+			psmt.setString(2, ID);
+			psmt.setTimestamp(3, date);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -551,5 +563,72 @@ public class Queries {
 		return numbers;
 	}
 	
+	public static void addLine(String name, String ID, Timestamp date) {
+		String query = ""
+				+ "INSERT INTO line "
+				+ "VALUES ((?));";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, name);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+		query = ""
+				+ "INSERT INTO admin_add_line "
+				+ "VALUES ((?), (?), (?));";
+		psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, name);
+			psmt.setString(2, ID);
+			psmt.setTimestamp(3, date);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
 	
+	public static void deleteStation(String name) {
+		String query = ""
+				+ "DELETE FROM station "
+				+ "WHERE name = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, name);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
+	
+	public static void updateStationOrderNumber(String stationName, String lineName, int orderNumber) {
+		String query = ""
+				+ "UPDATE station_on_line "
+				+ "SET order_number = (?) "
+				+ "WHERE station_name = (?) AND line_name = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setInt(1, orderNumber);
+			psmt.setString(2, stationName);
+			psmt.setString(3, lineName);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
+	
+	public static void updateStationStatus(String name, String status) {
+		String query = ""
+				+ "UPDATE station_on_line "
+				+ "SET status = (?) "
+				+ "WHERE name = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, status);
+			psmt.setString(2, name);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
 }

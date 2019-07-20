@@ -209,22 +209,53 @@ WHERE ID = (?);
 INSERT INTO station
 VALUES ((?), (?), (?), (?), (?), (?));
 
+INSERT INTO admin_add_station
+VALUES ((?), (?), (?));
 
-33. Get All Line Names
+
+32. Get All Line Names
 
 SELECT name
 From line;
 
 
-32. Add Line to Station
+33. Add Line To Station
 
 INSERT INTO station_on_line
 VALUES ((?), (?), (?));
 
 
-33. Get Station Order Numbers (Make sure not duplicate)
+34. Get Line Order Numbers (Make sure not duplicate)
 
 SELECT order_number
 FROM station_on_line
 WHERE line_name = (?);
 
+
+35. Add Line
+
+INSERT INTO line
+VALUES ((?));
+
+INSERT INTO admin_add_line
+VALUES ((?), (?), (?));
+
+
+36. Delete Station
+
+DELETE FROM station
+WHERE name = (?);
+
+
+37. Update Station Order Number
+
+UPDATE station_on_line
+SET order_number = (?)
+WHERE station_name = (?) AND line_name = (?);
+
+
+38. Update Station Status
+
+UPDATE station
+SET status = (?)
+WHERE name = (?);
