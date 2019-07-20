@@ -609,7 +609,6 @@ public class GUI {
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
 		JTable table = new JTable(rData, columnNames);
-		//JOptionPane.showMessageDialog(panelViewReviews, rData[0][1]);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 54);
 		scrollPane.setSize(444, 218);
