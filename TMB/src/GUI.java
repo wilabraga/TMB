@@ -87,27 +87,14 @@ public class GUI {
 	
 	
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					GUI window = new GUI();
-					window.frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+
 
 	/**
 	 * Create the application.
 	 */
 	public GUI() {
 		initialize();
+		frame.setVisible(true);
 	}
 
 	/**
@@ -118,7 +105,6 @@ public class GUI {
 		frame.setBounds(100, 100, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new CardLayout(0, 0));
-		
 		JPanel panelLogin = new JPanel();
 		frame.getContentPane().add(panelLogin, "name_75292580775046");
 		panelLogin.setLayout(null);
@@ -158,6 +144,65 @@ public class GUI {
 		frame.getContentPane().add(panelLineSummary, "name_116847732626867");
 		panelLineSummary.setLayout(null);
 		panelLineSummary.setVisible(false);
+		
+		
+		JPanel panelBuyCard = new JPanel();
+		frame.getContentPane().add(panelBuyCard, "name_118269236130479");
+		panelBuyCard.setLayout(null);
+		panelBuyCard.setVisible(false);
+		
+		
+		JPanel panelEditProfile = new JPanel();
+		frame.getContentPane().add(panelEditProfile, "name_117153285834010");
+		panelEditProfile.setLayout(null);
+		panelEditProfile.setVisible(false);
+		
+		JPanel panelViewTrips = new JPanel();
+		frame.getContentPane().add(panelViewTrips, "name_118708450389034");
+		panelViewTrips.setLayout(null);
+		
+		
+		JPanel panelGoOnATrip = new JPanel();
+		frame.getContentPane().add(panelGoOnATrip, "name_118392332897193");
+		panelGoOnATrip.setLayout(null);
+		panelGoOnATrip.setVisible(false);
+		
+		JPanel panelUpdateTrip = new JPanel();
+		frame.getContentPane().add(panelUpdateTrip, "name_118936376777311");
+		panelUpdateTrip.setLayout(null);
+		
+		JPanel panelAdminLanding = new JPanel();
+		frame.getContentPane().add(panelAdminLanding, "name_119110396471857");
+		panelAdminLanding.setLayout(null);
+		
+		
+		JPanel panelPendingReviews = new JPanel();
+		frame.getContentPane().add(panelPendingReviews, "name_119320537598432");
+		panelPendingReviews.setLayout(null);
+		
+		
+		JPanel panelEditProfileAD = new JPanel();
+		frame.getContentPane().add(panelEditProfileAD, "name_119594530220165");
+		panelEditProfileAD.setLayout(null);
+		
+		JPanel panelAddStation = new JPanel();
+		frame.getContentPane().add(panelAddStation, "name_120015002666853");
+		panelAddStation.setLayout(null);
+		
+		
+		JPanel panelAddLine = new JPanel();
+		frame.getContentPane().add(panelAddLine, "name_120405071029218");
+		panelAddLine.setLayout(null);
+		
+		
+		JPanel panelLineSummaryAD = new JPanel();
+		frame.getContentPane().add(panelLineSummaryAD, "name_120586777795513");
+		panelLineSummaryAD.setLayout(null);
+		
+		JPanel panelStationInfoAD = new JPanel();
+		frame.getContentPane().add(panelStationInfoAD, "name_120703525918700");
+		panelStationInfoAD.setLayout(null);
+		
 		
 		//Login
 		
@@ -358,18 +403,43 @@ public class GUI {
 		});
 		
 		JButton btnBuyCards = new JButton("Buy Card");
+		btnBuyCards.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelBuyCard.setVisible(true);
+				panelPassengerLanding.setVisible(false);
+			}
+		});
 		btnBuyCards.setBounds(56, 201, 117, 71);
 		panelPassengerLanding.add(btnBuyCards);
 		
 		JButton btnGoOnTrip = new JButton("Go On Trip");
+		btnGoOnTrip.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelGoOnATrip.setVisible(true);
+				panelPassengerLanding.setVisible(false);
+				
+			}
+		});
 		btnGoOnTrip.setBounds(245, 37, 117, 66);
 		panelPassengerLanding.add(btnGoOnTrip);
 		
 		JButton btnViewTrips = new JButton("View Trips");
+		btnViewTrips.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelViewTrips.setVisible(true);
+				panelPassengerLanding.setVisible(false);
+			}
+		});
 		btnViewTrips.setBounds(245, 119, 117, 70);
 		panelPassengerLanding.add(btnViewTrips);
 		
 		JButton btnEditTrips = new JButton("Edit Profile");
+		btnEditTrips.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelEditProfile.setVisible(true);
+				panelPassengerLanding.setVisible(false);
+			}
+		});
 		btnEditTrips.setBounds(245, 201, 117, 71);
 		panelPassengerLanding.add(btnEditTrips);
 		panelLeaveReview2.setLayout(null);
@@ -604,10 +674,6 @@ public class GUI {
 		
 		// Edit Profile
 		
-		JPanel panelEditProfile = new JPanel();
-		frame.getContentPane().add(panelEditProfile, "name_117153285834010");
-		panelEditProfile.setLayout(null);
-		panelEditProfile.setVisible(false);
 		
 		JLabel lblEditProfile = new JLabel("Edit Profile");
 		lblEditProfile.setBounds(17, 6, 118, 16);
@@ -686,15 +752,7 @@ public class GUI {
 		
 		
 		// BUY CARD
-		
-		JPanel panelBuyCard = new JPanel();
-		frame.getContentPane().add(panelBuyCard, "name_118269236130479");
-		panelBuyCard.setLayout(null);
-		panelBuyCard.setVisible(false);
-		
-		JLabel lblBuyCard = new JLabel("BuyCard");
-		lblBuyCard.setBounds(6, 6, 61, 16);
-		panelBuyCard.add(lblBuyCard);
+	
 		
 		JButton btnTmes = new JButton("T-mes");
 		btnTmes.setBounds(40, 58, 117, 77);
@@ -714,11 +772,7 @@ public class GUI {
 		
 		//GO ON A TRIP
 		
-		
-		JPanel panelGoOnATrip = new JPanel();
-		frame.getContentPane().add(panelGoOnATrip, "name_118392332897193");
-		panelGoOnATrip.setLayout(null);
-		panelGoOnATrip.setVisible(false);
+	
 		
 		JLabel lblGoonatrip = new JLabel("Go on a Trip");
 		lblGoonatrip.setBounds(17, 6, 187, 16);
@@ -749,9 +803,7 @@ public class GUI {
 		
 		//MY TRIPS
 		
-		JPanel panelViewTrips = new JPanel();
-		frame.getContentPane().add(panelViewTrips, "name_118708450389034");
-		panelViewTrips.setLayout(null);
+
 		
 		JLabel lblMyTrips = new JLabel("My Trips");
 		lblMyTrips.setBounds(6, 6, 61, 16);
@@ -769,10 +821,6 @@ public class GUI {
 		
 		
 		//UPDATE TRIP
-		
-		JPanel panelUpdateTrip = new JPanel();
-		frame.getContentPane().add(panelUpdateTrip, "name_118936376777311");
-		panelUpdateTrip.setLayout(null);
 		
 		JLabel lblUpdateTrip = new JLabel("Update Trip");
 		lblUpdateTrip.setBounds(6, 6, 142, 16);
@@ -803,9 +851,6 @@ public class GUI {
 		
 		//ADMIN LANDING
 		
-		JPanel panelAdminLanding = new JPanel();
-		frame.getContentPane().add(panelAdminLanding, "name_119110396471857");
-		panelAdminLanding.setLayout(null);
 		
 		JLabel lblWelcomeName = new JLabel("Welcome NAME");
 		lblWelcomeName.setBounds(6, 6, 128, 16);
@@ -846,11 +891,7 @@ public class GUI {
 		
 		//Pending reviews
 		
-		JPanel panelPendingReviews = new JPanel();
-		frame.getContentPane().add(panelPendingReviews, "name_119320537598432");
-		panelPendingReviews.setLayout(null);
-		
-		
+
 		JLabel lblPendingReviews = new JLabel("Pending Reviews");
 		lblPendingReviews.setBounds(6, 6, 128, 16);
 		panelPendingReviews.add(lblPendingReviews);
@@ -873,10 +914,7 @@ public class GUI {
 		
 		
 		//ADMIN EDIT PROFILE
-		
-		JPanel panelEditProfileAD = new JPanel();
-		frame.getContentPane().add(panelEditProfileAD, "name_119594530220165");
-		panelEditProfileAD.setLayout(null);
+
 		
 		JLabel lblEditProfile_1 = new JLabel("Edit Profile");
 		lblEditProfile_1.setBounds(6, 6, 124, 16);
@@ -949,9 +987,7 @@ public class GUI {
 		
 		//Add Station
 		
-		JPanel panelAddStation = new JPanel();
-		frame.getContentPane().add(panelAddStation, "name_120015002666853");
-		panelAddStation.setLayout(null);
+
 		
 		JLabel lblAddStation = new JLabel("Add Station");
 		lblAddStation.setBounds(6, 6, 97, 16);
@@ -1016,10 +1052,7 @@ public class GUI {
 		
 		
 		// Add Line
-		
-		JPanel panelAddLine = new JPanel();
-		frame.getContentPane().add(panelAddLine, "name_120405071029218");
-		panelAddLine.setLayout(null);
+
 		
 		txtLineName = new JTextField();
 		txtLineName.setText("Line Name");
@@ -1061,10 +1094,7 @@ public class GUI {
 		
 		// Line Summary AD  NEEDS WORK
 		
-		JPanel panelLineSummaryAD = new JPanel();
-		frame.getContentPane().add(panelLineSummaryAD, "name_120586777795513");
-		panelLineSummaryAD.setLayout(null);
-		
+
 		JLabel lblLineNum = new JLabel("Line NUMBER");
 		lblLineNum.setBounds(6, 6, 146, 16);
 		panelLineSummaryAD.add(lblLineNum);
@@ -1082,9 +1112,6 @@ public class GUI {
 		
 		//Station Info AD
 		
-		JPanel panelStationInfoAD = new JPanel();
-		frame.getContentPane().add(panelStationInfoAD, "name_120703525918700");
-		panelStationInfoAD.setLayout(null);
 		
 		JLabel lblStationName_1 = new JLabel("STATION NAME");
 		lblStationName_1.setBounds(6, 6, 122, 16);
