@@ -938,7 +938,7 @@ public class GUI {
 					}
 					if (registerpw.contentEquals(registerpw2) && registerpw.length()>=8 && !idExists){
 						//ADDING TO DATABASE --JB
-						Queries.addUser(registerid, registerfirst, registermi, registerlast, registerpw, registeremail);
+						Queries.updateUser(userID,registerid, registerfirst, registermi, registerlast, registerpw, registeremail);
 						
 						userfirstname = registerfirst;
 						userlastname = registerlast;
