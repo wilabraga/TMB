@@ -72,6 +72,14 @@ public class GUI {
 	private JTextField txtUserid_1;
 	private JTextField txtPassword_3;
 	private JTextField txtPassword_4;
+	private JTextField txtStationName;
+	private JTextField txtStreetAddress;
+	private JTextField txtCity;
+	private JTextField txtState;
+	private JTextField txtPostalCode;
+	private JTextField txtOrder;
+	private JTextField txtLineName;
+	private JTextField txtOrder_1;
 	
 	
 
@@ -905,7 +913,186 @@ public class GUI {
 		JButton btnUpdate_1 = new JButton("Update");
 		btnUpdate_1.setBounds(228, 218, 117, 54);
 		panelEditProfileAD.add(btnUpdate_1);
+		
+		
+		//Add Station
+		
+		JPanel panelAddStation = new JPanel();
+		frame.getContentPane().add(panelAddStation, "name_120015002666853");
+		panelAddStation.setLayout(null);
+		
+		JLabel lblAddStation = new JLabel("Add Station");
+		lblAddStation.setBounds(6, 6, 97, 16);
+		panelAddStation.add(lblAddStation);
+		
+		txtStationName = new JTextField();
+		txtStationName.setText("Station Name");
+		txtStationName.setBounds(6, 26, 130, 26);
+		panelAddStation.add(txtStationName);
+		txtStationName.setColumns(10);
+		
+		txtStreetAddress = new JTextField();
+		txtStreetAddress.setText("Street Address");
+		txtStreetAddress.setBounds(266, 26, 130, 26);
+		panelAddStation.add(txtStreetAddress);
+		txtStreetAddress.setColumns(10);
+		
+		txtCity = new JTextField();
+		txtCity.setText("City");
+		txtCity.setBounds(6, 64, 130, 26);
+		panelAddStation.add(txtCity);
+		txtCity.setColumns(10);
+		
+		txtState = new JTextField();
+		txtState.setText("State");
+		txtState.setBounds(164, 64, 130, 26);
+		panelAddStation.add(txtState);
+		txtState.setColumns(10);
+		
+		txtPostalCode = new JTextField();
+		txtPostalCode.setText("Postal/Zip Code");
+		txtPostalCode.setBounds(314, 64, 130, 26);
+		panelAddStation.add(txtPostalCode);
+		txtPostalCode.setColumns(10);
+		
+		JComboBox comboBox_3 = new JComboBox();
+		comboBox_3.setBounds(16, 102, 52, 27);
+		panelAddStation.add(comboBox_3);
+		
+		txtOrder = new JTextField();
+		txtOrder.setText("Order");
+		txtOrder.setBounds(134, 102, 130, 26);
+		panelAddStation.add(txtOrder);
+		txtOrder.setColumns(10);
+		
+		JButton btnAddLine_1 = new JButton("Add Line");
+		btnAddLine_1.setBounds(314, 102, 117, 29);
+		panelAddStation.add(btnAddLine_1);
+		
+		JButton btnAddStation_1 = new JButton("Add Station");
+		btnAddStation_1.setBounds(314, 243, 117, 29);
+		panelAddStation.add(btnAddStation_1);
+		
+		Object rowData6[][] = { { "Row1-Column1", "Row1-Column2"}};
+		Object columnNames6[] = { "Line", "Order"};
+		JTable table6 = new JTable(rowData6, columnNames6);
+		JScrollPane scrollPane6 = new JScrollPane(table6);
+		scrollPane6.setLocation(26, 140);
+		scrollPane6.setSize(353, 100);
+		panelAddStation.add(scrollPane6, BorderLayout.CENTER);
+		
+		
+		
+		// Add Line
+		
+		JPanel panelAddLine = new JPanel();
+		frame.getContentPane().add(panelAddLine, "name_120405071029218");
+		panelAddLine.setLayout(null);
+		
+		txtLineName = new JTextField();
+		txtLineName.setText("Line Name");
+		txtLineName.setBounds(6, 34, 130, 26);
+		panelAddLine.add(txtLineName);
+		txtLineName.setColumns(10);
+		
+		JLabel lblAddLine = new JLabel("Add Line");
+		lblAddLine.setBounds(6, 6, 61, 16);
+		panelAddLine.add(lblAddLine);
+		
+		JComboBox comboBox_4 = new JComboBox();
+		comboBox_4.setBounds(6, 73, 140, 27);
+		panelAddLine.add(comboBox_4);
+		
+		txtOrder_1 = new JTextField();
+		txtOrder_1.setText("Order");
+		txtOrder_1.setBounds(172, 72, 130, 26);
+		panelAddLine.add(txtOrder_1);
+		txtOrder_1.setColumns(10);
+		
+		JButton btnAddStation_2 = new JButton("Add Station");
+		btnAddStation_2.setBounds(327, 72, 117, 29);
+		panelAddLine.add(btnAddStation_2);
+		
+		JButton btnAddLine_2 = new JButton("Add Line");
+		btnAddLine_2.setBounds(314, 243, 117, 29);
+		panelAddLine.add(btnAddLine_2);
         
+		
+		Object rowData7[][] = { { "Row1-Column1", "Row1-Column2"}};
+		Object columnNames7[] = { "Station", "Order"};
+		JTable table7 = new JTable(rowData7, columnNames7);
+		JScrollPane scrollPane7 = new JScrollPane(table7);
+		scrollPane7.setLocation(26, 125);
+		scrollPane7.setSize(353, 115);
+		panelAddLine.add(scrollPane7, BorderLayout.CENTER);
+		
+		
+		// Line Summary AD  NEEDS WORK
+		
+		JPanel panelLineSummaryAD = new JPanel();
+		frame.getContentPane().add(panelLineSummaryAD, "name_120586777795513");
+		panelLineSummaryAD.setLayout(null);
+		
+		JLabel lblLineNum = new JLabel("Line NUMBER");
+		lblLineNum.setBounds(6, 6, 146, 16);
+		panelLineSummaryAD.add(lblLineNum);
+		
+		JLabel lblNumStop = new JLabel("NUM Stops");
+		lblNumStop.setBounds(327, 8, 100, 16);
+		panelLineSummaryAD.add(lblNumStop);
+		
+		JButton btnUpdate_2 = new JButton("Update");
+		btnUpdate_2.setBounds(327, 225, 117, 47);
+		panelLineSummaryAD.add(btnUpdate_2);
+		
+		
+		
+		
+		//Station Info AD
+		
+		JPanel panelStationInfoAD = new JPanel();
+		frame.getContentPane().add(panelStationInfoAD, "name_120703525918700");
+		panelStationInfoAD.setLayout(null);
+		
+		JLabel lblStationName_1 = new JLabel("STATION NAME");
+		lblStationName_1.setBounds(6, 6, 122, 16);
+		panelStationInfoAD.add(lblStationName_1);
+		
+		JLabel lblStatus_1 = new JLabel("Status :");
+		lblStatus_1.setBounds(256, 6, 61, 16);
+		panelStationInfoAD.add(lblStatus_1);
+		
+		JComboBox comboBox_5 = new JComboBox();
+		comboBox_5.setBounds(332, 2, 94, 27);
+		panelStationInfoAD.add(comboBox_5);
+		
+		JLabel lblAddressAddress = new JLabel("Address : ADDRESS");
+		lblAddressAddress.setBounds(16, 34, 264, 16);
+		panelStationInfoAD.add(lblAddressAddress);
+		
+		JLabel lblLines = new JLabel("Lines : LINES");
+		lblLines.setBounds(6, 62, 284, 16);
+		panelStationInfoAD.add(lblLines);
+		
+		JLabel lblAverageShopping_1 = new JLabel("Average Shopping : AVGSHOP");
+		lblAverageShopping_1.setBounds(6, 94, 185, 16);
+		panelStationInfoAD.add(lblAverageShopping_1);
+		
+		JLabel lblAVGCS = new JLabel("Average Connection Speed : AVCS");
+		lblAVGCS.setBounds(224, 90, 202, 16);
+		panelStationInfoAD.add(lblAVGCS);
+		
+		JLabel lblReviews_1 = new JLabel("Reviews");
+		lblReviews_1.setBounds(6, 122, 61, 16);
+		panelStationInfoAD.add(lblReviews_1);
+		
+        Object rowData8[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4"}};
+		Object columnNames8[] = { "User", "Shopping", "Connection Speed", "Comment"};
+		JTable table8 = new JTable(rowData8, columnNames8);
+		JScrollPane scrollPane8 = new JScrollPane(table8);
+		scrollPane8.setLocation(6, 142);
+		scrollPane8.setSize(444, 130);
+		panelStationInfoAD.add(scrollPane8, BorderLayout.CENTER);
 		
 	}
 }
