@@ -581,33 +581,34 @@ public class GUI {
 		
 		ButtonGroup rdbtnViewReviews = new ButtonGroup();
 		
-		JRadioButton rdbtnID = new JRadioButton("");
+		JRadioButton rdbtnID = new JRadioButton("1");
 		rdbtnID.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				String s = e.getActionCommand();
-				JOptionPane.showMessageDialog(panelViewReviews, s);
+				JRadioButton s = (JRadioButton) e.getSource();
+				String n = s.getName();
+				JOptionPane.showMessageDialog(panelViewReviews, n);
 			}
 		});
 		rdbtnID.setBounds(26, 34, 37, 23);
 		panelViewReviews.add(rdbtnID);
 		
-		JRadioButton rdbtnStation = new JRadioButton("");
+		JRadioButton rdbtnStation = new JRadioButton("2");
 		rdbtnStation.setBounds(90, 34, 51, 23);
 		panelViewReviews.add(rdbtnStation);
 		
-		JRadioButton rdbtnShopping = new JRadioButton("");
+		JRadioButton rdbtnShopping = new JRadioButton("3");
 		rdbtnShopping.setBounds(170, 34, 37, 23);
 		panelViewReviews.add(rdbtnShopping);
 		
-		JRadioButton rdbtnConnectionSpeed = new JRadioButton("");
+		JRadioButton rdbtnConnectionSpeed = new JRadioButton("4");
 		rdbtnConnectionSpeed.setBounds(242, 34, 28, 23);
 		panelViewReviews.add(rdbtnConnectionSpeed);
 		
-		JRadioButton rdbtnComment = new JRadioButton("");
+		JRadioButton rdbtnComment = new JRadioButton("5");
 		rdbtnComment.setBounds(321, 34, 28, 23);
 		panelViewReviews.add(rdbtnComment);
 		
-		JRadioButton rdbtnApprovalStatus = new JRadioButton("");
+		JRadioButton rdbtnApprovalStatus = new JRadioButton("6");
 		rdbtnApprovalStatus.setBounds(394, 34, 28, 23);
 		panelViewReviews.add(rdbtnApprovalStatus);
 		
