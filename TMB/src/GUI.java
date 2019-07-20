@@ -86,6 +86,8 @@ public class GUI {
 	private JTextField txtOrder;
 	private JTextField txtLineName;
 	private JTextField txtOrder_1;
+	public JLabel lblWelcomename;
+	public JLabel lblWelcomeName;
 	
 	
 
@@ -266,9 +268,11 @@ public class GUI {
 							userID = loginidattempt;
 							
 							if (isAdmin) {
+								lblWelcomeName.setText("Welcome " + userfirstname + " " + userlastname);
 								panelAdminLanding.setVisible(true);
 								panelLogin.setVisible(false);
 							} else {
+								lblWelcomename.setText("Welcome " + userfirstname + " " + userlastname);
 								panelPassengerLanding.setVisible(true);
 								panelLogin.setVisible(false);
 							}
@@ -391,7 +395,7 @@ public class GUI {
 		//get user first and last name from database
 		
 		
-		JLabel lblWelcomename = new JLabel("Welcome " + userfirstname + " " + userlastname);
+		lblWelcomename = new JLabel("Welcome " + userfirstname + " " + userlastname);
 		lblWelcomename.setBounds(6, 6, 200, 16);
 		panelPassengerLanding.add(lblWelcomename);
 		
@@ -916,8 +920,8 @@ public class GUI {
 		//ADMIN LANDING
 		
 		
-		JLabel lblWelcomeName = new JLabel("Welcome NAME");
-		lblWelcomeName.setBounds(6, 6, 128, 16);
+		lblWelcomeName = new JLabel("Welcome " + userfirstname + " " + userlastname);
+		lblWelcomeName.setBounds(6, 6, 297, 16);
 		panelAdminLanding.add(lblWelcomeName);
 		
 		JLabel lblAdmin = new JLabel("Admin");
