@@ -60,8 +60,8 @@ public class GUI {
 	public boolean isAdmin;
 	//REVIEW SHTUFF
 	public Object[][] rData;
-	public ArrayList<Object[]> revs;
-	public int revcount;
+	//public ArrayList<Object[]> revs;
+	//public int revcount;
 	public String[] stars = {"--","1","2","3","4","5"};
 	public int nextID;
 	private JTextField txtOldComment;
@@ -605,12 +605,15 @@ public class GUI {
 		viewreviews.setBounds(16, 6, 243, 16);
 		panelViewReviews.add(viewreviews);
 		
-		rData = new Object[3][6];
+		//rData = new Object[3][6];
 		
 		//creating attribute arrays
-		revcount = 0;
+		while (userID == null) {
+			//suck off otis
+		}
+		int revcount = 0;
 		ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
-		revs = new ArrayList<>();
+		ArrayList<Object[]> revs = new ArrayList<>();
 		
 		for (Object[] t: temp) {
 			if (((String) t[0]).equals(userID)) {
@@ -637,7 +640,7 @@ public class GUI {
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
 		JTable table = new JTable(rData, columnNames);
-		//JOptionPane.showMessageDialog(panelViewReviews, rData[0][1]);
+		JOptionPane.showMessageDialog(panelViewReviews, rData[0][1]);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 54);
 		scrollPane.setSize(444, 218);
