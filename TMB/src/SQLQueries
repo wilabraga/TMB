@@ -203,3 +203,28 @@ WHERE ID = (?)
 DELETE FROM admin
 WHERE ID = (?);
 
+
+31. Add Station
+
+INSERT INTO station
+VALUES ((?), (?), (?), (?), (?), (?));
+
+
+33. Get All Line Names
+
+SELECT name
+From line;
+
+
+32. Add Line to Station
+
+INSERT INTO station_on_line
+VALUES ((?), (?), (?));
+
+
+33. Get Station Order Numbers (Make sure not duplicate)
+
+SELECT order_number
+FROM station_on_line
+WHERE line_name = (?);
+
