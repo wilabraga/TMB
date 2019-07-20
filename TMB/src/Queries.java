@@ -296,41 +296,11 @@ public class Queries {
 		TMB.executePreparedModification();
 	}
 	
-	public static void deleteUserAccount(String ID) {
+	public static void deleteUser(String ID) {
 		String query = ""
 				+ "DELETE FROM user "
 				+ "WHERE ID = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
-		try {
-			psmt.setString(1, ID);
-		} catch(SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		TMB.executePreparedModification();
-		query = ""
-				+ "DELETE FROM review "
-				+ "WHERE passenger_ID = (?);";
-		psmt = TMB.makePreparedStatement(query);
-		try {
-			psmt.setString(1, ID);
-		} catch(SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		TMB.executePreparedModification();
-		query = ""
-				+ "DELETE FROM card "
-				+ "WHERE user_ID = (?);";
-		psmt = TMB.makePreparedStatement(query);
-		try {
-			psmt.setString(1, ID);
-		} catch(SQLException e) {
-			System.out.println(e.getMessage());
-		}
-		TMB.executePreparedModification();
-		query = ""
-				+ "DELETE FROM trip "
-				+ "WHERE user_ID = (?);";
-		psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setString(1, ID);
 		} catch(SQLException e) {
@@ -497,6 +467,19 @@ public class Queries {
 		try {
 			psmt.setString(1, newID);
 			psmt.setString(2, originalID);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
+	
+	public static void deleteAdmin(String ID) {
+		String query = ""
+				+ "DELETE FROM admin "
+				+ "WHERE ID = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, ID);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}

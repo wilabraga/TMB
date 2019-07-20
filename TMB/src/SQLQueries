@@ -126,15 +126,6 @@ WHERE ID = (?);
 DELETE FROM user
 WHERE ID = (?);
 
-DELETE FROM review
-WHERE passenger_ID = (?);
-
-DELETE FROM card
-WHERE user_ID = (?);
-
-DELETE FROM trip
-WHERE user_ID = (?);
-
 
 20. Buy Card
 
@@ -205,3 +196,10 @@ WHERE passenger_ID = (?) AND rid = (?);
 UPDATE admin
 SET ID = (?)
 WHERE ID = (?)
+
+
+30. Delete Admin
+
+DELETE FROM admin
+WHERE ID = (?);
+
