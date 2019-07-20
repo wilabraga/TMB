@@ -609,12 +609,15 @@ public class GUI {
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
 		JTable table = new JTable(rData, columnNames);
+		//JOptionPane.showMessageDialog(panelViewReviews, rData[0][1]);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 54);
 		scrollPane.setSize(444, 218);
 		panelViewReviews.add(scrollPane, BorderLayout.CENTER);
 		
 		ButtonGroup rdbtnViewReviews = new ButtonGroup();
+		
+		
 		
 		//TABLE STUFF HERE
 		
@@ -625,17 +628,18 @@ public class GUI {
 				
 				if (s.equals(rdbtnID)) {
 					//creating attribute arrays
-					//int revcount = 0;
+					int revcount = 0;
 					ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
 					ArrayList<Object[]> revs = new ArrayList<>();
 					
 					for (Object[] t: temp) {
 						if (((String) t[0]).equals(userID)) {
 							revs.add(t);
-							//revcount++;
+							revcount++;
 						}
 					}
 					//rData = new Object[revcount][6];
+					JOptionPane.showMessageDialog(panelViewReviews, userID);
 					
 					//putting data in table
 					for (int i = 0; i < revs.size(); i++) {
@@ -839,7 +843,7 @@ public class GUI {
 		txtFirstName.setColumns(10);
 		
 		txtMiddlein = new JTextField();
-		//txtMiddlein.setText((String)(Queries.getUserInfo(userID,"minit")[0]));
+		txtMiddlein.setText((String)(Queries.getUserInfo(userID,"minit")[0]));
 		txtMiddlein.setBounds(159, 46, 130, 26);
 		panelEditProfile.add(txtMiddlein);
 		txtMiddlein.setColumns(10);
@@ -855,7 +859,7 @@ public class GUI {
 		panelEditProfile.add(lblEmail);
 		
 		txtEmail_1 = new JTextField();
-		//txtEmail_1.setText((String)(Queries.getUserInfo(userID,"passenger_email")[0]));
+		txtEmail_1.setText((String)(Queries.getUserInfo(userID,"passenger_email")[0]));
 		txtEmail_1.setBounds(90, 79, 130, 26);
 		panelEditProfile.add(txtEmail_1);
 		txtEmail_1.setColumns(10);
@@ -879,13 +883,13 @@ public class GUI {
 		panelEditProfile.add(lblConfirmPassword);
 		
 		txtPassword_1 = new JTextField();
-		//txtPassword_1.setText((String)(Queries.getUserInfo(userID,"password")[0]));
+		txtPassword_1.setText((String)(Queries.getUserInfo(userID,"password")[0]));
 		txtPassword_1.setBounds(27, 193, 130, 26);
 		panelEditProfile.add(txtPassword_1);
 		txtPassword_1.setColumns(10);
 		
 		txtPassword_2 = new JTextField();
-		//txtPassword_2.setText((String)(Queries.getUserInfo(userID,"password")[0]));
+		txtPassword_2.setText((String)(Queries.getUserInfo(userID,"password")[0]));
 		txtPassword_2.setBounds(253, 188, 130, 26);
 		panelEditProfile.add(txtPassword_2);
 		txtPassword_2.setColumns(10);
@@ -952,14 +956,8 @@ public class GUI {
 	
 		
 		JButton btnTmes = new JButton("T-mes");
-		btnTmes.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Queries.buyCard(userID,"T-mes",Queries.getCurrentTimestamp(),0,null);
-			}
-		});
 		btnTmes.setBounds(40, 58, 117, 77);
 		panelBuyCard.add(btnTmes);
-		
 		
 		JButton btnT = new JButton("T-10");
 		btnT.setBounds(245, 58, 117, 71);
