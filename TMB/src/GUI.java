@@ -959,8 +959,14 @@ public class GUI {
 	
 		
 		JButton btnTmes = new JButton("T-mes");
+		btnTmes.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Queries.buyCard(userID,"T-mes",Queries.getCurrentTimestamp(),0,null);
+			}
+		});
 		btnTmes.setBounds(40, 58, 117, 77);
 		panelBuyCard.add(btnTmes);
+		
 		
 		JButton btnT = new JButton("T-10");
 		btnT.setBounds(245, 58, 117, 71);
