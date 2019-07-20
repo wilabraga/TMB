@@ -602,17 +602,7 @@ public class GUI {
 		
 		ButtonGroup rdbtnViewReviews = new ButtonGroup();
 		
-		//putting data in table
-		for (int i = 0; i < revs.size(); i++) {
-			Object[] tuple = revs.get(i);
-			
-			rowData[i][0] = (Integer) tuple[1];
-			rowData[i][1] = (String) tuple[2];
-			rowData[i][2] = (Integer) tuple[3];
-			rowData[i][3] = (Integer) tuple[4];
-			rowData[i][4] = (String) tuple[5];
-			rowData[i][5] = (String) tuple[6];
-		}
+		//TABLE STUFF HERE
 		
 		JRadioButton rdbtnID = new JRadioButton("");
 		rdbtnID.addActionListener(new ActionListener() {
