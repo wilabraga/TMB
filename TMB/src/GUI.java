@@ -19,6 +19,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JRadioButton;
@@ -551,10 +552,10 @@ public class GUI {
 				}
 				else {
 					//ADD REVIEW TO DATABASE
-					Time d = new Time(System.currentTimeMillis());
+					Timestamp d = new Timestamp(System.currentTimeMillis());
 					int shop = Integer.parseInt(reviewshopping);
 					int conn = Integer.parseInt(reviewconnectionspeed);
-					JOptionPane.showMessageDialog(panelLeaveReview2, d + " " + shop + conn + " " + nextID);
+					//JOptionPane.showMessageDialog(panelLeaveReview2, d + " " + shop + conn + " " + nextID);
 					Queries.addReview(userID, nextID, shop, conn, reviewcomment, null, "Pending", d, reviewstationname);
 					nextID++;
 					panelPassengerLanding.setVisible(true);
