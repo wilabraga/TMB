@@ -88,6 +88,7 @@ public class GUI {
 	private JTextField txtOrder_1;
 	public JLabel lblWelcomename;
 	public JLabel lblWelcomeName;
+	private JTable table_1;
 	
 	
 
@@ -1221,6 +1222,39 @@ public class GUI {
 		JButton btnUpdate_2 = new JButton("Update");
 		btnUpdate_2.setBounds(327, 225, 117, 47);
 		panelLineSummaryAD.add(btnUpdate_2);
+		
+
+		Object rowData11[][] = { { "Row1-Column1", "Row1-Column2"}};
+		Object columnNames11[] = { "Station", "Order"};
+		JTable table11 = new JTable(rowData11, columnNames11);
+		JScrollPane scrollPane11 = new JScrollPane(table11);
+		scrollPane11.setLocation(17, 50);
+		scrollPane11.setSize(265, 163);
+		panelLineSummaryAD.add(scrollPane11, BorderLayout.CENTER);
+		
+		JButton btnDelete_2 = new JButton("Delete");
+		btnDelete_2.setBounds(372, 62, 72, 29);
+		panelLineSummaryAD.add(btnDelete_2);
+		
+		JButton btnUp = new JButton("UP");
+		btnUp.setBounds(280, 62, 44, 29);
+		panelLineSummaryAD.add(btnUp);
+		
+		JButton btnDown = new JButton("DOWN");
+		btnDown.setBounds(316, 62, 66, 29);
+		panelLineSummaryAD.add(btnDown);
+		
+		JRadioButton rdbtnStationLineNum = new JRadioButton("");
+		rdbtnStationLineNum.setBounds(51, 25, 141, 23);
+		panelLineSummaryAD.add(rdbtnStationLineNum);
+		
+		JRadioButton rdbtnOrderLineNum = new JRadioButton("");
+		rdbtnOrderLineNum.setBounds(169, 27, 141, 23);
+		panelLineSummaryAD.add(rdbtnOrderLineNum);
+		
+		ButtonGroup LineSummary  = new ButtonGroup();
+		LineSummary.add(rdbtnStationLineNum);
+		LineSummary.add(rdbtnOrderLineNum);
 		
 		
 		
