@@ -954,22 +954,52 @@ public class GUI {
 		panelAdminLanding.add(btnBuyCard);
 		
 		JButton btnGoOnTrip_1 = new JButton("Go on Trip");
+		btnGoOnTrip_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelGoOnATrip.setVisible(true);
+				panelAdminLanding.setVisible(false);
+			}
+		});
 		btnGoOnTrip_1.setBounds(31, 158, 117, 51);
 		panelAdminLanding.add(btnGoOnTrip_1);
 		
 		JButton btnReviewPassengerReviews = new JButton("Review Passenger Reviews");
+		btnReviewPassengerReviews.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelPendingReviews.setVisible(true);
+				panelAdminLanding.setVisible(false);
+			}
+		});
 		btnReviewPassengerReviews.setBounds(31, 225, 194, 47);
 		panelAdminLanding.add(btnReviewPassengerReviews);
 		
 		JButton btnEditProfile = new JButton("Edit Profile");
+		btnEditProfile.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelEditProfileAD.setVisible(true);
+				panelAdminLanding.setVisible(false);
+			}
+		});
 		btnEditProfile.setBounds(276, 30, 117, 59);
 		panelAdminLanding.add(btnEditProfile);
 		
 		JButton btnAddStation = new JButton("Add Station");
+		btnAddStation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelAddStation.setVisible(true);
+				panelAdminLanding.setVisible(false);
+			}
+		});
 		btnAddStation.setBounds(276, 107, 117, 59);
 		panelAdminLanding.add(btnAddStation);
 		
 		JButton btnAddLine = new JButton("Add Line");
+		btnAddLine.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelAddLine.setVisible(true);
+				panelAdminLanding.setVisible(false);
+			}
+		});
 		btnAddLine.setBounds(276, 178, 117, 51);
 		panelAdminLanding.add(btnAddLine);
 		
