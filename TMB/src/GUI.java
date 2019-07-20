@@ -574,7 +574,7 @@ public class GUI {
 		
 		
 		
-		Object rowData[][] = {};
+		Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" } };
 		//{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
 		JTable table = new JTable(rowData, columnNames);
@@ -585,32 +585,34 @@ public class GUI {
 		
 		ButtonGroup rdbtnViewReviews = new ButtonGroup();
 		
+		//creating attribute arrays
+		ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
+		ArrayList<Object[]> revs = new ArrayList<>();
+		for (Object[] t: temp) {
+			if (t[0].equals(userID)) {
+				revs.add(t);
+			}
+		}
+		
+		//putting data in table
+		for (int i = 0; i < revs.size(); i++) {
+			Object[] tuple = revs.get(i);
+			
+			rowData[i][0] = (Integer) tuple[1];
+			rowData[i][1] = (String) tuple[2];
+			rowData[i][2] = (Integer) tuple[3];
+			rowData[i][3] = (Integer) tuple[4];
+			rowData[i][4] = (String) tuple[5];
+			rowData[i][5] = (String) tuple[6];
+		}
+		
 		JRadioButton rdbtnID = new JRadioButton("");
 		rdbtnID.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				JRadioButton s = (JRadioButton) e.getSource();
 				
 				if (s.equals(rdbtnID)) {
-					//creating attribute arrays
-					ArrayList<Object[]> temp = Queries.getReviews("rid", "passenger_ID", "rid", "station_name", "shopping", "connection_speed", "comment", "approval_status");
-					ArrayList<Object[]> revs = new ArrayList<>();
-					for (Object[] t: temp) {
-						if (t[0].equals(userID)) {
-							revs.add(t);
-						}
-					}
 					
-					//putting data in table
-					for (int i = 0; i < revs.size(); i++) {
-						Object[] tuple = revs.get(i);
-						
-						rowData[i][0] = (Integer) tuple[1];
-						rowData[i][1] = (String) tuple[2];
-						rowData[i][2] = (Integer) tuple[3];
-						rowData[i][3] = (Integer) tuple[4];
-						rowData[i][4] = (String) tuple[5];
-						rowData[i][5] = (String) tuple[6];
-					}
 				}
 			}
 		});
