@@ -605,7 +605,6 @@ public class GUI {
 		viewreviews.setBounds(16, 6, 243, 16);
 		panelViewReviews.add(viewreviews);
 		
-<<<<<<< HEAD
 		//rData = new Object[3][6];
 		
 		//creating attribute arrays
@@ -638,9 +637,7 @@ public class GUI {
 			rData[i][5] = (String) tuple[6];
 		}
 		
-=======
 		Object[][] rData = new Object[20][6];
->>>>>>> 0d13c51a1b5c7e01bf14e75c48e774f155adf9cf
 		//{{ "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5", "R1C6" }}
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status"};
 		JTable table = new JTable(rData, columnNames);
