@@ -95,7 +95,7 @@ public class Queries {
 		return names;
 	}
 	
-	public static void addReview(String ID, int rID, int shopping, int connectionSpeed, String comment, String adminID, String status, Time timestamp, String stationName) {
+	public static void addReview(String ID, int rID, int shopping, int connectionSpeed, String comment, String adminID, String status, Timestamp timestamp, String stationName) {
 		String query = ""
 				+ "INSERT INTO review "
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
@@ -108,7 +108,7 @@ public class Queries {
 			psmt.setString(5, comment);
 			psmt.setString(6, adminID);
 			psmt.setString(7, status);
-			psmt.setTime(8, timestamp);
+			psmt.setTimestamp(8, timestamp);
 			psmt.setString(9, stationName);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
