@@ -1111,9 +1111,9 @@ public class GUI {
 			if (idExists && !(ID.equals(uid))) {
 				JOptionPane.showMessageDialog(panelEditProfileAD, "User ID already exists!");
 			}
-			if (pw.contentEquals(pw2) && pw.length() >= 8 && (!idExists || ID.equals(uid))) {
+			if (pw.contentEquals(pw2) && (pw.length() >= 8 || oldpw.equals(pw)) && (!idExists || ID.equals(uid))) {
 				Queries.updateUser(ID, uid, first, mi, last, pw, null);
-				Queries.updateAdminID(ID,uid);
+				Queries.updateAdminID(ID, uid);
 				fName = first;
 				lName = last;
 				ID = uid;
