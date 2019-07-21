@@ -863,7 +863,7 @@ public class GUI {
 
 		ArrayList<Object[]> validCards = Queries.getUserValidCards(ID, "type", "purchase_date_time");
 		ArrayList<String> validC = new ArrayList<>();
-		JOptionPane.showMessageDialog(panelGoOnATrip, validCards.get(0));
+		
 		for (Object[] c: validCards) {
 			validC.add(((String) c[0]) + " (" + ((Timestamp) c[1]).toString() + ")");
 		}
@@ -872,6 +872,7 @@ public class GUI {
 		JComboBox comboBoxCard = new JComboBox(validC.toArray());
 		comboBoxCard.setBounds(200, 150, 250, 25);
 		panelGoOnATrip.add(comboBoxCard);
+		//JOptionPane.showMessageDialog(panelGoOnATrip, comboBoxCard.getItemAt(0));
 		//THIS RETURNS OBJECTS.... NEED A TO STRING METHOD FOR VALID CARDS
 
 		// Button
