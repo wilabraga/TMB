@@ -859,9 +859,11 @@ public class GUI {
 		comboBoxStation.setBounds(200, 46, 250, 25);
 		panelGoOnATrip.add(comboBoxStation);
 
-		JComboBox comboBoxCard = new JComboBox();
+		ArrayList<Object[]> validCards = Queries.getUserValidCards(ID);
+		JComboBox comboBoxCard = new JComboBox(validCards.toArray());
 		comboBoxCard.setBounds(200, 150, 250, 25);
 		panelGoOnATrip.add(comboBoxCard);
+		//THIS RETURNS OBJECTS.... NEED A TO STRING METHOD FOR VALID CARDS
 
 		// Button
 		JButton btnEmbark = new JButton("Embark");
@@ -870,6 +872,11 @@ public class GUI {
 
 		return panelGoOnATrip;
 	}
+	
+	//public String[] userValidCards(Object[] objectArray){
+		//String[] returnList = new String[];
+		
+	//}
 
 	private JPanel makeUpdateTripPanel() {
 		JPanel panelUpdateTrip = new JPanel();
@@ -1037,38 +1044,32 @@ public class GUI {
 		panelEditProfileAD.add(lblUserId_1);
 
 		// Text Fields
-		JTextField txtFirstname = new JTextField();
-		txtFirstname.setText("FIRSTNAME");
+		JTextField txtFirstname = new JTextField(fName);
 		txtFirstname.setBounds(16, 57, 130, 26);
 		panelEditProfileAD.add(txtFirstname);
 		txtFirstname.setColumns(10);
 
-		JTextField txtMiddlein_1 = new JTextField();
-		txtMiddlein_1.setText("MIDDLEIN");
+		JTextField txtMiddlein_1 = new JTextField((String)Queries.getUserInfo(ID,"minit")[0]);
 		txtMiddlein_1.setBounds(158, 57, 130, 26);
 		panelEditProfileAD.add(txtMiddlein_1);
 		txtMiddlein_1.setColumns(10);
 
-		JTextField txtLastname_1 = new JTextField();
-		txtLastname_1.setText("LASTNAME");
+		JTextField txtLastname_1 = new JTextField(lName);
 		txtLastname_1.setBounds(314, 57, 130, 26);
 		panelEditProfileAD.add(txtLastname_1);
 		txtLastname_1.setColumns(10);
 
-		JTextField txtUserid_1 = new JTextField();
-		txtUserid_1.setText("USERID");
+		JTextField txtUserid_1 = new JTextField(ID);
 		txtUserid_1.setBounds(103, 95, 130, 26);
 		panelEditProfileAD.add(txtUserid_1);
 		txtUserid_1.setColumns(10);
 
-		JTextField txtPassword_3 = new JTextField();
-		txtPassword_3.setText("Password");
+		JTextField txtPassword_3 = new JTextField((String)Queries.getUserInfo(ID,"password")[0]);
 		txtPassword_3.setBounds(218, 169, 130, 26);
 		panelEditProfileAD.add(txtPassword_3);
 		txtPassword_3.setColumns(10);
 
-		JTextField txtPassword_4 = new JTextField();
-		txtPassword_4.setText("Password");
+		JTextField txtPassword_4 = new JTextField((String)Queries.getUserInfo(ID,"password")[0]);
 		txtPassword_4.setBounds(6, 169, 130, 26);
 		panelEditProfileAD.add(txtPassword_4);
 		txtPassword_4.setColumns(10);
@@ -1076,10 +1077,49 @@ public class GUI {
 		// Buttons
 
 		JButton btnDelete_1 = new JButton("Delete");
+		btnDelete_1.addActionListener(e -> {
+			Queries.deleteAdmin((String)Queries.getUserInfo(ID, "ID")[0]);
+		});
 		btnDelete_1.setBounds(33, 218, 117, 54);
 		panelEditProfileAD.add(btnDelete_1);
 
+		
 		JButton btnUpdate_1 = new JButton("Update");
+		btnUpdate_1.addActionListener(e -> {
+			String first = txtFirstname.getText();
+			String mi = txtMiddlein_1.getText();
+			String last = txtLastname_1.getText();
+			String uid = txtUserid_1.getText();
+			String pw = txtPassword_3.getText();
+			String pw2 = txtPassword_4.getText();
+			String oldpw = (String)Queries.getUserInfo(ID,"password")[0];
+			if (pw.contentEquals(pw2) == false) {
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Passwords do not match!");
+			}
+			if (pw.length() < 8 && !(oldpw.equals(pw))) {
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Password must have at least 8 characters!");
+			}
+			ArrayList<String> ids = Queries.getUserIDs();
+			boolean idExists = false;
+			for (String id : ids) {
+				if (id.equals(uid)) {
+					idExists = true;
+				}
+			}
+			if (idExists && !(ID.equals(uid))) {
+				JOptionPane.showMessageDialog(panelEditProfileAD, "User ID already exists!");
+			}
+			if (pw.contentEquals(pw2) && pw.length() >= 8 && (!idExists || ID.equals(uid))) {
+				Queries.updateUser(ID, uid, first, mi, last, pw, null);
+				Queries.updateAdminID(ID,uid);
+				fName = first;
+				lName = last;
+				ID = uid;
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Update Successful!");
+				panelEditProfileAD.setVisible(false);
+				makeAdminLandingPanel();
+			}
+		});
 		btnUpdate_1.setBounds(228, 218, 117, 54);
 		panelEditProfileAD.add(btnUpdate_1);
 
