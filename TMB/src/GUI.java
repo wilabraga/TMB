@@ -17,6 +17,8 @@ import java.util.Arrays;
 
 import javax.swing.JRadioButton;
 
+import java.util.Date;
+
 public class GUI {
 
 	private JFrame frame;
@@ -617,20 +619,61 @@ public class GUI {
 		JButton btnTmes = new JButton("T-mes");
 		btnTmes.setBounds(40, 58, 117, 77);
 		panelBuyCard.add(btnTmes);
+		btnTmes.addActionListener(e -> {
+			JOptionPane.showMessageDialog(panelBuyCard, "T-mes Card Purchased");
+			buyTmesCard();
+		});
 
 		JButton btnT = new JButton("T-10");
 		btnT.setBounds(245, 58, 117, 71);
 		panelBuyCard.add(btnT);
+		btnT.addActionListener(e -> {
+			JOptionPane.showMessageDialog(panelBuyCard, "T-10 Card Purchased");
+			buyT10Card();
+		});
 
 		JButton btnT_1 = new JButton("T-50/30");
 		btnT_1.setBounds(40, 170, 117, 71);
 		panelBuyCard.add(btnT_1);
+		btnT_1.addActionListener(e -> {
+			JOptionPane.showMessageDialog(panelBuyCard, "T-50/30 Card Purchased");
+			buyT5030Card();
+		});
 
 		JButton btnTjove = new JButton("T-jove");
 		btnTjove.setBounds(245, 170, 117, 77);
 		panelBuyCard.add(btnTjove);
+		btnTjove.addActionListener(e -> {
+			JOptionPane.showMessageDialog(panelBuyCard, "T-jove Card Purchased");
+			buyTjoveCard();
+		});
 
 		return panelBuyCard;
+	}
+	
+	public void buyTmesCard() {
+		//fancy buy Tmes Card stuff ... need to figure out month addition
+	}
+	
+	public void buyT10Card() {
+		Queries.buyCard(ID, "T10", Queries.getCurrentTimestamp(), 10, null);
+		//done
+	}
+	
+	public void buyT5030Card() {
+		Timestamp currentts = Queries.getCurrentTimestamp();
+		//Date currentDate = new Date(currentts.getTime());
+		//Timestamp tsPlus30 = new Timestamp(currentts + Long.valueOf(30 * 24 * 60 * 60 * 1000));
+		Queries.buyCard(ID, "T-50/30", currentts, 50, null);
+		//FIGURE OUT TIMESTAMP DATE
+	}
+	
+	public void buyTjoveCard() {
+		Queries.buyCard(ID, "T-jove", Queries.getCurrentTimestamp(), -1, null);
+		//FIGURE OUT TIMESTAMP
+		//ADD 90 DAYS to TIMESTAMP
+		//the -1 should be null ????
+		
 	}
 
 	private JPanel makeEditProfilePanel() {

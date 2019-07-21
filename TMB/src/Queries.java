@@ -121,10 +121,22 @@ public class Queries {
 		String query = ""
 				+ "SELECT * "
 				+ "FROM review "
-				+ "ORDER BY (?) ASC;";
+				+ "ORDER BY %s ASC;";
+		query = String.format(query, order);
+		TMB.makeStatement();
+		return TMB.executeQuery(query, attributes);
+	}
+	
+	public static ArrayList<Object[]> getReviewsByUser(String ID, String order, String... attributes) {
+		String query = ""
+				+ "SELECT * "
+				+ "FROM review "
+				+ "WHERE passenger_ID = (?) "
+				+ "ORDER BY %s ASC;";
+		query = String.format(query, order);
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
-			psmt.setString(1, order);
+			psmt.setString(1, ID);
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -250,12 +262,12 @@ public class Queries {
 				+ "SELECT station_name, order_number "
 				+ "FROM station_on_line "
 				+ "WHERE line_name = (?) "
-				+ "ORDER BY (?) ASC;";
+				+ "ORDER BY %s ASC;";
+		query = String.format(query, order);
 		ArrayList<Object[]> stations = new ArrayList<>();
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setString(1, lineName);
-			psmt.setString(2, order);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -378,13 +390,13 @@ public class Queries {
 				+ "SELECT * "
 				+ "FROM trip "
 				+ "WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?) "
-				+ "ORDER BY (?) ASC;";
+				+ "ORDER BY %s ASC;";
+		query = String.format(query, order);
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setString(1, ID);
 			psmt.setString(2, type);
 			psmt.setTimestamp(3, purchaseDate);
-			psmt.setString(4, type);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}
