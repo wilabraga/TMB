@@ -350,7 +350,7 @@ public class GUI {
 				if (rData[0][0] != null) {
 					return getValueAt(0, c).getClass();
 				} else {
-					return null;
+					return Object.class;
 				}
 	            
 	        }
