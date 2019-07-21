@@ -18,7 +18,6 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
-import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.awt.event.ActionEvent;
@@ -97,6 +96,7 @@ public class GUI {
 	public JLabel lblWelcomeName;
 	private JTable table_1;
 	public JLabel viewreviews;
+	public String currentStation;
 	
 	
 
@@ -846,11 +846,11 @@ public class GUI {
         //STATION INFO
         
         
-        JLabel lblStationName = new JLabel("STATION NAME");
+        JLabel lblStationName = new JLabel(currentStation);
         lblStationName.setBounds(6, 6, 127, 16);
         panelStationInfo.add(lblStationName);
         
-        JLabel lblStatus = new JLabel("Status : STATUS");
+        JLabel lblStatus = new JLabel("Status : ");
         lblStatus.setBounds(324, 6, 120, 16);
         panelStationInfo.add(lblStatus);
         
