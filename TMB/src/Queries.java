@@ -496,6 +496,8 @@ public class Queries {
 		TMB.executePreparedModification();
 	}
 	
+	//what is the purpose of this if we have the update user
+	
 	public static void deleteAdmin(String ID) {
 		String query = ""
 				+ "DELETE FROM admin "
