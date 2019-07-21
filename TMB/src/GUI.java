@@ -380,7 +380,7 @@ public class GUI {
 				"connection_speed", "comment", "approval_status");
 		for (int i = 0; i < revs.size(); i++) {
 			Object[] tuple = revs.get(i); //(Integer) tuple[1]
-			rData[i][0] = new JButton(Integer.toString((Integer) tuple[1]));
+			rData[i][0] = new JButton("test");
 			rData[i][1] = (String) tuple[2];
 			rData[i][2] = (Integer) tuple[3];
 			rData[i][3] = (Integer) tuple[4];
