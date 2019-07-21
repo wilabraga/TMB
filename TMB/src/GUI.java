@@ -946,6 +946,24 @@ public class GUI {
 
 		// Button
 		JButton btnEmbark = new JButton("Embark");
+		btnEmbark.addActionListener(e -> {
+			String startStation = comboBoxStation.getSelectedItem().toString();
+			String tripTicket = comboBoxCard.getSelectedItem().toString();
+			String[] splitString = tripTicket.split("\\s+");
+			String tripTicketType = splitString[0];
+			//String tripTicketPurchaseDate = (splitString[1].substring(1,11)+" "+splitString[2].substring(0,10));
+			//SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+			//Date parsedDate = Queries.getCurrentTimestamp2();
+			//try {
+			//	parsedDate = dateFormat.parse(tripTicketPurchaseDate);
+			//} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+			//	e1.printStackTrace();
+			//}
+			//Timestamp timestampPD = new java.sql.Timestamp(parsedDate.getTime());
+		
+			//Queries.embark(ID, tripTicketType, Queries.getCurrentTimestamp2(), Queries.getCurrentTimestamp2(), null, startStation, null);
+		});
 		btnEmbark.setBounds(235, 203, 153, 55);
 		panelGoOnATrip.add(btnEmbark);
 
