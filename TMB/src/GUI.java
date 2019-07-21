@@ -379,13 +379,15 @@ public class GUI {
 		ArrayList<Object[]> revs = Queries.getReviewsByUser(ID, sort, "passenger_ID", "rid", "station_name", "shopping",
 				"connection_speed", "comment", "approval_status");
 		for (int i = 0; i < revs.size(); i++) {
-			Object[] tuple = revs.get(i);
-			rData[i][0] = (Integer) tuple[1];
+			Object[] tuple = revs.get(i); //(Integer) tuple[1]
+			rData[i][0] = new JButton(Integer.toString((Integer) tuple[1]));
 			rData[i][1] = (String) tuple[2];
 			rData[i][2] = (Integer) tuple[3];
 			rData[i][3] = (Integer) tuple[4];
 			rData[i][4] = (String) tuple[5];
 			rData[i][5] = (String) tuple[6];
+			
+			
 		}
 	}
 
