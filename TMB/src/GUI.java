@@ -1078,12 +1078,17 @@ public class GUI {
 
 		JButton btnDelete_1 = new JButton("Delete");
 		btnDelete_1.addActionListener(e -> {
-			Queries.deleteAdmin((String)Queries.getUserInfo(ID, "ID")[0]);
+			System.out.print("HERE");
+			Queries.deleteAdmin(ID);
+			System.out.println("WE");
 		});
+		System.out.println("GO");
 		btnDelete_1.setBounds(33, 218, 117, 54);
 		panelEditProfileAD.add(btnDelete_1);
+//		DELETING THE  ADMIN REMOVES THE ADMIN ID FROM THE ADMIN TABLE BUT IT DOES NOT REMOVE USER
 
 		
+		//UPDATING THE ADMIN ID DOES NOT WORK
 		JButton btnUpdate_1 = new JButton("Update");
 		btnUpdate_1.addActionListener(e -> {
 			String first = txtFirstname.getText();
