@@ -706,40 +706,37 @@ public class GUI {
 		panelEditProfile.add(lblUserId);
 
 		// Text Fields
-		JTextField txtFirstName = new JTextField();
-		txtFirstName.setText(fName);
+		JTextField txtFirstName = new JTextField(fName);
 		txtFirstName.setBounds(5, 46, 130, 26);
 		panelEditProfile.add(txtFirstName);
 		txtFirstName.setColumns(10);
 
-		JTextField txtMiddlein = new JTextField();
+		JTextField txtMiddlein = new JTextField((String)Queries.getUserInfo(ID, "minit")[0]);
 		txtMiddlein.setBounds(159, 46, 130, 26);
 		panelEditProfile.add(txtMiddlein);
 		txtMiddlein.setColumns(10);
 
-		JTextField txtLastname = new JTextField();
-		txtLastname.setText(lName);
+		JTextField txtLastname = new JTextField(lName);
 		txtLastname.setBounds(301, 46, 130, 26);
 		panelEditProfile.add(txtLastname);
 		txtLastname.setColumns(10);
 
-		JTextField txtEmail_1 = new JTextField();
+		JTextField txtEmail_1 = new JTextField((String)Queries.getUserInfo(ID,"passenger_email")[0]);
 		txtEmail_1.setBounds(90, 79, 130, 26);
 		panelEditProfile.add(txtEmail_1);
 		txtEmail_1.setColumns(10);
 
-		JTextField txtUserid = new JTextField();
-		txtUserid.setText(ID);
+		JTextField txtUserid = new JTextField(ID);
 		txtUserid.setBounds(100, 122, 130, 26);
 		panelEditProfile.add(txtUserid);
 		txtUserid.setColumns(10);
 
-		JTextField txtPassword_1 = new JTextField();
+		JTextField txtPassword_1 = new JTextField((String)Queries.getUserInfo(ID, "password")[0]);
 		txtPassword_1.setBounds(27, 193, 130, 26);
 		panelEditProfile.add(txtPassword_1);
 		txtPassword_1.setColumns(10);
 
-		JTextField txtPassword_2 = new JTextField();
+		JTextField txtPassword_2 = new JTextField((String)Queries.getUserInfo(ID, "password")[0]);
 		txtPassword_2.setBounds(253, 188, 130, 26);
 		panelEditProfile.add(txtPassword_2);
 		txtPassword_2.setColumns(10);
@@ -774,10 +771,10 @@ public class GUI {
 					idExists = true;
 				}
 			}
-			if (idExists) {
+			if (idExists && !(ID.equals(uid))) {
 				JOptionPane.showMessageDialog(panelEditProfile, "User ID already exists!");
 			}
-			if (pw.contentEquals(pw2) && pw.length() >= 8 && !idExists) {
+			if (pw.contentEquals(pw2) && pw.length() >= 8 && (!idExists || ID.equals(uid))) {
 				Queries.updateUser(ID, uid, first, mi, last, pw, email);
 				fName = first;
 				lName = last;

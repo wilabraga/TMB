@@ -291,7 +291,7 @@ public class Queries {
 	public static void updateUser(String originalID, String newID, String fName, String mInit, String lName, String password, String email) {
 		String query = ""
 				+ "UPDATE user "
-				+ "SET ID = (?), first_name = (?), last_name = (?), password = (?), passenger_email = (?) "
+				+ "SET ID = (?), first_name = (?), minit= (?), last_name = (?), password = (?), passenger_email = (?) "
 				+ "WHERE ID = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
@@ -439,6 +439,8 @@ public class Queries {
 		TMB.executePreparedModification();
 	}
 	
+	//getCurrentTimeStamp is throwing an index out of bound error!
+	//"INDEX 0 out of bounds for length 0"
 	public static Timestamp getCurrentTimestamp() {	
 		String query = ""
 				+ "SELECT current_timestamp();";
