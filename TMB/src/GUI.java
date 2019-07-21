@@ -383,10 +383,12 @@ public class GUI {
 		        int col = table.getSelectedColumn();
 		        if (col == 0 && row < revcount) {
 		        	int val = (Integer) table.getValueAt(row, col);
-		        	//JOptionPane.showMessageDialog(panelViewReviews, val); H*CK YEAH
-		        	
 		        	panelViewReviews.setVisible(false);
 					makeEditReviewPanel(val);
+		        } else if (col == 1 && row < revcount) {
+		        	String val = (String) table.getValueAt(row, col);
+		        	panelViewReviews.setVisible(false);
+		        	makeStationInfoPanel(val);
 		        }
 			}
 		});
@@ -629,29 +631,37 @@ public class GUI {
 	private JPanel makeStationInfoPanel(String sName) {
 		JPanel panelStationInfo = new JPanel();
 		initPanel(panelStationInfo, "name_116178640692044");
+		
+		Object[] stat = Queries.getStation(sName, "status", "address");
+		float[] avgs = Queries.getAvgRatings(sName);
+		ArrayList<String> lines = Queries.getLinesFromStation(sName);
+		String status = (String) stat[0];
+		String addy = (String) stat[1];
+		float aShop = avgs[0];
+		float aConn = avgs[1];
 
 		// Labels
-		JLabel lblStationName = new JLabel("STATION NAME");
+		JLabel lblStationName = new JLabel(sName);
 		lblStationName.setBounds(6, 6, 127, 16);
 		panelStationInfo.add(lblStationName);
 
-		JLabel lblStatus = new JLabel("Status : STATUS");
+		JLabel lblStatus = new JLabel("Status : " + status);
 		lblStatus.setBounds(324, 6, 120, 16);
 		panelStationInfo.add(lblStatus);
 
-		JLabel lblAddress = new JLabel("Address : ADDRESS");
+		JLabel lblAddress = new JLabel("Address : " + addy);
 		lblAddress.setBounds(27, 34, 396, 16);
 		panelStationInfo.add(lblAddress);
 
-		JLabel lblLinesLines = new JLabel("Lines : LINES");
+		JLabel lblLinesLines = new JLabel("Lines : " + "");
 		lblLinesLines.setBounds(29, 65, 255, 16);
 		panelStationInfo.add(lblLinesLines);
 
-		JLabel lblAverageShopping = new JLabel("Average Shopping : AVGSHOP");
+		JLabel lblAverageShopping = new JLabel("Average Shopping : " + aShop);
 		lblAverageShopping.setBounds(6, 93, 234, 16);
 		panelStationInfo.add(lblAverageShopping);
 
-		JLabel lblAverageConnectionSpeed = new JLabel("Average Connection Speed : AVGCS");
+		JLabel lblAverageConnectionSpeed = new JLabel("Average Connection Speed : " + aConn);
 		lblAverageConnectionSpeed.setBounds(217, 93, 227, 16);
 		panelStationInfo.add(lblAverageConnectionSpeed);
 

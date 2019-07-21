@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -227,7 +228,7 @@ public class Queries {
 		return names;
 	}
 	
-	public static int[] getAvgRatings(String stationName) {
+	public static float[] getAvgRatings(String stationName) {
 		String query = ""
 				+ "SELECT AVG(shopping) AS avg_shopping, AVG(connection_speed) AS avg_speed "
 				+ "FROM review "
@@ -240,7 +241,7 @@ public class Queries {
 			System.out.println(e.getMessage());
 		}
 		Object[] result = TMB.executePreparedQuery("avg_shopping", "avg_speed").get(0);
-		return new int[] {(int) result[0], (int) result[1]};
+		return new float[] {((BigDecimal) result[0]).floatValue(), ((BigDecimal) result[1]).floatValue()};
 	}
 	
 	public static int getNumStops(String lineName) {
