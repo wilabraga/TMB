@@ -478,15 +478,15 @@ public class GUI {
 		lblReviewStatus.setBounds(352, 18, 61, 16);
 		panelEditReview.add(lblReviewStatus);
 
-		JLabel lblId_1 = new JLabel("ID: ");
+		JLabel lblId_1 = new JLabel("ID:");
 		lblId_1.setBounds(27, 56, 61, 16);
 		panelEditReview.add(lblId_1);
 
-		JLabel lblShopping = new JLabel("Shopping");
+		JLabel lblShopping = new JLabel("Shopping:");
 		lblShopping.setBounds(27, 107, 61, 16);
 		panelEditReview.add(lblShopping);
 
-		JLabel lblConnectionSpeed_1 = new JLabel("Connection Speed");
+		JLabel lblConnectionSpeed_1 = new JLabel("Connection Speed:");
 		lblConnectionSpeed_1.setBounds(27, 145, 155, 16);
 		panelEditReview.add(lblConnectionSpeed_1);
 
@@ -513,18 +513,40 @@ public class GUI {
 		
 		JComboBox comboBox_1 = new JComboBox(stars);
 		comboBox_1.setBounds(259, 103, 52, 27);
+		comboBox_1.setSelectedIndex(shop);
 		panelEditReview.add(comboBox_1);
 
 		JComboBox comboBox_2 = new JComboBox(stars);
 		comboBox_2.setBounds(259, 141, 52, 27);
+		comboBox_2.setSelectedIndex(conx);
 		panelEditReview.add(comboBox_2);
 
 		// Buttons
 		JButton btnDeleteReview = new JButton("Delete Review");
+		btnDeleteReview.addActionListener(e -> {
+			Queries.deleteReview(ID, revID);
+			panelEditReview.setVisible(false);
+			makeViewReviewPanel("rid");
+		});
 		btnDeleteReview.setBounds(45, 244, 117, 29);
 		panelEditReview.add(btnDeleteReview);
 
 		JButton btnSaveReview = new JButton("Save Review");
+		btnSaveReview.addActionListener(e -> {
+			//JOptionPane.showMessageDialog(panelEditReview, comboBox_1.getSelectedItem().toString());
+			String shopping = comboBox_1.getSelectedItem().toString();
+			String speed = comboBox_2.getSelectedItem().toString();
+			String newCom = txtOldComment.getText();
+			if (shopping.equals("--") || speed.equals("--")) {
+			} else {
+				Timestamp d = new Timestamp(System.currentTimeMillis());
+				int shopp = Integer.parseInt(shopping);
+				int conn = Integer.parseInt(speed);
+				Queries.updateReview(ID, revID, shopp, conn, newCom, apst, d);
+				panelEditReview.setVisible(false);
+				makeViewReviewPanel("rid");
+			}
+		});
 		btnSaveReview.setBounds(245, 244, 117, 29);
 		panelEditReview.add(btnSaveReview);
 		return panelEditReview;

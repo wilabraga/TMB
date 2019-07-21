@@ -159,7 +159,7 @@ public class Queries {
 		return TMB.executePreparedQuery(attributes).get(0);
 	}
 	
-	public static void updateReview(String ID, int rid, int shopping, int connectionSpeed, String comment, String status, Time timestamp) {
+	public static void updateReview(String ID, int rid, int shopping, int connectionSpeed, String comment, String status, Timestamp timestamp) {
 		String query = ""
 				+ "UPDATE review "
 				+ "SET shopping = (?), connection_speed = (?), comment = (?), approval_status = (?), edit_timestamp = (?) "
@@ -170,7 +170,7 @@ public class Queries {
 			psmt.setInt(2, connectionSpeed);
 			psmt.setString(3, comment);
 			psmt.setString(4, status);
-			psmt.setTime(5, timestamp);
+			psmt.setTimestamp(5, timestamp);
 			psmt.setString(6, ID);
 			psmt.setInt(7, rid);
 		} catch(SQLException e) {
