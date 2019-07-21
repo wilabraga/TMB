@@ -48,7 +48,14 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 
 SELECT *
 FROM review
-ORDER BY (?) ASC
+ORDER BY %s ASC;
+
+8. Get Reviews By User
+
+SELECT *
+FROM review
+WHERE passenger_id = (?)
+ORDER BY %s ASC;
 
 
 9. Get Review
@@ -104,7 +111,7 @@ WHERE line_name = (?);
 SELECT station_name, order_number
 FROM station_on_line
 WHERE line_name = (?)
-ORDER BY (?) ASC;
+ORDER BY %s ASC;
 
 
 17. Get User Info
@@ -155,7 +162,7 @@ VALUES ((?), (?), (?), (?), (?), (?), (?));
 SELECT *
 FROM trip
 WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?)
-ORDER BY (?) ASC;
+ORDER BY %s ASC;
 
 
 24. Get Trip Start Station
