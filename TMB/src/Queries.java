@@ -5,6 +5,7 @@ import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.sql.Statement;
 
 public class Queries {
 	
@@ -292,7 +293,9 @@ public class Queries {
 		String query = ""
 				+ "UPDATE user "
 				+ "SET ID = (?), first_name = (?), minit= (?), last_name = (?), password = (?), passenger_email = (?) "
-				+ "WHERE ID = (?);";
+				+ "WHERE ID = (?);";		
+		
+				
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setString(1, newID);
@@ -322,7 +325,7 @@ public class Queries {
 		TMB.executePreparedModification();
 	}
 	
-	public static void buyCard(String ID, String type, Timestamp purchaseDate, int usesLeft, Date expirationDate) {
+	public static void buyCard(String ID, String type, Timestamp purchaseDate, Object usesLeft, Date expirationDate) {
 		String query = ""
 				+ "INSERT INTO card "
 				+ "VALUES ((?), (?), (?), (?), (?));";
@@ -331,7 +334,7 @@ public class Queries {
 			psmt.setString(1, ID);
 			psmt.setString(2, type);
 			psmt.setTimestamp(3, purchaseDate);
-			psmt.setInt(4, usesLeft);
+			psmt.setObject(4, usesLeft);
 			psmt.setDate(5, expirationDate);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
@@ -446,6 +449,11 @@ public class Queries {
 				+ "SELECT current_timestamp();";
 		TMB.makeStatement();
 		return (Timestamp) TMB.executeQuery(query).get(0)[0];
+	}
+	
+	public static Timestamp getCurrentTimestamp2() {
+		java.sql.Timestamp date = new java.sql.Timestamp(new java.util.Date().getTime());
+		return date;
 	}
 	
 	public static ArrayList<Object[]> getPendingReviews(String... attributes) {

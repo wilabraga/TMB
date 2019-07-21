@@ -18,6 +18,9 @@ import java.util.Arrays;
 import javax.swing.JRadioButton;
 
 import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;  
+import java.util.Calendar;
 
 public class GUI {
 
@@ -651,31 +654,54 @@ public class GUI {
 		return panelBuyCard;
 	}
 	
+	
+	public java.sql.Date convertUtilToSql(java.util.Date uDate){
+		java.sql.Date sDate = new java.sql.Date(uDate.getTime());
+		return sDate;
+	}
+	
 	public void buyTmesCard() {
-		//fancy buy Tmes Card stuff ... need to figure out month addition
+		Calendar calendar = Calendar.getInstance();
+		Timestamp currentts = Queries.getCurrentTimestamp2();
+		calendar.setTimeInMillis(currentts.getTime());
+		calendar.add(Calendar.MONTH, 1);
+		Timestamp expTimestamp = new Timestamp(calendar.getTime().getTime());
+		Date expDate = new Date(expTimestamp.getTime());
+        java.sql.Date sDate = convertUtilToSql(expDate);
+		Queries.buyCard(ID, "T-mes", currentts, null, sDate);
+		//done
 	}
 	
 	public void buyT10Card() {
-		Queries.buyCard(ID, "T10", Queries.getCurrentTimestamp(), 10, null);
+		Queries.buyCard(ID, "T-10", Queries.getCurrentTimestamp2(), 10, null);
 		//done
 	}
 	
 	public void buyT5030Card() {
-		Timestamp currentts = Queries.getCurrentTimestamp();
-		//Date currentDate = new Date(currentts.getTime());
-		//Timestamp tsPlus30 = new Timestamp(currentts + Long.valueOf(30 * 24 * 60 * 60 * 1000));
-		Queries.buyCard(ID, "T-50/30", currentts, 50, null);
-		//FIGURE OUT TIMESTAMP DATE
+		Calendar calendar = Calendar.getInstance();
+		Timestamp currentts = Queries.getCurrentTimestamp2();
+		calendar.setTimeInMillis(currentts.getTime());
+		calendar.add(Calendar.DAY_OF_WEEK, 30);
+		Timestamp expTimestamp = new Timestamp(calendar.getTime().getTime());
+		Date expDate = new Date(expTimestamp.getTime());
+        java.sql.Date sDate = convertUtilToSql(expDate);
+		Queries.buyCard(ID, "T-50/30", currentts, 50, sDate);
+		//done
 	}
 	
 	public void buyTjoveCard() {
-		Queries.buyCard(ID, "T-jove", Queries.getCurrentTimestamp(), -1, null);
-		//FIGURE OUT TIMESTAMP
-		//ADD 90 DAYS to TIMESTAMP
-		//the -1 should be null ????
+		Calendar calendar = Calendar.getInstance();
+		Timestamp currentts = Queries.getCurrentTimestamp2();
+		calendar.setTimeInMillis(currentts.getTime());
+		calendar.add(Calendar.DAY_OF_WEEK, 90);
+		Timestamp expTimestamp = new Timestamp(calendar.getTime().getTime());
+		Date expDate = new Date(expTimestamp.getTime());
+        java.sql.Date sDate = convertUtilToSql(expDate);
+		Queries.buyCard(ID, "T-jove", currentts, null, sDate);
+		//done
 		
 	}
-
+	//EDITING THE USERID OR DELETING USER DOESNT WORK
 	private JPanel makeEditProfilePanel() {
 		JPanel panelEditProfile = new JPanel();
 		initPanel(panelEditProfile, "name_117153285834010");
@@ -828,12 +854,13 @@ public class GUI {
 		panelGoOnATrip.add(lblCardUsed);
 
 		// ComboBoxes
-		JComboBox comboBoxStation = new JComboBox();
-		comboBoxStation.setBounds(290, 46, 52, 27);
+		ArrayList<String> stations = Queries.getStationNames();
+		JComboBox comboBoxStation = new JComboBox(stations.toArray());
+		comboBoxStation.setBounds(200, 46, 250, 25);
 		panelGoOnATrip.add(comboBoxStation);
 
 		JComboBox comboBoxCard = new JComboBox();
-		comboBoxCard.setBounds(290, 151, 52, 27);
+		comboBoxCard.setBounds(200, 150, 250, 25);
 		panelGoOnATrip.add(comboBoxCard);
 
 		// Button
