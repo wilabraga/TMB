@@ -861,8 +861,14 @@ public class GUI {
 		comboBoxStation.setBounds(200, 46, 250, 25);
 		panelGoOnATrip.add(comboBoxStation);
 
-		ArrayList<Object[]> validCards = Queries.getUserValidCards(ID);
-		JComboBox comboBoxCard = new JComboBox(validCards.toArray());
+		ArrayList<Object[]> validCards = Queries.getUserValidCards(ID, "type", "purchase_date_time");
+		ArrayList<String> validC = new ArrayList<>();
+		for (Object[] c: validCards) {
+			validC.add(((String) c[0]) + " (" + ((String) c[1]) + ")");
+		}
+		
+		
+		JComboBox comboBoxCard = new JComboBox(validC.toArray());
 		comboBoxCard.setBounds(200, 150, 250, 25);
 		panelGoOnATrip.add(comboBoxCard);
 		//THIS RETURNS OBJECTS.... NEED A TO STRING METHOD FOR VALID CARDS
