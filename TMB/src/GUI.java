@@ -3,11 +3,15 @@ import javax.swing.JScrollPane;
 import javax.swing.JFrame;
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+
 import javax.swing.ButtonGroup;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -313,15 +317,74 @@ public class GUI {
 
 		// Table
 		Object[][] rData = new Object[20][6];
-		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status" };
-		JTable table = new JTable(rData, columnNames);
+		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status" }; //rData, columnNames
+		
+		//TABLE MODEL
+		class MyTModel extends AbstractTableModel {
+
+			@Override
+			public int getColumnCount() {
+				// TODO Auto-generated method stub
+				return columnNames.length;
+			}
+
+			@Override
+			public int getRowCount() {
+				// TODO Auto-generated method stub
+				return rData[0].length;
+			}
+
+			@Override
+			public Object getValueAt(int row, int col) {
+				// TODO Auto-generated method stub
+				return rData[row][col];
+			}
+			
+			public Class getColumnClass(int c) {
+				if (c == 0) {
+					return JButton.class;
+				}
+	            return getValueAt(0, c).getClass();
+	        }
+			
+			private void printDebugData() {
+	            int numRows = getRowCount();
+	            int numCols = getColumnCount();
+
+	            for (int i=0; i < numRows; i++) {
+	                System.out.print("    row " + i + ":");
+	                for (int j=0; j < numCols; j++) {
+	                    System.out.print("  " + rData[i][j]);
+	                }
+	                System.out.println();
+	            }
+	            System.out.println("--------------------------");
+	        }
+
+		}//END TABLE MODEL STUFF
+		
+		JTable table = new JTable(new MyTModel());
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 54);
 		scrollPane.setSize(444, 218);
 		panelViewReviews.add(scrollPane, BorderLayout.CENTER);
 
 		// Initial Data
-		populateReviewTable(order, rData);
+		int revcount = populateReviewTable(order, rData);
+		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow();
+		        int col = table.getSelectedColumn();
+		        if (col == 0 && row < revcount) {
+		        	int val = (Integer) table.getValueAt(row, col);
+		        	//JOptionPane.showMessageDialog(panelViewReviews, val); H*CK YEAH
+		        	
+		        	panelViewReviews.setVisible(false);
+					makeEditReviewPanel(val);
+		        }
+			}
+		});
 
 		// Sort Radio Buttons
 		ButtonGroup rdbtnViewReviews = new ButtonGroup();
@@ -375,36 +438,42 @@ public class GUI {
 		return panelViewReviews;
 	}
 
-	private void populateReviewTable(String sort, Object[][] rData) {
+	private int populateReviewTable(String sort, Object[][] rData) {
 		ArrayList<Object[]> revs = Queries.getReviewsByUser(ID, sort, "passenger_ID", "rid", "station_name", "shopping",
 				"connection_speed", "comment", "approval_status");
 		for (int i = 0; i < revs.size(); i++) {
 			Object[] tuple = revs.get(i); //(Integer) tuple[1]
-			rData[i][0] = new JButton("test");
+			rData[i][0] = (Integer) tuple[1];
 			rData[i][1] = (String) tuple[2];
 			rData[i][2] = (Integer) tuple[3];
 			rData[i][3] = (Integer) tuple[4];
 			rData[i][4] = (String) tuple[5];
 			rData[i][5] = (String) tuple[6];
-
-
 		}
+		return revs.size();
 	}
 
-	private JPanel makeEditReviewPanel() {
+	private JPanel makeEditReviewPanel(int revID) {
 		JPanel panelEditReview = new JPanel();
 		initPanel(panelEditReview, "name_110293474217147");
+		
+		Object[] revi = Queries.getReview(ID, revID, "shopping", "connection_speed", "comment", "approval_status", "station_name");
+		Integer shop = (Integer) revi[0];
+		Integer conx = (Integer) revi[1];
+		String comment = (String) revi[2];
+		String apst = (String) revi[3];
+		String name = (String) revi[4];
 
 		// Labels
-		JLabel lblEditReview = new JLabel("Edit Review : \"STATION NAME\"");
+		JLabel lblEditReview = new JLabel("Edit Review : " + name);
 		lblEditReview.setBounds(17, 18, 270, 16);
 		panelEditReview.add(lblEditReview);
 
-		JLabel lblReviewStatus = new JLabel("Status");
+		JLabel lblReviewStatus = new JLabel(apst);
 		lblReviewStatus.setBounds(352, 18, 61, 16);
 		panelEditReview.add(lblReviewStatus);
 
-		JLabel lblId_1 = new JLabel("ID");
+		JLabel lblId_1 = new JLabel("ID: ");
 		lblId_1.setBounds(27, 56, 61, 16);
 		panelEditReview.add(lblId_1);
 
@@ -421,12 +490,12 @@ public class GUI {
 		panelEditReview.add(lblComment_1);
 		JTextField txtOldComment = new JTextField();
 
-		txtOldComment.setText("old comment!!!");
+		txtOldComment.setText(comment);
 		txtOldComment.setBounds(17, 182, 396, 50);
 		panelEditReview.add(txtOldComment);
 		txtOldComment.setColumns(10);
 
-		JLabel lblidNum = new JLabel("\"ID NUM\"");
+		JLabel lblidNum = new JLabel("" + revID);
 		lblidNum.setBounds(242, 56, 61, 16);
 		panelEditReview.add(lblidNum);
 
@@ -435,11 +504,13 @@ public class GUI {
 		panelEditReview.add(lblRatingstars_1);
 
 		// ComboBoxes
-		JComboBox comboBox_1 = new JComboBox();
+		String[] stars = { "--", "1", "2", "3", "4", "5" };
+		
+		JComboBox comboBox_1 = new JComboBox(stars);
 		comboBox_1.setBounds(259, 103, 52, 27);
 		panelEditReview.add(comboBox_1);
 
-		JComboBox comboBox_2 = new JComboBox();
+		JComboBox comboBox_2 = new JComboBox(stars);
 		comboBox_2.setBounds(259, 141, 52, 27);
 		panelEditReview.add(comboBox_2);
 
@@ -528,7 +599,7 @@ public class GUI {
 		return panelLeaveReview;
 	}
 
-	private JPanel makeStationInfoPanel() {
+	private JPanel makeStationInfoPanel(String sName) {
 		JPanel panelStationInfo = new JPanel();
 		initPanel(panelStationInfo, "name_116178640692044");
 
@@ -1366,3 +1437,4 @@ public class GUI {
 		return panelStationInfoAD;
 	}
 }
+
