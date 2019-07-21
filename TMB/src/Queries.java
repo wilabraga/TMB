@@ -346,7 +346,7 @@ public class Queries {
 		String query = ""
 				+ "SELECT * "
 				+ "FROM card "
-				+ "WHERE user_ID = (?) AND (uses_left > 0 OR uses_left = NULL) AND (expiration_date >= CURDATE() OR expiration_date = NULL);";
+				+ "WHERE user_ID = (?) AND (uses_left > 0 OR uses_left IS NULL) AND (expiration_date >= CURDATE() OR expiration_date IS NULL);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setString(1, ID);

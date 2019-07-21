@@ -867,8 +867,6 @@ public class GUI {
 		for (Object[] c: validCards) {
 			validC.add(((String) c[0]) + " (" + ((Timestamp) c[1]).toString() + ")");
 		}
-
-
 		JComboBox comboBoxCard = new JComboBox(validC.toArray());
 		comboBoxCard.setBounds(200, 150, 250, 25);
 		panelGoOnATrip.add(comboBoxCard);
