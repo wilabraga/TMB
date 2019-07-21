@@ -319,6 +319,9 @@ public class GUI {
 		Object[][] rData = new Object[20][6];
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status" }; //rData, columnNames
 		
+		// Initial Data
+		int revcount = populateReviewTable(order, rData);
+		
 		//TABLE MODEL
 		class MyTModel extends AbstractTableModel {
 
@@ -368,9 +371,6 @@ public class GUI {
 		scrollPane.setLocation(6, 54);
 		scrollPane.setSize(444, 218);
 		panelViewReviews.add(scrollPane, BorderLayout.CENTER);
-
-		// Initial Data
-		int revcount = populateReviewTable(order, rData);
 		
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
