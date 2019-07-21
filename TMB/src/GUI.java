@@ -19,7 +19,7 @@ import javax.swing.JRadioButton;
 
 import java.util.Date;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;  
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 public class GUI {
@@ -301,7 +301,7 @@ public class GUI {
 	private JPanel makeViewReviewPanel() {
 		return makeViewReviewPanel("rid");
 	}
-	
+
 	private JPanel makeViewReviewPanel(String order) {
 		JPanel panelViewReviews = new JPanel();
 		initPanel(panelViewReviews, "name_76504429508073");
@@ -386,8 +386,8 @@ public class GUI {
 			rData[i][3] = (Integer) tuple[4];
 			rData[i][4] = (String) tuple[5];
 			rData[i][5] = (String) tuple[6];
-			
-			
+
+
 		}
 	}
 
@@ -655,13 +655,13 @@ public class GUI {
 
 		return panelBuyCard;
 	}
-	
-	
+
+
 	public java.sql.Date convertUtilToSql(java.util.Date uDate){
 		java.sql.Date sDate = new java.sql.Date(uDate.getTime());
 		return sDate;
 	}
-	
+
 	public void buyTmesCard() {
 		Calendar calendar = Calendar.getInstance();
 		Timestamp currentts = Queries.getCurrentTimestamp2();
@@ -673,12 +673,12 @@ public class GUI {
 		Queries.buyCard(ID, "T-mes", currentts, null, sDate);
 		//done
 	}
-	
+
 	public void buyT10Card() {
 		Queries.buyCard(ID, "T-10", Queries.getCurrentTimestamp2(), 10, null);
 		//done
 	}
-	
+
 	public void buyT5030Card() {
 		Calendar calendar = Calendar.getInstance();
 		Timestamp currentts = Queries.getCurrentTimestamp2();
@@ -690,7 +690,7 @@ public class GUI {
 		Queries.buyCard(ID, "T-50/30", currentts, 50, sDate);
 		//done
 	}
-	
+
 	public void buyTjoveCard() {
 		Calendar calendar = Calendar.getInstance();
 		Timestamp currentts = Queries.getCurrentTimestamp2();
@@ -701,7 +701,7 @@ public class GUI {
         java.sql.Date sDate = convertUtilToSql(expDate);
 		Queries.buyCard(ID, "T-jove", currentts, null, sDate);
 		//done
-		
+
 	}
 	//EDITING THE USERID OR DELETING USER DOESNT WORK
 	private JPanel makeEditProfilePanel() {
@@ -863,11 +863,12 @@ public class GUI {
 
 		ArrayList<Object[]> validCards = Queries.getUserValidCards(ID, "type", "purchase_date_time");
 		ArrayList<String> validC = new ArrayList<>();
+		JOptionPane.showMessageDialog(panelGoOnATrip, validCards.get(0));
 		for (Object[] c: validCards) {
 			validC.add(((String) c[0]) + " (" + ((Timestamp) c[1]).toString() + ")");
 		}
-		
-		
+
+
 		JComboBox comboBoxCard = new JComboBox(validC.toArray());
 		comboBoxCard.setBounds(200, 150, 250, 25);
 		panelGoOnATrip.add(comboBoxCard);
@@ -880,10 +881,10 @@ public class GUI {
 
 		return panelGoOnATrip;
 	}
-	
+
 	//public String[] userValidCards(Object[] objectArray){
 		//String[] returnList = new String[];
-		
+
 	//}
 
 	private JPanel makeUpdateTripPanel() {
@@ -1086,12 +1087,17 @@ public class GUI {
 
 		JButton btnDelete_1 = new JButton("Delete");
 		btnDelete_1.addActionListener(e -> {
-			Queries.deleteAdmin((String)Queries.getUserInfo(ID, "ID")[0]);
+			System.out.print("HERE");
+			Queries.deleteAdmin(ID);
+			System.out.println("WE");
 		});
+		System.out.println("GO");
 		btnDelete_1.setBounds(33, 218, 117, 54);
 		panelEditProfileAD.add(btnDelete_1);
+//		DELETING THE  ADMIN REMOVES THE ADMIN ID FROM THE ADMIN TABLE BUT IT DOES NOT REMOVE USER
 
-		
+
+		//UPDATING THE ADMIN ID DOES NOT WORK
 		JButton btnUpdate_1 = new JButton("Update");
 		btnUpdate_1.addActionListener(e -> {
 			String first = txtFirstname.getText();
