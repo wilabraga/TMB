@@ -863,8 +863,10 @@ public class GUI {
 
 		ArrayList<Object[]> validCards = Queries.getUserValidCards(ID, "type", "purchase_date_time");
 		ArrayList<String> validC = new ArrayList<>();
+		JOptionPane.showMessageDialog(panelGoOnATrip, validCards.get(0));
 		for (Object[] c: validCards) {
 			validC.add(((String) c[0]) + " (" + ((String) c[1]) + ")");
+			JOptionPane.showMessageDialog(panelGoOnATrip, ((String) c[0]) + " (" + ((String) c[1]) + ")");
 		}
 		
 		
