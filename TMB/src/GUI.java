@@ -347,7 +347,12 @@ public class GUI {
 				if (c == 0) {
 					return JButton.class;
 				}
-	            return getValueAt(0, c).getClass();
+				if (rData[0][0] != null) {
+					return getValueAt(0, c).getClass();
+				} else {
+					return null;
+				}
+	            
 	        }
 			
 			private void printDebugData() {
