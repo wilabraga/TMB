@@ -389,6 +389,22 @@ public class Queries {
 		TMB.executePreparedModification();
 	}
 	
+	public static ArrayList<Object[]> getAllTrips(String ID, String order, String... attributes) {
+		String query = ""
+				+ "SELECT * "
+				+ "FROM trip "
+				+ "WHERE user_ID = (?) "
+				+ "ORDER BY %s ASC;";
+		query = String.format(query, order);
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, ID);
+		} catch(SQLException e) {
+			System.out.println(e.getMessage());
+		}
+		return TMB.executePreparedQuery(attributes);
+	}
+	
 	public static ArrayList<Object[]> getTrips(String ID, String type, Timestamp purchaseDate, String order, String... attributes) {
 		String query = ""
 				+ "SELECT * "

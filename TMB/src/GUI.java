@@ -10,7 +10,9 @@ import javax.swing.ButtonGroup;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
@@ -190,7 +192,7 @@ public class GUI {
 		JButton btnViewTrips = new JButton("View Trips");
 		btnViewTrips.addActionListener(e -> {
 			panelPassengerLanding.setVisible(false);
-			makeViewTripsPanel();
+			makeViewTripsPanel("start_date_time");
 		});
 		btnViewTrips.setBounds(245, 119, 117, 70);
 		panelPassengerLanding.add(btnViewTrips);
@@ -657,6 +659,23 @@ public class GUI {
 		JLabel lblLinesLines = new JLabel("Lines : " + "");
 		lblLinesLines.setBounds(29, 65, 255, 16);
 		panelStationInfo.add(lblLinesLines);
+		
+		//LINES LIST
+		JList<String> lisLines = new JList(lines.toArray());
+		lisLines.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		lisLines.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		lisLines.setVisibleRowCount(-1);
+		lisLines.setBounds(65, 65, 125, 16);
+		panelStationInfo.add(lisLines);
+		lisLines.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				String val = lisLines.getSelectedValue();
+		        if (val != null) {
+		        	panelStationInfo.setVisible(false);
+					makeLineSummaryPanel(val, "order_number");
+		        }
+			}
+		});
 
 		JLabel lblAverageShopping = new JLabel("Average Shopping : " + aShop);
 		lblAverageShopping.setBounds(6, 93, 234, 16);
@@ -696,13 +715,26 @@ public class GUI {
 		panelStationInfo.add(scrollPane, BorderLayout.CENTER);
 		return panelStationInfo;
 	}
+	
+	private int populateStationTable(String line, String sort, Object[][] rData) {
+		ArrayList<Object[]> stations = Queries.getStationsFromLine(line, sort);
+		for (int i = 0; i < stations.size(); i++) {
+			Object[] tuple = stations.get(i);
+			rData[i][0] = (String) tuple[0];
+			rData[i][1] = (Integer) tuple[1];
+		}
+		return stations.size();
+	}
 
-	private JPanel makeLineSummaryPanel() {
+	private JPanel makeLineSummaryPanel(String lnum, String order) {
 		JPanel panelLineSummary = new JPanel();
 		initPanel(panelLineSummary, "name_116847732626867");
+		
+		ArrayList<Object[]> stations = Queries.getStationsFromLine(lnum, "order_number");
+		
 
 		// Labels
-		JLabel lblLineLine = new JLabel("Line : LINE#");
+		JLabel lblLineLine = new JLabel("Line : " + lnum);
 		lblLineLine.setBounds(6, 6, 145, 16);
 		panelLineSummary.add(lblLineLine);
 
@@ -711,13 +743,35 @@ public class GUI {
 		panelLineSummary.add(lblStops);
 
 		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2" } };
+		Object rowData[][] = new Object[20][2];
+		int numstats = populateStationTable(lnum, order, rowData);
 		Object columnNames[] = { "Station", "Order" };
-		JTable table = new JTable(rowData, columnNames);
+		//BELOW MODEL MAKES TABLE NOT EDITABLE
+		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
+		
+		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 50);
 		scrollPane.setSize(434, 2228);
 		panelLineSummary.add(scrollPane, BorderLayout.CENTER);
+		
+		//Clickable Stations
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow();
+		        int col = table.getSelectedColumn();
+		        if (col == 0 && row < numstats) {
+		        	String val = (String) table.getValueAt(row, col);
+		        	panelLineSummary.setVisible(false);
+					makeStationInfoPanel(val);
+		        }
+			}
+		});
 
 		// Radio Buttons
 		ButtonGroup rdbtnLineSummary = new ButtonGroup();
@@ -725,10 +779,18 @@ public class GUI {
 		JRadioButton rdbtnStationLS = new JRadioButton("");
 		rdbtnStationLS.setBounds(93, 26, 46, 23);
 		panelLineSummary.add(rdbtnStationLS);
+		rdbtnStationLS.addActionListener(e -> {
+			panelLineSummary.setVisible(false);
+			makeLineSummaryPanel(lnum, "line_name");
+		});
 
 		JRadioButton rdbtnOrder = new JRadioButton("");
 		rdbtnOrder.setBounds(275, 26, 33, 23);
 		panelLineSummary.add(rdbtnOrder);
+		rdbtnOrder.addActionListener(e -> {
+			panelLineSummary.setVisible(false);
+			makeLineSummaryPanel(lnum, "order_number");
+		});
 
 		rdbtnLineSummary.add(rdbtnStationLS);
 		rdbtnLineSummary.add(rdbtnOrder);
@@ -946,9 +1008,30 @@ public class GUI {
 		return panelEditProfile;
 	}
 
-	
+	private int populateTripTable(String sort, Object[][] rData) {
+		ArrayList<Object[]> trips = Queries.getAllTrips(ID, sort, "start_date_time", "end_date_time", "card_type", "from_station_name", "to_station_name");
+		for (int i = 0; i < trips.size(); i++) {
+			Object[] tuple = trips.get(i);
+			rData[i][0] = (Timestamp) tuple[0];
+			//checking to see if there's not an endtime yet
+			if(tuple[1] == null) {
+				rData[i][1] = "N/A";
+			} else {
+				rData[i][1] = (Timestamp) tuple[1];
+			}
+			rData[i][2] = (String) tuple[2];
+			rData[i][3] = (String) tuple[3];
+			//checking to see if there's no tostation yet
+			if(tuple[4] == null) {
+				rData[i][4] = "N/A";
+			} else {
+				rData[i][4] = (String) tuple[4];
+			}
+		}
+		return trips.size();
+	}
 
-	private JPanel makeViewTripsPanel() {
+	private JPanel makeViewTripsPanel(String order) {
 		JPanel panelViewTrips = new JPanel();
 		initPanel(panelViewTrips, "name_118708450389034");
 
@@ -958,13 +1041,36 @@ public class GUI {
 		panelViewTrips.add(lblMyTrips);
 
 		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5" } };
+		Object rowData[][] = new Object[20][5];
+		int numTrips = populateTripTable(order, rowData);
 		Object columnNames[] = { "Start DateTime", "End DateTime", "CardUsed", "From", "To" };
-		JTable table = new JTable(rowData, columnNames);
+		//BELOW MODEL MAKES TABLE NOT EDITABLE
+		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
+		
+		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 23);
 		scrollPane.setSize(444, 249);
 		panelViewTrips.add(scrollPane, BorderLayout.CENTER);
+		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow();
+		        int col = table.getSelectedColumn();
+		        if (col >= 0 && col <= 2 && row < numTrips) {
+		        	//UPDATE TRIP STUFF
+		        } else if (row < numTrips) {
+		        	String val = (String) table.getValueAt(row, col);
+		        	panelViewTrips.setVisible(false);
+		        	makeStationInfoPanel(val);
+		        }
+			}
+		});
 
 		return panelViewTrips;
 	}
@@ -1090,7 +1196,7 @@ public class GUI {
 		JButton btnViewTripsAD = new JButton("View Trips");
 		btnViewTripsAD.addActionListener(e -> {
 			panelAdminLanding.setVisible(false);
-			makeViewTripsPanel();
+			makeViewTripsPanel("start_date_time");
 		});
 		btnViewTripsAD.setBounds(31, 34, 117, 51);
 		panelAdminLanding.add(btnViewTripsAD);
