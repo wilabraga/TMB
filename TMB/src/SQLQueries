@@ -287,3 +287,16 @@ WHERE start_date_time = (?);
 SELECT *
 FROM review
 WHERE station_name = (?);
+
+
+42. Remove Admin Stations And Lines
+
+DELETE FROM station
+WHERE (name IN (SELECT station_name
+				FROM admin_add_station
+				WHERE admin_id = (?)));
+				
+DELETE FROM line
+WHERE (name IN (SELECT line_name
+				FROM admin_add_line
+				WHERE admin_id = (?)));

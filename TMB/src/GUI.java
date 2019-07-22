@@ -1478,6 +1478,7 @@ public class GUI {
 
 		JButton btnDelete_1 = new JButton("Delete");
 		btnDelete_1.addActionListener(e -> {
+			Queries.deleteAdminStationsAndLines(ID);
 			Queries.deleteAdmin(ID);
 			Queries.deleteUser(ID);
 			panelEditProfileAD.setVisible(false);
