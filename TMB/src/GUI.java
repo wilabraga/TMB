@@ -779,7 +779,9 @@ public class GUI {
 		//done
 
 	}
-	//EDITING THE USERID OR DELETING USER DOESNT WORK
+	
+	
+	//DONE
 	private JPanel makeEditProfilePanel() {
 		JPanel panelEditProfile = new JPanel();
 		initPanel(panelEditProfile, "name_117153285834010");
@@ -849,6 +851,8 @@ public class GUI {
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(e -> {
 			Queries.deleteUser((String) Queries.getUserInfo(ID, "ID")[0]);
+			panelEditProfile.setVisible(false);
+			makeLoginPanel();
 		});
 		btnDelete.setBounds(34, 229, 117, 29);
 		panelEditProfile.add(btnDelete);
@@ -865,7 +869,7 @@ public class GUI {
 			if (pw.contentEquals(pw2) == false) {
 				JOptionPane.showMessageDialog(panelEditProfile, "Passwords do not match!");
 			}
-			if (pw.length() < 8) {
+			if (pw.length() < 8 && (pw.equals((String)Queries.getUserInfo(ID, "password")[0]))== false) {
 				JOptionPane.showMessageDialog(panelEditProfile, "Password must have at least 8 characters!");
 			}
 			ArrayList<String> ids = Queries.getUserIDs();
@@ -875,10 +879,10 @@ public class GUI {
 					idExists = true;
 				}
 			}
-			if (idExists && !(ID.equals(uid))) {
+			if (idExists && (ID.equals(uid) == false)) {
 				JOptionPane.showMessageDialog(panelEditProfile, "User ID already exists!");
 			}
-			if (pw.contentEquals(pw2) && pw.length() >= 8 && (!idExists || ID.equals(uid))) {
+			if (pw.contentEquals(pw2) && (pw.length() >= 8 || (pw.equals((String)Queries.getUserInfo(ID, "password")[0]))== true) && (!idExists || ID.equals(uid))) {
 				Queries.updateUser(ID, uid, first, mi, last, pw, email);
 				fName = first;
 				lName = last;
@@ -892,6 +896,8 @@ public class GUI {
 		panelEditProfile.add(btnUpdate);
 		return panelEditProfile;
 	}
+
+	
 
 	private JPanel makeViewTripsPanel() {
 		JPanel panelViewTrips = new JPanel();
@@ -956,29 +962,34 @@ public class GUI {
 			String tripTicket = comboBoxCard.getSelectedItem().toString();
 			String[] splitString = tripTicket.split("\\s+");
 			String tripTicketType = splitString[0];
-			//String tripTicketPurchaseDate = (splitString[1].substring(1,11)+" "+splitString[2].substring(0,10));
-			//SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
-			//Date parsedDate = Queries.getCurrentTimestamp2();
-			//try {
-			//	parsedDate = dateFormat.parse(tripTicketPurchaseDate);
-			//} catch (ParseException e1) {
+			String tripTicketPurchaseDate = (splitString[1].substring(1,11)+" "+splitString[2].substring(0,10));
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+			Date parsedDate = Queries.getCurrentTimestamp2();
+			try {
+				parsedDate = dateFormat.parse(tripTicketPurchaseDate);
+			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
-			//	e1.printStackTrace();
-			//}
-			//Timestamp timestampPD = new java.sql.Timestamp(parsedDate.getTime());
-		
-			//Queries.embark(ID, tripTicketType, Queries.getCurrentTimestamp2(), Queries.getCurrentTimestamp2(), null, startStation, null);
+				e1.printStackTrace();
+			}
+			Timestamp timestampPD = new java.sql.Timestamp(parsedDate.getTime());
+			Calendar calendar = Calendar.getInstance();
+			calendar.setTimeInMillis(timestampPD.getTime());
+			calendar.add(Calendar.HOUR, -2);
+			Timestamp finalTimestamp = new Timestamp(calendar.getTime().getTime());
+			SimpleDateFormat dateFormat5 = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
+			String tsstring  = dateFormat5.format(finalTimestamp);
+			
+			Queries.embark(ID, tripTicketType, tsstring, Queries.getCurrentTimestamp2(), null, startStation, null);
 		});
 		btnEmbark.setBounds(235, 203, 153, 55);
 		panelGoOnATrip.add(btnEmbark);
 
 		return panelGoOnATrip;
+		
+		/////if you keep clicking, it lets you use more than allowed uses.
 	}
 
-	//public String[] userValidCards(Object[] objectArray){
-		//String[] returnList = new String[];
-
-	//}
+	
 
 	private JPanel makeUpdateTripPanel() {
 		JPanel panelUpdateTrip = new JPanel();
@@ -1116,6 +1127,8 @@ public class GUI {
 		return panelPendingReviews;
 	}
 
+	
+	//DONEEEEE
 	private JPanel makeEditProfileADPanel() {
 		JPanel panelEditProfileAD = new JPanel();
 		initPanel(panelEditProfileAD, "name_119594530220165");
@@ -1180,17 +1193,14 @@ public class GUI {
 
 		JButton btnDelete_1 = new JButton("Delete");
 		btnDelete_1.addActionListener(e -> {
-			System.out.print("HERE");
 			Queries.deleteAdmin(ID);
-			System.out.println("WE");
+			Queries.deleteUser(ID);
+			panelEditProfileAD.setVisible(false);
+			makeLoginPanel();
 		});
-		System.out.println("GO");
 		btnDelete_1.setBounds(33, 218, 117, 54);
 		panelEditProfileAD.add(btnDelete_1);
-//		DELETING THE  ADMIN REMOVES THE ADMIN ID FROM THE ADMIN TABLE BUT IT DOES NOT REMOVE USER
 
-
-		//UPDATING THE ADMIN ID DOES NOT WORK
 		JButton btnUpdate_1 = new JButton("Update");
 		btnUpdate_1.addActionListener(e -> {
 			String first = txtFirstname.getText();

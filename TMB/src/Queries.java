@@ -356,16 +356,16 @@ public class Queries {
 		return TMB.executePreparedQuery(attributes);
 	}
 	
-	public static void embark(String ID, String type, Timestamp purchaseDate, Timestamp startTime, Timestamp endTime, String startStation, String endStation) {
+	public static void embark(String ID, String type, String purchaseDate, Timestamp startTime, Timestamp endTime, String startStation, String endStation) {
 		String query = ""
 				+ "UPDATE card "
 				+ "SET uses_left = uses_left - 1 "
-				+ "WHERE user_ID = (?) AND type = (?) AND purchase_date_time = (?));";
+				+ "WHERE user_ID = (?) AND type = (?) AND purchase_date_time = (?) AND uses_left IS NOT NULL;";	
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setString(1, ID);
 			psmt.setString(2, type);
-			psmt.setTimestamp(3, purchaseDate);
+			psmt.setString(3, purchaseDate);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -377,7 +377,7 @@ public class Queries {
 		try {
 			psmt.setString(1, ID);
 			psmt.setString(2, type);
-			psmt.setTimestamp(3, purchaseDate);
+			psmt.setString(3, purchaseDate);
 			psmt.setTimestamp(4, startTime);
 			psmt.setTimestamp(5, endTime);
 			psmt.setString(6, startStation);
