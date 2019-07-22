@@ -1137,7 +1137,11 @@ public class GUI {
 		        	String val = (String) table.getValueAt(row, col);
 		        	if (!val.equals("N/A")) {
 			        	panelViewTrips.setVisible(false);
-			        	makeStationInfoPanel(val);
+			        	if (!isAdmin) {
+			        		makeStationInfoPanel(val);
+			        	} else {
+			        		makeStationInfoADPanel();
+			        	}
 					}
 		        }
 			}
