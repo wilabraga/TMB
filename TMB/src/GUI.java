@@ -1159,11 +1159,10 @@ public class GUI {
 			Timestamp timestampPD = new java.sql.Timestamp(parsedDate.getTime());
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(timestampPD.getTime());
-			calendar.add(Calendar.HOUR, -2);
 			Timestamp finalTimestamp = new Timestamp(calendar.getTime().getTime());
 			SimpleDateFormat dateFormat5 = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 			String tsstring  = dateFormat5.format(finalTimestamp);
-			
+			System.out.println(tsstring);
 			Queries.embark(ID, tripTicketType, tsstring, Queries.getCurrentTimestamp2(), null, startStation, null);
 			JOptionPane.showMessageDialog(panelGoOnATrip, "Embark successful!");
 			panelGoOnATrip.setVisible(false);
@@ -1179,7 +1178,6 @@ public class GUI {
 
 		return panelGoOnATrip;
 		
-		/////if you keep clicking, it lets you use more than allowed uses.
 	}
 
 	
