@@ -36,6 +36,8 @@ public class GUI {
 	public String lName;
 	public String ID;
 	public boolean isAdmin;
+	public Integer count = 0;
+
 
 	/**
 	 * Create the application.
@@ -1339,31 +1341,88 @@ public class GUI {
 		txtOrder.setColumns(10);
 
 		// ComboBox
-		JComboBox comboBox_3 = new JComboBox();
-		comboBox_3.setBounds(16, 102, 52, 27);
+		ArrayList<String> lineNames = Queries.getLineNames();
+		JComboBox comboBox_3 = new JComboBox(lineNames.toArray());
+		comboBox_3.setBounds(16, 102, 75, 27);
 		panelAddStation.add(comboBox_3);
+		
 
-		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2" } };
-		Object columnNames[] = { "Line", "Order" };
-		JTable table = new JTable(rowData, columnNames);
+		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn("Line");
+		model.addColumn("Order");
+		JTable table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(26, 140);
 		scrollPane.setSize(353, 100);
 		panelAddStation.add(scrollPane, BorderLayout.CENTER);
-
+		ArrayList<String> addinglines = new ArrayList<String>();
+		ArrayList<String> addingstations = new ArrayList<String>();
+		
 		// Buttons
 		JButton btnAddLine_1 = new JButton("Add Line");
+		btnAddLine_1.addActionListener(e -> {
+			String selectedLine = comboBox_3.getSelectedItem().toString();
+			String selectedOrder = txtOrder.getText();
+			ArrayList<Integer> linenums = Queries.getLineOrderNumbers(selectedLine);
+			System.out.println(linenums);
+			String newStationName = txtStationName.getText();
+			if (Queries.getStationNames().contains(newStationName)) {
+				JOptionPane.showMessageDialog(panelAddStation, "Station Name not Unique.");
+			}
+			else if (isNumeric(selectedOrder) == false) {
+				JOptionPane.showMessageDialog(panelAddStation, "Invalid Order Number");
+			}
+			else if (linenums.contains((Integer.valueOf(selectedOrder)))){
+				JOptionPane.showMessageDialog(panelAddStation, "Invalid Order Number");
+			}
+			else {
+				DefaultTableModel model2 = (DefaultTableModel) table.getModel();
+				model2.addRow(new Object[]{selectedLine,selectedOrder});
+				addinglines.add(selectedLine);
+				addingstations.add(selectedOrder);
+				
+			}
+			
+		});
 		btnAddLine_1.setBounds(314, 102, 117, 29);
 		panelAddStation.add(btnAddLine_1);
 
+		
+		//ADDD MAKING SURE ADDRESS IS UNIQUE
 		JButton btnAddStation_1 = new JButton("Add Station");
+		btnAddStation_1.addActionListener(e -> {
+			String newStationName = txtStationName.getText();
+			if (Queries.getStationNames().contains(newStationName)) {
+				JOptionPane.showMessageDialog(panelAddStation, "Station Name not Unique.");
+			}
+			
+			else if (isNumeric(txtPostalCode.getText()) == false)
+					{
+				JOptionPane.showMessageDialog(panelAddStation, "Enter Numeric PostalCode.");
+
+			}
+			else {
+				Queries.addStation(newStationName, "Open", txtState.getText(), txtStreetAddress.getText(), Integer.valueOf(txtPostalCode.getText()), txtCity.getText(), ID, Queries.getCurrentTimestamp2());
+				for (int i=0; i<addinglines.size(); i++) {
+					Queries.addLineToStation(newStationName, addinglines.get(i), Integer.valueOf(addingstations.get(i)));
+				}
+			}
+		});
 		btnAddStation_1.setBounds(314, 243, 117, 29);
 		panelAddStation.add(btnAddStation_1);
 
 		return panelAddStation;
 	}
-
+	
+	
+	public static boolean isNumeric(String str) { 
+		  try {  
+		    Double.parseDouble(str);  
+		    return true;
+		  } catch(NumberFormatException e){  
+		    return false;  
+		  }  
+		}
 	private JPanel makeAddLinePanel() {
 		JPanel panelAddLine = new JPanel();
 		initPanel(panelAddLine, "name_120405071029218");

@@ -553,6 +553,23 @@ public class Queries {
 		return names;
 	}
 	
+	/**
+	
+	public static ArrayList<String> getLineAddresses() {
+		String query = ""
+				+"SELECT address, city, state_province, zipcode"
+				+"FROM station";
+		TMB.makeStatement();
+		ArrayList<Object[]> result = TMB.executeQuery(query, "name");
+		ArrayList<String> names = new ArrayList<>();
+		for (Object[] arr: result) {
+			names.add((String) arr[0]);
+		}
+		return names;
+	}
+	*/
+	//I NEED TO SEE WHETHER THE COMBINATION OF THE ADDRESS IS UNIQUE
+	
 	public static void addLineToStation(String stationName, String lineName, int orderNumber) {
 		String query = ""
 				+ "INSERT INTO station_on_line "
