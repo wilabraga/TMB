@@ -1497,12 +1497,6 @@ public class GUI {
 			String pw = txtPassword_3.getText();
 			String pw2 = txtPassword_4.getText();
 			String oldpw = (String)Queries.getUserInfo(ID,"password")[0];
-			if (pw.contentEquals(pw2) == false) {
-				JOptionPane.showMessageDialog(panelEditProfileAD, "Passwords do not match!");
-			}
-			if (pw.length() < 8 && !(oldpw.equals(pw))) {
-				JOptionPane.showMessageDialog(panelEditProfileAD, "Password must have at least 8 characters!");
-			}
 			ArrayList<String> ids = Queries.getUserIDs();
 			boolean idExists = false;
 			for (String id : ids) {
@@ -1510,10 +1504,20 @@ public class GUI {
 					idExists = true;
 				}
 			}
-			if (idExists && !(ID.equals(uid))) {
+			if (pw.contentEquals(pw2) == false) {
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Passwords do not match!");
+			}
+			else if (pw.length() < 8 && !(oldpw.equals(pw))) {
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Password must have at least 8 characters!");
+			}
+	
+			else if (idExists && !(ID.equals(uid))) {
 				JOptionPane.showMessageDialog(panelEditProfileAD, "User ID already exists!");
 			}
-			if (pw.contentEquals(pw2) && (pw.length() >= 8 || oldpw.equals(pw)) && (!idExists || ID.equals(uid))) {
+			else if (mi.isEmpty() == false && ((mi).matches("[a-zA-Z]+") == false)) {
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Enter a valid name.");
+			}
+			else {
 				Queries.updateUser(ID, uid, first, mi, last, pw, null);
 				Queries.updateAdminID(ID, uid);
 				fName = first;
