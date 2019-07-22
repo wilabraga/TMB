@@ -549,7 +549,7 @@ public class GUI {
 				Timestamp d = new Timestamp(System.currentTimeMillis());
 				int shopp = Integer.parseInt(shopping);
 				int conn = Integer.parseInt(speed);
-				Queries.updateReview(ID, revID, shopp, conn, newCom, apst, d);
+				Queries.updateReview(ID, revID, shopp, conn, newCom, null, "Pending", d);
 				panelEditReview.setVisible(false);
 				makeViewReviewPanel("rid");
 			}
@@ -639,7 +639,6 @@ public class GUI {
 		
 		Object[] stat = Queries.getStation(sName, "status", "address");
 		float[] avgs = Queries.getAvgRatings(sName);
-		ArrayList<String> lines = Queries.getLinesFromStation(sName);
 		String status = (String) stat[0];
 		String addy = (String) stat[1];
 		float aShop = avgs[0];
@@ -662,28 +661,13 @@ public class GUI {
 		lblLinesLines.setBounds(29, 65, 255, 16);
 		panelStationInfo.add(lblLinesLines);
 		
-		//LINES LIST
-		JList<String> lisLines = new JList(lines.toArray());
-		lisLines.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		lisLines.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		lisLines.setVisibleRowCount(-1);
-		lisLines.setBounds(65, 65, 125, 16);
-		panelStationInfo.add(lisLines);
-		lisLines.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				String val = lisLines.getSelectedValue();
-		        if (val != null) {
-		        	panelStationInfo.setVisible(false);
-					makeLineSummaryPanel(val, "order_number");
-		        }
-			}
-		});
+		makeLinesList(sName, panelStationInfo);
 
-		JLabel lblAverageShopping = new JLabel("Average Shopping : " + aShop);
+		JLabel lblAverageShopping = new JLabel("Average Shopping : " + ((aShop < 0) ? "N/A" : aShop));
 		lblAverageShopping.setBounds(6, 93, 234, 16);
 		panelStationInfo.add(lblAverageShopping);
 
-		JLabel lblAverageConnectionSpeed = new JLabel("Average Connection Speed : " + aConn);
+		JLabel lblAverageConnectionSpeed = new JLabel("Average Connection Speed : " + ((aConn < 0) ? "N/A" : aConn));
 		lblAverageConnectionSpeed.setBounds(217, 93, 227, 16);
 		panelStationInfo.add(lblAverageConnectionSpeed);
 
@@ -693,7 +677,7 @@ public class GUI {
 
 		// Table
 		Object rowData[][] = new Object[20][4];
-		ArrayList<Object[]> reviews = Queries.getReviews("rid", "passenger_ID", "shopping", "connection_speed", "comment");
+		ArrayList<Object[]> reviews = Queries.getReviewsByStation(sName, "passenger_ID", "shopping", "connection_speed", "comment");
 		for (int i = 0; i < reviews.size(); i++) {
 			Object[] tuple = reviews.get(i);
 			rowData[i][0] = (String) tuple[0];
@@ -716,6 +700,30 @@ public class GUI {
 		scrollPane.setSize(444, 130);
 		panelStationInfo.add(scrollPane, BorderLayout.CENTER);
 		return panelStationInfo;
+	}
+	
+	private void makeLinesList(String station, JPanel panel) {
+		//LINES LIST
+		ArrayList<String> lines = Queries.getLinesFromStation(station);
+		JList<String> lisLines = new JList(lines.toArray());
+		lisLines.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		lisLines.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		lisLines.setVisibleRowCount(-1);
+		lisLines.setBounds(65, 65, 125, 16);
+		panel.add(lisLines);
+		lisLines.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				String val = lisLines.getSelectedValue();
+		        if (val != null) {
+		        	panel.setVisible(false);
+		        	if (!isAdmin) {
+		        		makeLineSummaryPanel(val, "order_number");
+		        	} else {
+		        		makeLineSummaryADPanel();
+		        	}
+		        }
+			}
+		});
 	}
 	
 	private int populateStationTable(String line, String sort, Object[][] rData) {
@@ -1140,7 +1148,7 @@ public class GUI {
 			        	if (!isAdmin) {
 			        		makeStationInfoPanel(val);
 			        	} else {
-			        		makeStationInfoADPanel();
+			        		makeStationInfoADPanel(val);
 			        	}
 					}
 		        }
@@ -1370,8 +1378,8 @@ public class GUI {
 		// Table
 		JTable table = new JTable(rData, columnNames);
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setLocation(6, 23);
-		scrollPane.setSize(356, 249);
+		scrollPane.setLocation(10, 23);
+		scrollPane.setSize(444, 249);
 		panelPendingReviews.add(scrollPane, BorderLayout.CENTER);
 		
 		ArrayList<Object[]> reviews = populatePendingReviewTable(rData);
@@ -1831,12 +1839,20 @@ public class GUI {
 		return panelLineSummaryAD;
 	}
 
-	private JPanel makeStationInfoADPanel() {
+	private JPanel makeStationInfoADPanel(String sName) {
 		JPanel panelStationInfoAD = new JPanel();
 		initPanel(panelStationInfoAD, "name_120703525918700");
 
+		Object[] stat = Queries.getStation(sName, "status", "address");
+		float[] avgs = Queries.getAvgRatings(sName);
+
+		String status = (String) stat[0];
+		String addy = (String) stat[1];
+		float aShop = avgs[0];
+		float aConn = avgs[1];
+		
 		// Labels
-		JLabel lblStationName_1 = new JLabel("STATION NAME");
+		JLabel lblStationName_1 = new JLabel(sName);
 		lblStationName_1.setBounds(6, 6, 122, 16);
 		panelStationInfoAD.add(lblStationName_1);
 
@@ -1844,19 +1860,21 @@ public class GUI {
 		lblStatus_1.setBounds(256, 6, 61, 16);
 		panelStationInfoAD.add(lblStatus_1);
 
-		JLabel lblAddressAddress = new JLabel("Address : ADDRESS");
+		JLabel lblAddressAddress = new JLabel("Address : " + addy);
 		lblAddressAddress.setBounds(16, 34, 264, 16);
 		panelStationInfoAD.add(lblAddressAddress);
 
-		JLabel lblLines = new JLabel("Lines : LINES");
+		JLabel lblLines = new JLabel("Lines : ");
 		lblLines.setBounds(6, 62, 284, 16);
 		panelStationInfoAD.add(lblLines);
+		
+		makeLinesList(sName, panelStationInfoAD);
 
-		JLabel lblAverageShopping_1 = new JLabel("Average Shopping : AVGSHOP");
+		JLabel lblAverageShopping_1 = new JLabel("Average Shopping : " + ((aShop < 0) ? "N/A" : aShop));
 		lblAverageShopping_1.setBounds(6, 94, 185, 16);
 		panelStationInfoAD.add(lblAverageShopping_1);
 
-		JLabel lblAVGCS = new JLabel("Average Connection Speed : AVCS");
+		JLabel lblAVGCS = new JLabel("Average Connection Speed : " + ((aConn < 0) ? "N/A" : aConn));
 		lblAVGCS.setBounds(224, 90, 202, 16);
 		panelStationInfoAD.add(lblAVGCS);
 
@@ -1865,19 +1883,53 @@ public class GUI {
 		panelStationInfoAD.add(lblReviews_1);
 
 		// ComboBox
-		JComboBox comboBox_5 = new JComboBox();
-		comboBox_5.setBounds(332, 2, 94, 27);
-		panelStationInfoAD.add(comboBox_5);
+		JComboBox stationStatus = new JComboBox();
+		stationStatus.setBounds(332, 2, 94, 27);
+		panelStationInfoAD.add(stationStatus);
+		stationStatus.addItem("Open");
+		stationStatus.addItem("Closed");
+		stationStatus.addItem("Half Capacity");
+		if (status.equalsIgnoreCase("Open")) {
+			stationStatus.setSelectedItem("Open");
+		} else if (status.equalsIgnoreCase("Closed")) {
+			stationStatus.setSelectedItem("Closed");
+		} else {
+			stationStatus.setSelectedItem("Half Capacity");
+		}
+		stationStatus.addActionListener(e -> {
+			String newStatus = (String) stationStatus.getSelectedItem();
+			if (!status.equalsIgnoreCase(newStatus)) {
+				Queries.updateStationStatus(sName, newStatus);
+				panelStationInfoAD.setVisible(false);
+				makeStationInfoADPanel(sName);
+			}
+		});
 
 		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4" } };
+		Object rowData[][] = new Object[20][4];
+		ArrayList<Object[]> reviews = Queries.getReviewsByStation(sName, "passenger_ID", "shopping", "connection_speed", "comment");
+		for (int i = 0; i < reviews.size(); i++) {
+			Object[] tuple = reviews.get(i);
+			rowData[i][0] = (String) tuple[0];
+			rowData[i][1] = (Integer) tuple[1];
+			rowData[i][2] = (Integer) tuple[2];
+			rowData[i][3] = (String) tuple[3];
+		}
 		Object columnNames[] = { "User", "Shopping", "Connection Speed", "Comment" };
-		JTable table = new JTable(rowData, columnNames);
+		
+		//BELOW MODEL MAKES TABLE NOT EDITABLE
+		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
+		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 142);
 		scrollPane.setSize(444, 130);
 		panelStationInfoAD.add(scrollPane, BorderLayout.CENTER);
-
+		
 		return panelStationInfoAD;
 	}
 }

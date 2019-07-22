@@ -50,6 +50,7 @@ SELECT *
 FROM review
 ORDER BY %s ASC;
 
+
 8. Get Reviews By User
 
 SELECT *
@@ -68,7 +69,7 @@ WHERE passenger_id = (?) AND rid = (?);
 10. Update Review
 
 UPDATE review
-SET shopping = (?), connection_speed = (?), comment = (?), approval_status = (?), edit_timestamp = (?)
+SET shopping = (?), connection_speed = (?), comment = (?), approver_ID = (?), approval_status = (?), edit_timestamp = (?)
 WHERE passenger_id = (?) AND rid = (?);
 
 
@@ -279,3 +280,10 @@ FROM station;
 SELECT *
 FROM trip
 WHERE start_date_time = (?);
+
+
+41. Get Reviews By Station
+
+SELECT *
+FROM review
+WHERE station_name = (?);

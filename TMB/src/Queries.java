@@ -160,20 +160,21 @@ public class Queries {
 		return TMB.executePreparedQuery(attributes).get(0);
 	}
 	
-	public static void updateReview(String ID, int rid, int shopping, int connectionSpeed, String comment, String status, Timestamp timestamp) {
+	public static void updateReview(String ID, int rid, int shopping, int connectionSpeed, String comment, String approverID, String status, Timestamp timestamp) {
 		String query = ""
 				+ "UPDATE review "
-				+ "SET shopping = (?), connection_speed = (?), comment = (?), approval_status = (?), edit_timestamp = (?) "
+				+ "SET shopping = (?), connection_speed = (?), comment = (?), approver_ID = (?), approval_status = (?), edit_timestamp = (?) "
 				+ "WHERE passenger_ID = (?) AND rid = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setInt(1, shopping);
 			psmt.setInt(2, connectionSpeed);
 			psmt.setString(3, comment);
-			psmt.setString(4, status);
-			psmt.setTimestamp(5, timestamp);
-			psmt.setString(6, ID);
-			psmt.setInt(7, rid);
+			psmt.setString(4, approverID);
+			psmt.setString(5, status);
+			psmt.setTimestamp(6, timestamp);
+			psmt.setString(7, ID);
+			psmt.setInt(8, rid);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -241,6 +242,9 @@ public class Queries {
 			System.out.println(e.getMessage());
 		}
 		Object[] result = TMB.executePreparedQuery("avg_shopping", "avg_speed").get(0);
+		if (result[0] == null || result[1] == null) {
+			return new float[] {-1, -1};
+		}
 		return new float[] {((BigDecimal) result[0]).floatValue(), ((BigDecimal) result[1]).floatValue()};
 	}
 	
@@ -677,7 +681,7 @@ public class Queries {
 	
 	public static void updateStationStatus(String name, String status) {
 		String query = ""
-				+ "UPDATE station_on_line "
+				+ "UPDATE station "
 				+ "SET status = (?) "
 				+ "WHERE name = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
@@ -711,6 +715,20 @@ public class Queries {
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setTimestamp(1, date);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return TMB.executePreparedQuery(attributes);
+	}
+	
+	public static ArrayList<Object[]> getReviewsByStation(String station, String... attributes) {
+		String query = ""
+				+ "SELECT * "
+				+ "FROM review "
+				+ "WHERE station_name = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, station);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
