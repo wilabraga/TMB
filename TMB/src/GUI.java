@@ -1611,8 +1611,12 @@ public class GUI {
 			else if (isNumeric(selectedOrder) == false) {
 				JOptionPane.showMessageDialog(panelAddStation, "Invalid Order Number");
 			}
-			else if (linenums.contains((Integer.valueOf(selectedOrder)))){
+			else if (linenums.contains((Integer.valueOf(selectedOrder))) || Integer.valueOf(selectedOrder)<1){
 				JOptionPane.showMessageDialog(panelAddStation, "Invalid Order Number");
+			}
+			else if (addinglines.contains(selectedLine)){
+				JOptionPane.showMessageDialog(panelAddStation, ("Station already added on Line " + selectedLine));
+
 			}
 			else {
 				DefaultTableModel model2 = (DefaultTableModel) table.getModel();
