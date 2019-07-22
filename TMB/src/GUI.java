@@ -38,6 +38,8 @@ public class GUI {
 	public String lName;
 	public String ID;
 	public boolean isAdmin;
+	public Integer count = 0;
+
 
 	/**
 	 * Create the application.
@@ -95,7 +97,6 @@ public class GUI {
 		// Creates Registration Button
 		JButton btnRegister = new JButton("Register");
 		btnRegister.addActionListener(e -> {
-			System.out.println("here");
 			panelLogin.setVisible(false);
 			makeRegistrationPanel();
 		});
@@ -269,19 +270,13 @@ public class GUI {
 		panelRegistration.add(btnRegister_1);
 		btnRegister_1.addActionListener(e -> {
 			String first = txtFirst.getText();
+			System.out.println(first);
 			String mi = txtMi.getText();
 			String last = txtLast.getText();
 			String email = txtEmail.getText();
 			String uid = txtUID.getText();
 			String pw = txtPassword.getText();
 			String pw2 = txtPasswordagain.getText();
-			if (!pw.contentEquals(pw2)) {
-				JOptionPane.showMessageDialog(panelRegistration, "Passwords do not match!");
-			}
-			if (pw.length() < 8) {
-				JOptionPane.showMessageDialog(panelRegistration, "Password must have at least 8 characters!");
-			}
-			// MAKE SURE ID DOESN'T EXIST
 			ArrayList<String> ids = Queries.getUserIDs();
 			boolean idExists = false;
 			for (String id : ids) {
@@ -289,10 +284,28 @@ public class GUI {
 					idExists = true;
 				}
 			}
-			if (idExists) {
+			if (first.isEmpty() || last.isEmpty() || email.isEmpty() || uid.isEmpty()) {
+				JOptionPane.showMessageDialog(panelRegistration, "All fields except middle initial required.");
+
+			}
+			else if (!pw.contentEquals(pw2)) {
+				JOptionPane.showMessageDialog(panelRegistration, "Passwords do not match!");
+			}
+			else if ((first).matches("[a-zA-Z]+") == false || (last).matches("[a-zA-Z]+") == false ){
+				JOptionPane.showMessageDialog(panelRegistration, "Enter a valid name.");
+			}
+			else if (mi.isEmpty() == false) {
+				if ((mi).matches("[a-zA-Z]+") == false ) {
+					JOptionPane.showMessageDialog(panelRegistration, "Enter a valid name.");
+				}
+			}
+			else if (pw.length() < 8) {
+				JOptionPane.showMessageDialog(panelRegistration, "Password must have at least 8 characters!");
+			}
+			else if (idExists) {
 				JOptionPane.showMessageDialog(panelRegistration, "User ID already exists!");
 			}
-			if (pw.contentEquals(pw2) && pw.length() >= 8 && !idExists) {
+			else {
 				Queries.addUser(uid, first, mi, last, pw, email);
 				fName = first;
 				lName = last;
@@ -547,7 +560,7 @@ public class GUI {
 				Timestamp d = new Timestamp(System.currentTimeMillis());
 				int shopp = Integer.parseInt(shopping);
 				int conn = Integer.parseInt(speed);
-				Queries.updateReview(ID, revID, shopp, conn, newCom, apst, d);
+				Queries.updateReview(ID, revID, shopp, conn, newCom, null, "Pending", d);
 				panelEditReview.setVisible(false);
 				makeViewReviewPanel("rid");
 			}
@@ -637,7 +650,6 @@ public class GUI {
 		
 		Object[] stat = Queries.getStation(sName, "status", "address");
 		float[] avgs = Queries.getAvgRatings(sName);
-		ArrayList<String> lines = Queries.getLinesFromStation(sName);
 		String status = (String) stat[0];
 		String addy = (String) stat[1];
 		float aShop = avgs[0];
@@ -660,28 +672,13 @@ public class GUI {
 		lblLinesLines.setBounds(29, 65, 255, 16);
 		panelStationInfo.add(lblLinesLines);
 		
-		//LINES LIST
-		JList<String> lisLines = new JList(lines.toArray());
-		lisLines.setLayoutOrientation(JList.HORIZONTAL_WRAP);
-		lisLines.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
-		lisLines.setVisibleRowCount(-1);
-		lisLines.setBounds(65, 65, 125, 16);
-		panelStationInfo.add(lisLines);
-		lisLines.addMouseListener(new MouseAdapter() {
-			public void mouseClicked(MouseEvent e) {
-				String val = lisLines.getSelectedValue();
-		        if (val != null) {
-		        	panelStationInfo.setVisible(false);
-					makeLineSummaryPanel(val, "order_number");
-		        }
-			}
-		});
+		makeLinesList(sName, panelStationInfo);
 
-		JLabel lblAverageShopping = new JLabel("Average Shopping : " + aShop);
+		JLabel lblAverageShopping = new JLabel("Average Shopping : " + ((aShop < 0) ? "N/A" : aShop));
 		lblAverageShopping.setBounds(6, 93, 234, 16);
 		panelStationInfo.add(lblAverageShopping);
 
-		JLabel lblAverageConnectionSpeed = new JLabel("Average Connection Speed : " + aConn);
+		JLabel lblAverageConnectionSpeed = new JLabel("Average Connection Speed : " + ((aConn < 0) ? "N/A" : aConn));
 		lblAverageConnectionSpeed.setBounds(217, 93, 227, 16);
 		panelStationInfo.add(lblAverageConnectionSpeed);
 
@@ -691,7 +688,7 @@ public class GUI {
 
 		// Table
 		Object rowData[][] = new Object[20][4];
-		ArrayList<Object[]> reviews = Queries.getReviews("rid", "passenger_ID", "shopping", "connection_speed", "comment");
+		ArrayList<Object[]> reviews = Queries.getReviewsByStation(sName, "passenger_ID", "shopping", "connection_speed", "comment");
 		for (int i = 0; i < reviews.size(); i++) {
 			Object[] tuple = reviews.get(i);
 			rowData[i][0] = (String) tuple[0];
@@ -714,6 +711,30 @@ public class GUI {
 		scrollPane.setSize(444, 130);
 		panelStationInfo.add(scrollPane, BorderLayout.CENTER);
 		return panelStationInfo;
+	}
+	
+	private void makeLinesList(String station, JPanel panel) {
+		//LINES LIST
+		ArrayList<String> lines = Queries.getLinesFromStation(station);
+		JList<String> lisLines = new JList(lines.toArray());
+		lisLines.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		lisLines.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		lisLines.setVisibleRowCount(-1);
+		lisLines.setBounds(65, 65, 125, 16);
+		panel.add(lisLines);
+		lisLines.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				String val = lisLines.getSelectedValue();
+		        if (val != null) {
+		        	panel.setVisible(false);
+		        	if (!isAdmin) {
+		        		makeLineSummaryPanel(val, "order_number");
+		        	} else {
+		        		makeLineSummaryADPanel();
+		        	}
+		        }
+			}
+		});
 	}
 	
 	private int populateStationTable(String line, String sort, Object[][] rData) {
@@ -814,6 +835,13 @@ public class GUI {
 		btnTmes.addActionListener(e -> {
 			JOptionPane.showMessageDialog(panelBuyCard, "T-mes Card Purchased");
 			buyTmesCard();
+			panelBuyCard.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
 		});
 
 		JButton btnT = new JButton("T-10");
@@ -822,6 +850,13 @@ public class GUI {
 		btnT.addActionListener(e -> {
 			JOptionPane.showMessageDialog(panelBuyCard, "T-10 Card Purchased");
 			buyT10Card();
+			panelBuyCard.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
 		});
 
 		JButton btnT_1 = new JButton("T-50/30");
@@ -830,6 +865,13 @@ public class GUI {
 		btnT_1.addActionListener(e -> {
 			JOptionPane.showMessageDialog(panelBuyCard, "T-50/30 Card Purchased");
 			buyT5030Card();
+			panelBuyCard.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
 		});
 
 		JButton btnTjove = new JButton("T-jove");
@@ -838,6 +880,13 @@ public class GUI {
 		btnTjove.addActionListener(e -> {
 			JOptionPane.showMessageDialog(panelBuyCard, "T-jove Card Purchased");
 			buyTjoveCard();
+			panelBuyCard.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
 		});
 
 		return panelBuyCard;
@@ -961,7 +1010,7 @@ public class GUI {
 		// Buttons
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(e -> {
-			Queries.deleteUser((String) Queries.getUserInfo(ID, "ID")[0]);
+			Queries.deleteUser(ID);
 			panelEditProfile.setVisible(false);
 			makeLoginPanel();
 		});
@@ -977,12 +1026,6 @@ public class GUI {
 			String uid = txtUserid.getText();
 			String pw = txtPassword_1.getText();
 			String pw2 = txtPassword_2.getText();
-			if (pw.contentEquals(pw2) == false) {
-				JOptionPane.showMessageDialog(panelEditProfile, "Passwords do not match!");
-			}
-			if (pw.length() < 8 && (pw.equals((String)Queries.getUserInfo(ID, "password")[0]))== false) {
-				JOptionPane.showMessageDialog(panelEditProfile, "Password must have at least 8 characters!");
-			}
 			ArrayList<String> ids = Queries.getUserIDs();
 			boolean idExists = false;
 			for (String id : ids) {
@@ -990,10 +1033,27 @@ public class GUI {
 					idExists = true;
 				}
 			}
-			if (idExists && (ID.equals(uid) == false)) {
+			if (first.isEmpty() || last.isEmpty() || email.isEmpty() || uid.isEmpty()) {
+				JOptionPane.showMessageDialog(panelEditProfile, "All fields except middle initial required.");
+			}
+			else if ((first).matches("[a-zA-Z]+") == false || (last).matches("[a-zA-Z]+") == false ){
+				JOptionPane.showMessageDialog(panelEditProfile, "Enter a valid name.");
+			}
+			else if (mi.isEmpty() == false) {
+				if ((mi).matches("[a-zA-Z]+") == false ) {
+					JOptionPane.showMessageDialog(panelEditProfile, "Enter a valid name.");
+				}
+			}
+			else if (pw.contentEquals(pw2) == false) {
+				JOptionPane.showMessageDialog(panelEditProfile, "Passwords do not match!");
+			}
+			else if (pw.length() < 8 && (pw.equals((String)Queries.getUserInfo(ID, "password")[0]))== false) {
+				JOptionPane.showMessageDialog(panelEditProfile, "Password must have at least 8 characters!");
+			}
+			else if (idExists && (ID.equals(uid) == false)) {
 				JOptionPane.showMessageDialog(panelEditProfile, "User ID already exists!");
 			}
-			if (pw.contentEquals(pw2) && (pw.length() >= 8 || (pw.equals((String)Queries.getUserInfo(ID, "password")[0]))== true) && (!idExists || ID.equals(uid))) {
+			else{
 				Queries.updateUser(ID, uid, first, mi, last, pw, email);
 				fName = first;
 				lName = last;
@@ -1051,10 +1111,42 @@ public class GUI {
 		       return false;
 		    }
 		};
+		ButtonGroup rdbtnMyTrips = new ButtonGroup();
+		
+		JRadioButton rdbtnStartDate = new JRadioButton();
+		rdbtnStartDate.addActionListener(e -> {
+			panelViewTrips.setVisible(false);
+			makeViewTripsPanel("start_date_time");
+		});
+		rdbtnStartDate.setBounds(40,25,37,23);
+		panelViewTrips.add(rdbtnStartDate);
+		
+		JRadioButton rdbtnFrom = new JRadioButton();
+		rdbtnFrom.addActionListener(e -> {
+			panelViewTrips.setVisible(false);
+			makeViewTripsPanel("from_station_name");
+		});
+		rdbtnFrom.setBounds(285,25,37,23);
+		panelViewTrips.add(rdbtnFrom);
+		
+		JRadioButton rdbtnTo = new JRadioButton();
+		rdbtnTo.addActionListener(e -> {
+			panelViewTrips.setVisible(false);
+			makeViewTripsPanel("to_station_name");
+		});
+		rdbtnTo.setBounds(375,25,37,23);
+		panelViewTrips.add(rdbtnTo);
+		
+		
+		rdbtnMyTrips.add(rdbtnStartDate);
+		rdbtnMyTrips.add(rdbtnFrom);
+		rdbtnMyTrips.add(rdbtnTo);
+
+		
 		
 		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setLocation(6, 23);
+		scrollPane.setLocation(6, 50);
 		scrollPane.setSize(444, 249);
 		panelViewTrips.add(scrollPane, BorderLayout.CENTER);
 		
@@ -1063,11 +1155,24 @@ public class GUI {
 				int row = table.getSelectedRow();
 		        int col = table.getSelectedColumn();
 		        if (col >= 0 && col <= 2 && row < numTrips) {
+		        	if (col==0 && table.getValueAt(row,1).equals("N/A")) {
+		        		String type = (String)table.getValueAt(row,2);
+		        		Timestamp startdatetime = (Timestamp)table.getValueAt(row, col);
+		        		String startStation = (String)table.getValueAt(row, 3);		        		
+		        		panelViewTrips.setVisible(false);
+		        		makeUpdateTripPanel(startdatetime, type, startStation);
+		        	}
 		        	//UPDATE TRIP STUFF
 		        } else if (row < numTrips) {
 		        	String val = (String) table.getValueAt(row, col);
-		        	panelViewTrips.setVisible(false);
-		        	makeStationInfoPanel(val);
+		        	if (!val.equals("N/A")) {
+			        	panelViewTrips.setVisible(false);
+			        	if (!isAdmin) {
+			        		makeStationInfoPanel(val);
+			        	} else {
+			        		makeStationInfoADPanel(val);
+			        	}
+					}
 		        }
 			}
 		});
@@ -1113,6 +1218,10 @@ public class GUI {
 		// Button
 		JButton btnEmbark = new JButton("Embark");
 		btnEmbark.addActionListener(e -> {
+			if (validC.size() ==0) {
+				JOptionPane.showMessageDialog(panelGoOnATrip, "No valid cards!");
+			}
+			else {
 			String startStation = comboBoxStation.getSelectedItem().toString();
 			String tripTicket = comboBoxCard.getSelectedItem().toString();
 			String[] splitString = tripTicket.split("\\s+");
@@ -1129,24 +1238,34 @@ public class GUI {
 			Timestamp timestampPD = new java.sql.Timestamp(parsedDate.getTime());
 			Calendar calendar = Calendar.getInstance();
 			calendar.setTimeInMillis(timestampPD.getTime());
-			calendar.add(Calendar.HOUR, -2);
 			Timestamp finalTimestamp = new Timestamp(calendar.getTime().getTime());
 			SimpleDateFormat dateFormat5 = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 			String tsstring  = dateFormat5.format(finalTimestamp);
-			
+			System.out.println(tsstring);
 			Queries.embark(ID, tripTicketType, tsstring, Queries.getCurrentTimestamp2(), null, startStation, null);
+			JOptionPane.showMessageDialog(panelGoOnATrip, "Embark successful!");
+			panelGoOnATrip.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
+		}
 		});
 		btnEmbark.setBounds(235, 203, 153, 55);
 		panelGoOnATrip.add(btnEmbark);
 
 		return panelGoOnATrip;
 		
-		/////if you keep clicking, it lets you use more than allowed uses.
 	}
 
 	
 
-	private JPanel makeUpdateTripPanel() {
+	private JPanel makeUpdateTripPanel(Timestamp startDateTime, String type, String startStation) {
+		ArrayList<Object[]> purchaseDate = Queries.getTripsFromStartTime(startDateTime, "card_purchase_date_time");
+		Timestamp purchaseDate2 = (Timestamp)(purchaseDate.get(0)[0]);
+		
 		JPanel panelUpdateTrip = new JPanel();
 		initPanel(panelUpdateTrip, "name_118936376777311");
 
@@ -1155,26 +1274,45 @@ public class GUI {
 		lblUpdateTrip.setBounds(6, 6, 142, 16);
 		panelUpdateTrip.add(lblUpdateTrip);
 
-		JLabel lblStartStationUpdate = new JLabel("Start Station     STATION NAME");
+		JLabel lblStartStationUpdate = new JLabel("Start Station    :     "+ startStation);
 		lblStartStationUpdate.setBounds(40, 48, 223, 16);
 		panelUpdateTrip.add(lblStartStationUpdate);
 
+		
 		JLabel lblEndStation = new JLabel("End Station");
 		lblEndStation.setBounds(40, 106, 108, 16);
 		panelUpdateTrip.add(lblEndStation);
 
-		JLabel lblCardUsedUpdate = new JLabel("Card Used      CARD USED");
+		JLabel lblCardUsedUpdate = new JLabel("Card Used : "+ type+ " (" + purchaseDate2 + ")");
 		lblCardUsedUpdate.setBounds(40, 180, 330, 16);
 		panelUpdateTrip.add(lblCardUsedUpdate);
 
-		JComboBox comboBoxEndStation = new JComboBox();
-		comboBoxEndStation.setBounds(237, 102, 52, 27);
+		ArrayList<String> stations = Queries.getStationNames();
+		JComboBox comboBoxEndStation = new JComboBox(stations.toArray());
+		comboBoxEndStation.setBounds(237, 102, 150, 27);
 		panelUpdateTrip.add(comboBoxEndStation);
 
 		// Button
 		JButton btnUpdateTrip = new JButton("Update");
+		btnUpdateTrip.addActionListener(e -> {
+			System.out.println(purchaseDate2);
+			System.out.println(startDateTime);
+			System.out.println(type);
+			Queries.updateTrip(ID,type,purchaseDate2, startDateTime, Queries.getCurrentTimestamp(), comboBoxEndStation.getSelectedItem().toString());
+			JOptionPane.showMessageDialog(panelUpdateTrip, "Update successful!");
+			panelUpdateTrip.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
+		
+		});
 		btnUpdateTrip.setBounds(263, 222, 117, 50);
 		panelUpdateTrip.add(btnUpdateTrip);
+
+		
 
 		return panelUpdateTrip;
 	}
@@ -1261,25 +1399,58 @@ public class GUI {
 		lblPendingReviews.setBounds(6, 6, 128, 16);
 		panelPendingReviews.add(lblPendingReviews);
 
+		Object rData[][] = new Object[20][7];
+		Object columnNames[] = { "User", "Station", "Shopping", "Connection Speed", "Comment", "Approve", "Reject"};
+				
 		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5" } };
-		Object columnNames[] = { "User", "Station", "Shopping", "Connection Speed", "Comment" };
-		JTable table = new JTable(rowData, columnNames);
+		JTable table = new JTable(rData, columnNames);
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setLocation(6, 23);
-		scrollPane.setSize(356, 249);
+		scrollPane.setLocation(10, 23);
+		scrollPane.setSize(444, 249);
 		panelPendingReviews.add(scrollPane, BorderLayout.CENTER);
-
-		// Buttons
-		JButton btnApprove = new JButton("AP");
-		btnApprove.setBounds(356, 35, 49, 29);
-		panelPendingReviews.add(btnApprove);
-
-		JButton btnRej = new JButton("REJ");
-		btnRej.setBounds(395, 35, 49, 29);
-		panelPendingReviews.add(btnRej);
+		
+		ArrayList<Object[]> reviews = populatePendingReviewTable(rData);
+		int revcount = reviews.size();
+		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow();
+		        int col = table.getSelectedColumn();
+		        if (row < revcount) {
+		        	if (col == 5) {
+		        		int rid = (Integer) reviews.get(row)[0];
+		        		String userID = (String) rData[row][0];
+		        		Queries.updateReviewStatus(userID, rid, ID, "Approved");
+		        		panelPendingReviews.setVisible(false);
+		        		makePendingReviewsPanel();
+		        	} else if (col == 6) {
+		        		int rid = (Integer) reviews.get(row)[0];
+		        		String userID = (String) rData[row][0];
+		        		Queries.updateReviewStatus(userID, rid, ID, "Rejected");
+		        		panelPendingReviews.setVisible(false);
+		        		makePendingReviewsPanel();
+		        	}
+		        }
+			}
+		});
+		
 
 		return panelPendingReviews;
+	}
+	
+	private ArrayList<Object[]> populatePendingReviewTable(Object[][] rData) {
+		ArrayList<Object[]> revs = Queries.getPendingReviews("rid", "passenger_ID", "station_name", "shopping", "connection_speed", "comment");
+		for (int i = 0; i < revs.size(); i++) {
+			Object[] tuple = revs.get(i); //(Integer) tuple[1]
+			rData[i][0] = (String) tuple[1];
+			rData[i][1] = (String) tuple[2];
+			rData[i][2] = (Integer) tuple[3];
+			rData[i][3] = (Integer) tuple[4];
+			rData[i][4] = (String) tuple[5];
+			rData[i][5] = "Approve";
+			rData[i][6] = "Reject";
+		}
+		return revs;
 	}
 
 	
@@ -1445,31 +1616,114 @@ public class GUI {
 		txtOrder.setColumns(10);
 
 		// ComboBox
-		JComboBox comboBox_3 = new JComboBox();
-		comboBox_3.setBounds(16, 102, 52, 27);
+		ArrayList<String> lineNames = Queries.getLineNames();
+		JComboBox comboBox_3 = new JComboBox(lineNames.toArray());
+		comboBox_3.setBounds(16, 102, 75, 27);
 		panelAddStation.add(comboBox_3);
+		
 
-		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2" } };
-		Object columnNames[] = { "Line", "Order" };
-		JTable table = new JTable(rowData, columnNames);
+		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn("Line");
+		model.addColumn("Order");
+		JTable table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(26, 140);
 		scrollPane.setSize(353, 100);
 		panelAddStation.add(scrollPane, BorderLayout.CENTER);
-
+		ArrayList<String> addinglines = new ArrayList<String>();
+		ArrayList<String> addingstations = new ArrayList<String>();
+		
 		// Buttons
 		JButton btnAddLine_1 = new JButton("Add Line");
+		btnAddLine_1.addActionListener(e -> {
+			String selectedLine = comboBox_3.getSelectedItem().toString();
+			String selectedOrder = txtOrder.getText();
+			ArrayList<Integer> linenums = Queries.getLineOrderNumbers(selectedLine);
+			String newStationName = txtStationName.getText();
+			if (Queries.getStationNames().contains(newStationName)) {
+				JOptionPane.showMessageDialog(panelAddStation, "Station Name not Unique.");
+			}
+			else if (isNumeric(selectedOrder) == false) {
+				JOptionPane.showMessageDialog(panelAddStation, "Invalid Order Number");
+			}
+			else if (linenums.contains((Integer.valueOf(selectedOrder))) || Integer.valueOf(selectedOrder)<1){
+				JOptionPane.showMessageDialog(panelAddStation, "Invalid Order Number");
+			}
+			else if (addinglines.contains(selectedLine)){
+				JOptionPane.showMessageDialog(panelAddStation, ("Station already added on Line " + selectedLine));
+
+			}
+			else {
+				DefaultTableModel model2 = (DefaultTableModel) table.getModel();
+				model2.addRow(new Object[]{selectedLine,selectedOrder});
+				addinglines.add(selectedLine);
+				addingstations.add(selectedOrder);
+				
+			}
+			
+		});
 		btnAddLine_1.setBounds(314, 102, 117, 29);
 		panelAddStation.add(btnAddLine_1);
 
+		
 		JButton btnAddStation_1 = new JButton("Add Station");
+		btnAddStation_1.addActionListener(e -> {
+			String newStationName = txtStationName.getText();
+			ArrayList<String[]> badAddresses = Queries.getStationAddresses();
+			String[] newAddress = {txtState.getText(), txtStreetAddress.getText(), txtPostalCode.getText(), txtCity.getText()};
+			boolean flag = true;
+			for (String[] str: badAddresses) {
+				int countingflag = 0;
+				for (int i=0; i<4; i++) {
+					if (str[i].equals(newAddress[i])) {
+						countingflag++;
+					}
+				}
+				if (countingflag==4) {
+					flag = false;
+					break;
+				}
+			}
+			if (Queries.getStationNames().contains(newStationName)) {
+				JOptionPane.showMessageDialog(panelAddStation, "Station Name not Unique.");
+			}
+			
+			else if (isNumeric(txtPostalCode.getText()) == false)
+					{
+				JOptionPane.showMessageDialog(panelAddStation, "Enter Numeric PostalCode.");
+
+			}
+			else if (flag == false) {
+				JOptionPane.showMessageDialog(panelAddStation, "Address is not unique.");
+
+			}
+		
+			else {
+				Queries.addStation(newStationName, "Open", txtState.getText(), txtStreetAddress.getText(), Integer.valueOf(txtPostalCode.getText()), txtCity.getText(), ID, Queries.getCurrentTimestamp2());
+				for (int i=0; i<addinglines.size(); i++) {
+					Queries.addLineToStation(newStationName, addinglines.get(i), Integer.valueOf(addingstations.get(i)));
+				}
+				JOptionPane.showMessageDialog(panelAddStation, "Station Added!");
+				panelAddStation.setVisible(false);
+				makeAdminLandingPanel();
+			}
+		});
 		btnAddStation_1.setBounds(314, 243, 117, 29);
 		panelAddStation.add(btnAddStation_1);
 
 		return panelAddStation;
 	}
-
+	
+	
+	public static boolean isNumeric(String str) { 
+		  try {  
+		    Double.parseDouble(str);  
+		    return true;
+		  } catch(NumberFormatException e){  
+		    return false;  
+		  }  
+		}
+	
 	private JPanel makeAddLinePanel() {
 		JPanel panelAddLine = new JPanel();
 		initPanel(panelAddLine, "name_120405071029218");
@@ -1493,25 +1747,66 @@ public class GUI {
 		txtOrder_1.setColumns(10);
 
 		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2" } };
-		Object columnNames[] = { "Station", "Order" };
-		JTable table = new JTable(rowData, columnNames);
+		
+		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn("Station");
+		model.addColumn("Order");
+		JTable table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(26, 125);
 		scrollPane.setSize(353, 115);
 		panelAddLine.add(scrollPane, BorderLayout.CENTER);
 
+
 		// ComboBox
-		JComboBox comboBox = new JComboBox();
+		ArrayList<String> stationNames = Queries.getStationNames();
+		JComboBox comboBox = new JComboBox(stationNames.toArray());
 		comboBox.setBounds(6, 73, 140, 27);
 		panelAddLine.add(comboBox);
+		ArrayList<String> ordernums = new ArrayList<String>();
+		ArrayList<String> addedstations = new ArrayList<String>();
 
 		// Buttons
 		JButton btnAddStation_2 = new JButton("Add Station");
+		btnAddStation_2.addActionListener(e -> {
+			String newLineName = txtLineName.getText();	
+			String selectedStation = comboBox.getSelectedItem().toString();
+			String selectedOrder = txtOrder_1.getText();
+			if (Queries.getLineNames().contains(newLineName)) {
+				JOptionPane.showMessageDialog(panelAddLine, "Line Name not Unique.");
+			}
+			else if (isNumeric(selectedOrder) == false || Integer.valueOf(selectedOrder)<1) {
+				JOptionPane.showMessageDialog(panelAddLine, "Invalid Order Number");
+			}
+			else if (ordernums.contains(selectedOrder)) {
+				JOptionPane.showMessageDialog(panelAddLine, "Invalid Order Number");
+			}
+			else if (addedstations.contains(selectedStation)) {
+				JOptionPane.showMessageDialog(panelAddLine, "Station already added to Line");
+			}
+			else {
+				DefaultTableModel model2 = (DefaultTableModel) table.getModel();
+				model2.addRow(new Object[]{selectedStation,selectedOrder});
+				ordernums.add(selectedOrder);
+				addedstations.add(selectedStation);
+			}
+			
+			
+		});
 		btnAddStation_2.setBounds(327, 72, 117, 29);
 		panelAddLine.add(btnAddStation_2);
 
 		JButton btnAddLine_2 = new JButton("Add Line");
+		btnAddLine_2.addActionListener(e -> {
+			String newLineName = txtLineName.getText();	
+			Queries.addLine(newLineName, ID, Queries.getCurrentTimestamp2());
+			for (int i=0; i<addedstations.size(); i++) {
+				Queries.addLineToStation(addedstations.get(i), newLineName, Integer.valueOf(ordernums.get(i)));
+			}
+			JOptionPane.showMessageDialog(panelAddLine, "Line Added!");
+			panelAddLine.setVisible(false);
+			makeAdminLandingPanel();
+		});
 		btnAddLine_2.setBounds(314, 243, 117, 29);
 		panelAddLine.add(btnAddLine_2);
 
@@ -1575,12 +1870,20 @@ public class GUI {
 		return panelLineSummaryAD;
 	}
 
-	private JPanel makeStationInfoADPanel() {
+	private JPanel makeStationInfoADPanel(String sName) {
 		JPanel panelStationInfoAD = new JPanel();
 		initPanel(panelStationInfoAD, "name_120703525918700");
 
+		Object[] stat = Queries.getStation(sName, "status", "address");
+		float[] avgs = Queries.getAvgRatings(sName);
+
+		String status = (String) stat[0];
+		String addy = (String) stat[1];
+		float aShop = avgs[0];
+		float aConn = avgs[1];
+		
 		// Labels
-		JLabel lblStationName_1 = new JLabel("STATION NAME");
+		JLabel lblStationName_1 = new JLabel(sName);
 		lblStationName_1.setBounds(6, 6, 122, 16);
 		panelStationInfoAD.add(lblStationName_1);
 
@@ -1588,19 +1891,21 @@ public class GUI {
 		lblStatus_1.setBounds(256, 6, 61, 16);
 		panelStationInfoAD.add(lblStatus_1);
 
-		JLabel lblAddressAddress = new JLabel("Address : ADDRESS");
+		JLabel lblAddressAddress = new JLabel("Address : " + addy);
 		lblAddressAddress.setBounds(16, 34, 264, 16);
 		panelStationInfoAD.add(lblAddressAddress);
 
-		JLabel lblLines = new JLabel("Lines : LINES");
+		JLabel lblLines = new JLabel("Lines : ");
 		lblLines.setBounds(6, 62, 284, 16);
 		panelStationInfoAD.add(lblLines);
+		
+		makeLinesList(sName, panelStationInfoAD);
 
-		JLabel lblAverageShopping_1 = new JLabel("Average Shopping : AVGSHOP");
+		JLabel lblAverageShopping_1 = new JLabel("Average Shopping : " + ((aShop < 0) ? "N/A" : aShop));
 		lblAverageShopping_1.setBounds(6, 94, 185, 16);
 		panelStationInfoAD.add(lblAverageShopping_1);
 
-		JLabel lblAVGCS = new JLabel("Average Connection Speed : AVCS");
+		JLabel lblAVGCS = new JLabel("Average Connection Speed : " + ((aConn < 0) ? "N/A" : aConn));
 		lblAVGCS.setBounds(224, 90, 202, 16);
 		panelStationInfoAD.add(lblAVGCS);
 
@@ -1609,19 +1914,53 @@ public class GUI {
 		panelStationInfoAD.add(lblReviews_1);
 
 		// ComboBox
-		JComboBox comboBox_5 = new JComboBox();
-		comboBox_5.setBounds(332, 2, 94, 27);
-		panelStationInfoAD.add(comboBox_5);
+		JComboBox stationStatus = new JComboBox();
+		stationStatus.setBounds(332, 2, 94, 27);
+		panelStationInfoAD.add(stationStatus);
+		stationStatus.addItem("Open");
+		stationStatus.addItem("Closed");
+		stationStatus.addItem("Half Capacity");
+		if (status.equalsIgnoreCase("Open")) {
+			stationStatus.setSelectedItem("Open");
+		} else if (status.equalsIgnoreCase("Closed")) {
+			stationStatus.setSelectedItem("Closed");
+		} else {
+			stationStatus.setSelectedItem("Half Capacity");
+		}
+		stationStatus.addActionListener(e -> {
+			String newStatus = (String) stationStatus.getSelectedItem();
+			if (!status.equalsIgnoreCase(newStatus)) {
+				Queries.updateStationStatus(sName, newStatus);
+				panelStationInfoAD.setVisible(false);
+				makeStationInfoADPanel(sName);
+			}
+		});
 
 		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4" } };
+		Object rowData[][] = new Object[20][4];
+		ArrayList<Object[]> reviews = Queries.getReviewsByStation(sName, "passenger_ID", "shopping", "connection_speed", "comment");
+		for (int i = 0; i < reviews.size(); i++) {
+			Object[] tuple = reviews.get(i);
+			rowData[i][0] = (String) tuple[0];
+			rowData[i][1] = (Integer) tuple[1];
+			rowData[i][2] = (Integer) tuple[2];
+			rowData[i][3] = (String) tuple[3];
+		}
 		Object columnNames[] = { "User", "Shopping", "Connection Speed", "Comment" };
-		JTable table = new JTable(rowData, columnNames);
+		
+		//BELOW MODEL MAKES TABLE NOT EDITABLE
+		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
+		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 142);
 		scrollPane.setSize(444, 130);
 		panelStationInfoAD.add(scrollPane, BorderLayout.CENTER);
-
+		
 		return panelStationInfoAD;
 	}
 }

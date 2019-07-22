@@ -7,7 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 public class TMB {
-	
+
 	private static Connection conn;
 	private static Statement statement;
 
@@ -19,7 +19,7 @@ public class TMB {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	public static void makeStatement() {
 		try {
 			statement = conn.createStatement();
@@ -27,7 +27,7 @@ public class TMB {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	public static PreparedStatement makePreparedStatement(String sql) {
 		try {
 			PreparedStatement psmt = conn.prepareStatement(sql);
@@ -38,7 +38,7 @@ public class TMB {
 		}
 		return null;
 	}
-	
+
 	public static void closeStatement() {
 		try {
 			if (statement != null) {
@@ -49,7 +49,7 @@ public class TMB {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	public static ArrayList<Object[]> executeQuery(String query, String... attributes) {
 		try {
 			ResultSet resultSet = statement.executeQuery(query);
@@ -59,7 +59,7 @@ public class TMB {
 		}
 		return null;
 	}
-	
+
 	public static ArrayList<Object[]> executePreparedQuery(String... attributes) {
 		try {
 			PreparedStatement psmt = (PreparedStatement) statement;
@@ -70,7 +70,7 @@ public class TMB {
 		}
 		return null;
 	}
-	
+
 	private static ArrayList<Object[]> processResultSet(ResultSet resultSet, String... attributes) {
 		try {
 			ArrayList<Object[]> result = new ArrayList<>();
@@ -89,7 +89,7 @@ public class TMB {
 		}
 		return null;
 	}
-	
+
 	public static void executeModification(String modify) {
 		try {
 			statement.execute(modify);
@@ -98,7 +98,7 @@ public class TMB {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	public static void executePreparedModification() {
 		try {
 			PreparedStatement psmt = (PreparedStatement) statement;
@@ -108,7 +108,7 @@ public class TMB {
 			System.out.println(e.getMessage());
 		}
 	}
-	
+
 	public static void printResult(ArrayList<Object[]> result) {
 		for (Object[] arr: result) {
 			for (Object o: arr) {
@@ -117,7 +117,7 @@ public class TMB {
 			System.out.println();
 		}
 	}
-	
+
 	public static void closeDatabase() throws SQLException {
 		closeStatement();
 		conn.close();

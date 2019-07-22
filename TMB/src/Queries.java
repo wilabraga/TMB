@@ -160,20 +160,21 @@ public class Queries {
 		return TMB.executePreparedQuery(attributes).get(0);
 	}
 	
-	public static void updateReview(String ID, int rid, int shopping, int connectionSpeed, String comment, String status, Timestamp timestamp) {
+	public static void updateReview(String ID, int rid, int shopping, int connectionSpeed, String comment, String approverID, String status, Timestamp timestamp) {
 		String query = ""
 				+ "UPDATE review "
-				+ "SET shopping = (?), connection_speed = (?), comment = (?), approval_status = (?), edit_timestamp = (?) "
+				+ "SET shopping = (?), connection_speed = (?), comment = (?), approver_ID = (?), approval_status = (?), edit_timestamp = (?) "
 				+ "WHERE passenger_ID = (?) AND rid = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setInt(1, shopping);
 			psmt.setInt(2, connectionSpeed);
 			psmt.setString(3, comment);
-			psmt.setString(4, status);
-			psmt.setTimestamp(5, timestamp);
-			psmt.setString(6, ID);
-			psmt.setInt(7, rid);
+			psmt.setString(4, approverID);
+			psmt.setString(5, status);
+			psmt.setTimestamp(6, timestamp);
+			psmt.setString(7, ID);
+			psmt.setInt(8, rid);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -241,6 +242,9 @@ public class Queries {
 			System.out.println(e.getMessage());
 		}
 		Object[] result = TMB.executePreparedQuery("avg_shopping", "avg_speed").get(0);
+		if (result[0] == null || result[1] == null) {
+			return new float[] {-1, -1};
+		}
 		return new float[] {((BigDecimal) result[0]).floatValue(), ((BigDecimal) result[1]).floatValue()};
 	}
 	
@@ -443,7 +447,7 @@ public class Queries {
 	public static void updateTrip(String ID, String type, Timestamp purchaseDate, Timestamp startDate, Timestamp endDate, String endStation) {
 		String query = ""
 				+ "UPDATE trip "
-				+ "SET end_date_time = (?) AND to_station_name = (?) "
+				+ "SET end_date_time = (?), to_station_name = (?) "
 				+ "WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?) AND start_date_time = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
@@ -463,9 +467,9 @@ public class Queries {
 	//"INDEX 0 out of bounds for length 0"
 	public static Timestamp getCurrentTimestamp() {	
 		String query = ""
-				+ "SELECT current_timestamp();";
+				+ "SELECT current_timestamp() AS timestamp;";
 		TMB.makeStatement();
-		return (Timestamp) TMB.executeQuery(query).get(0)[0];
+		return (Timestamp) TMB.executeQuery(query, "timestamp").get(0)[0];
 	}
 	
 	public static Timestamp getCurrentTimestamp2() {
@@ -482,16 +486,17 @@ public class Queries {
 		return TMB.executeQuery(query, attributes);
 	}
 	
-	public static void updateReviewStatus(String ID, int rid, String status) {
+	public static void updateReviewStatus(String reviewerID, int rid, String adminID, String status) {
 		String query = ""
 				+ "UPDATE review "
-				+ "SET approval_status = (?) "
+				+ "SET approval_status = (?), approver_ID = (?) "
 				+ "WHERE passenger_ID = (?) AND rid = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setString(1, status);
-			psmt.setString(2, ID);
-			psmt.setInt(3, rid);
+			psmt.setString(2, adminID);
+			psmt.setString(3, reviewerID);
+			psmt.setInt(4, rid);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -568,6 +573,23 @@ public class Queries {
 		}
 		return names;
 	}
+	
+	/**
+	
+	public static ArrayList<String> getLineAddresses() {
+		String query = ""
+				+"SELECT address, city, state_province, zipcode"
+				+"FROM station";
+		TMB.makeStatement();
+		ArrayList<Object[]> result = TMB.executeQuery(query, "name");
+		ArrayList<String> names = new ArrayList<>();
+		for (Object[] arr: result) {
+			names.add((String) arr[0]);
+		}
+		return names;
+	}
+	*/
+	//I NEED TO SEE WHETHER THE COMBINATION OF THE ADDRESS IS UNIQUE
 	
 	public static void addLineToStation(String stationName, String lineName, int orderNumber) {
 		String query = ""
@@ -659,7 +681,7 @@ public class Queries {
 	
 	public static void updateStationStatus(String name, String status) {
 		String query = ""
-				+ "UPDATE station_on_line "
+				+ "UPDATE station "
 				+ "SET status = (?) "
 				+ "WHERE name = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
@@ -670,5 +692,46 @@ public class Queries {
 			System.out.println(e.getMessage());
 		}
 		TMB.executePreparedModification();
+	}
+	
+	public static ArrayList<String[]> getStationAddresses() {	
+		String query = ""
+				+ "SELECT state_province, address, zipcode, city "
+				+ "FROM station;";
+		TMB.makeStatement();
+		ArrayList<Object[]> result = TMB.executeQuery(query, "state_province", "address", "zipcode", "city");
+		ArrayList<String[]> addresses = new ArrayList<>();
+		for(Object[] arr: result) {
+			addresses.add(new String[] {(String) arr[0], (String) arr[1], Integer.toString((Integer)arr[2]), (String) arr[3]});
+		}
+		return addresses;
+	}
+	
+	public static ArrayList<Object[]> getTripsFromStartTime(Timestamp date, String... attributes) {	
+		String query = ""
+				+ "SELECT * "
+				+ "FROM trip "
+				+ "WHERE start_date_time = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setTimestamp(1, date);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return TMB.executePreparedQuery(attributes);
+	}
+	
+	public static ArrayList<Object[]> getReviewsByStation(String station, String... attributes) {
+		String query = ""
+				+ "SELECT * "
+				+ "FROM review "
+				+ "WHERE station_name = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, station);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return TMB.executePreparedQuery(attributes);
 	}
 }

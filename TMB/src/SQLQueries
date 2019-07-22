@@ -50,6 +50,7 @@ SELECT *
 FROM review
 ORDER BY %s ASC;
 
+
 8. Get Reviews By User
 
 SELECT *
@@ -68,7 +69,7 @@ WHERE passenger_id = (?) AND rid = (?);
 10. Update Review
 
 UPDATE review
-SET shopping = (?), connection_speed = (?), comment = (?), approval_status = (?), edit_timestamp = (?)
+SET shopping = (?), connection_speed = (?), comment = (?), approver_ID = (?), approval_status = (?), edit_timestamp = (?)
 WHERE passenger_id = (?) AND rid = (?);
 
 
@@ -181,7 +182,7 @@ WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?) AND st
 
 26. Get Current Timestamp
 
-SELECT current_timestamp();
+SELECT current_timestamp() AS timestamp;
 
 
 27. Get Pending Reviews
@@ -194,7 +195,7 @@ WHERE approval_status = 'Pending';
 28. Update Review Status
 
 UPDATE review
-SET approval_status = (?)
+SET approval_status = (?), approver_ID = (?)
 WHERE passenger_ID = (?) AND rid = (?);
 
 
@@ -266,3 +267,23 @@ WHERE station_name = (?) AND line_name = (?);
 UPDATE station
 SET status = (?)
 WHERE name = (?);
+
+
+39. Get All Station Addresses
+
+SELECT state_province, address, zipcode, city
+FROM station;
+
+
+40. Get Trips From Start Time
+
+SELECT *
+FROM trip
+WHERE start_date_time = (?);
+
+
+41. Get Reviews By Station
+
+SELECT *
+FROM review
+WHERE station_name = (?);
