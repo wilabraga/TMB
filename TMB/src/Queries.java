@@ -1,3 +1,4 @@
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -159,7 +160,7 @@ public class Queries {
 		return TMB.executePreparedQuery(attributes).get(0);
 	}
 	
-	public static void updateReview(String ID, int rid, int shopping, int connectionSpeed, String comment, String status, Time timestamp) {
+	public static void updateReview(String ID, int rid, int shopping, int connectionSpeed, String comment, String status, Timestamp timestamp) {
 		String query = ""
 				+ "UPDATE review "
 				+ "SET shopping = (?), connection_speed = (?), comment = (?), approval_status = (?), edit_timestamp = (?) "
@@ -170,7 +171,7 @@ public class Queries {
 			psmt.setInt(2, connectionSpeed);
 			psmt.setString(3, comment);
 			psmt.setString(4, status);
-			psmt.setTime(5, timestamp);
+			psmt.setTimestamp(5, timestamp);
 			psmt.setString(6, ID);
 			psmt.setInt(7, rid);
 		} catch(SQLException e) {
@@ -227,7 +228,7 @@ public class Queries {
 		return names;
 	}
 	
-	public static int[] getAvgRatings(String stationName) {
+	public static float[] getAvgRatings(String stationName) {
 		String query = ""
 				+ "SELECT AVG(shopping) AS avg_shopping, AVG(connection_speed) AS avg_speed "
 				+ "FROM review "
@@ -240,7 +241,7 @@ public class Queries {
 			System.out.println(e.getMessage());
 		}
 		Object[] result = TMB.executePreparedQuery("avg_shopping", "avg_speed").get(0);
-		return new int[] {(int) result[0], (int) result[1]};
+		return new float[] {((BigDecimal) result[0]).floatValue(), ((BigDecimal) result[1]).floatValue()};
 	}
 	
 	public static int getNumStops(String lineName) {

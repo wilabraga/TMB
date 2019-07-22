@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -383,10 +384,12 @@ public class GUI {
 		        int col = table.getSelectedColumn();
 		        if (col == 0 && row < revcount) {
 		        	int val = (Integer) table.getValueAt(row, col);
-		        	//JOptionPane.showMessageDialog(panelViewReviews, val); H*CK YEAH
-		        	
 		        	panelViewReviews.setVisible(false);
 					makeEditReviewPanel(val);
+		        } else if (col == 1 && row < revcount) {
+		        	String val = (String) table.getValueAt(row, col);
+		        	panelViewReviews.setVisible(false);
+		        	makeStationInfoPanel(val);
 		        }
 			}
 		});
@@ -478,15 +481,15 @@ public class GUI {
 		lblReviewStatus.setBounds(352, 18, 61, 16);
 		panelEditReview.add(lblReviewStatus);
 
-		JLabel lblId_1 = new JLabel("ID: ");
+		JLabel lblId_1 = new JLabel("ID:");
 		lblId_1.setBounds(27, 56, 61, 16);
 		panelEditReview.add(lblId_1);
 
-		JLabel lblShopping = new JLabel("Shopping");
+		JLabel lblShopping = new JLabel("Shopping:");
 		lblShopping.setBounds(27, 107, 61, 16);
 		panelEditReview.add(lblShopping);
 
-		JLabel lblConnectionSpeed_1 = new JLabel("Connection Speed");
+		JLabel lblConnectionSpeed_1 = new JLabel("Connection Speed:");
 		lblConnectionSpeed_1.setBounds(27, 145, 155, 16);
 		panelEditReview.add(lblConnectionSpeed_1);
 
@@ -513,18 +516,40 @@ public class GUI {
 		
 		JComboBox comboBox_1 = new JComboBox(stars);
 		comboBox_1.setBounds(259, 103, 52, 27);
+		comboBox_1.setSelectedIndex(shop);
 		panelEditReview.add(comboBox_1);
 
 		JComboBox comboBox_2 = new JComboBox(stars);
 		comboBox_2.setBounds(259, 141, 52, 27);
+		comboBox_2.setSelectedIndex(conx);
 		panelEditReview.add(comboBox_2);
 
 		// Buttons
 		JButton btnDeleteReview = new JButton("Delete Review");
+		btnDeleteReview.addActionListener(e -> {
+			Queries.deleteReview(ID, revID);
+			panelEditReview.setVisible(false);
+			makeViewReviewPanel("rid");
+		});
 		btnDeleteReview.setBounds(45, 244, 117, 29);
 		panelEditReview.add(btnDeleteReview);
 
 		JButton btnSaveReview = new JButton("Save Review");
+		btnSaveReview.addActionListener(e -> {
+			//JOptionPane.showMessageDialog(panelEditReview, comboBox_1.getSelectedItem().toString());
+			String shopping = comboBox_1.getSelectedItem().toString();
+			String speed = comboBox_2.getSelectedItem().toString();
+			String newCom = txtOldComment.getText();
+			if (shopping.equals("--") || speed.equals("--")) {
+			} else {
+				Timestamp d = new Timestamp(System.currentTimeMillis());
+				int shopp = Integer.parseInt(shopping);
+				int conn = Integer.parseInt(speed);
+				Queries.updateReview(ID, revID, shopp, conn, newCom, apst, d);
+				panelEditReview.setVisible(false);
+				makeViewReviewPanel("rid");
+			}
+		});
 		btnSaveReview.setBounds(245, 244, 117, 29);
 		panelEditReview.add(btnSaveReview);
 		return panelEditReview;
@@ -607,29 +632,37 @@ public class GUI {
 	private JPanel makeStationInfoPanel(String sName) {
 		JPanel panelStationInfo = new JPanel();
 		initPanel(panelStationInfo, "name_116178640692044");
+		
+		Object[] stat = Queries.getStation(sName, "status", "address");
+		float[] avgs = Queries.getAvgRatings(sName);
+		ArrayList<String> lines = Queries.getLinesFromStation(sName);
+		String status = (String) stat[0];
+		String addy = (String) stat[1];
+		float aShop = avgs[0];
+		float aConn = avgs[1];
 
 		// Labels
-		JLabel lblStationName = new JLabel("STATION NAME");
+		JLabel lblStationName = new JLabel(sName);
 		lblStationName.setBounds(6, 6, 127, 16);
 		panelStationInfo.add(lblStationName);
 
-		JLabel lblStatus = new JLabel("Status : STATUS");
+		JLabel lblStatus = new JLabel("Status : " + status);
 		lblStatus.setBounds(324, 6, 120, 16);
 		panelStationInfo.add(lblStatus);
 
-		JLabel lblAddress = new JLabel("Address : ADDRESS");
+		JLabel lblAddress = new JLabel("Address : " + addy);
 		lblAddress.setBounds(27, 34, 396, 16);
 		panelStationInfo.add(lblAddress);
 
-		JLabel lblLinesLines = new JLabel("Lines : LINES");
+		JLabel lblLinesLines = new JLabel("Lines : " + "");
 		lblLinesLines.setBounds(29, 65, 255, 16);
 		panelStationInfo.add(lblLinesLines);
 
-		JLabel lblAverageShopping = new JLabel("Average Shopping : AVGSHOP");
+		JLabel lblAverageShopping = new JLabel("Average Shopping : " + aShop);
 		lblAverageShopping.setBounds(6, 93, 234, 16);
 		panelStationInfo.add(lblAverageShopping);
 
-		JLabel lblAverageConnectionSpeed = new JLabel("Average Connection Speed : AVGCS");
+		JLabel lblAverageConnectionSpeed = new JLabel("Average Connection Speed : " + aConn);
 		lblAverageConnectionSpeed.setBounds(217, 93, 227, 16);
 		panelStationInfo.add(lblAverageConnectionSpeed);
 
@@ -638,9 +671,25 @@ public class GUI {
 		panelStationInfo.add(lblReviews);
 
 		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4" } };
+		Object rowData[][] = new Object[20][4];
+		ArrayList<Object[]> reviews = Queries.getReviews("rid", "passenger_ID", "shopping", "connection_speed", "comment");
+		for (int i = 0; i < reviews.size(); i++) {
+			Object[] tuple = reviews.get(i);
+			rowData[i][0] = (String) tuple[0];
+			rowData[i][1] = (Integer) tuple[1];
+			rowData[i][2] = (Integer) tuple[2];
+			rowData[i][3] = (String) tuple[3];
+		}
+		
 		Object columnNames[] = { "User", "Shopping", "Connection Speed", "Comment" };
-		JTable table = new JTable(rowData, columnNames);
+		//BELOW MODEL MAKES TABLE NOT EDITABLE
+		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
+		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 142);
 		scrollPane.setSize(444, 130);
