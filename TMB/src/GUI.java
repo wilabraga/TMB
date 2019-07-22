@@ -1947,4 +1947,3 @@ public class GUI {
 		return panelStationInfoAD;
 	}
 }
-
