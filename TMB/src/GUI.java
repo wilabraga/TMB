@@ -1360,7 +1360,11 @@ public class GUI {
 
 		Object rData[][] = new Object[20][7];
 		Object columnNames[] = { "User", "Station", "Shopping", "Connection Speed", "Comment", "Approve", "Reject"};
-				
+		
+		ArrayList<Object[]> reviews = populatePendingReviewTable(rData);
+		int revcount = reviews.size();
+		JOptionPane.showMessageDialog(panelPendingReviews, revcount + "");
+		
 		// Table
 		//BELOW MODEL MAKES TABLE NOT EDITABLE
 		DefaultTableModel tableModel = new DefaultTableModel(rData, columnNames) {
@@ -1376,8 +1380,7 @@ public class GUI {
 		scrollPane.setSize(444, 249);
 		panelPendingReviews.add(scrollPane, BorderLayout.CENTER);
 		
-		ArrayList<Object[]> reviews = populatePendingReviewTable(rData);
-		int revcount = reviews.size();
+		
 		
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
@@ -1789,25 +1792,40 @@ public class GUI {
 
 		return panelAddLine;
 	}
+	
+	private int populateStationTableAD(String line, String sort, Object[][] rData) {
+		ArrayList<Object[]> stations = Queries.getStationsFromLine(line, sort);
+		for (int i = 0; i < stations.size(); i++) {
+			Object[] tuple = stations.get(i);
+			rData[i][0] = (String) tuple[0];
+			rData[i][1] = (Integer) tuple[1];
+			rData[i][2] = "[↑]";
+			rData[i][3] = "[↓]";
+			rData[i][4] = "[Delete]";
+		}
+		return stations.size();
+	}
 
 	private JPanel makeLineSummaryADPanel(String line, String order) {
 		JPanel panelLineSummaryAD = new JPanel();
 		initPanel(panelLineSummaryAD, "name_120586777795513");
+		
+		int num = Queries.getNumStops(line);
 
 		// Label
-		JLabel lblLineNum = new JLabel("Line NUMBER");
+		JLabel lblLineNum = new JLabel("Line: " + line);
 		lblLineNum.setBounds(6, 6, 146, 16);
 		panelLineSummaryAD.add(lblLineNum);
 
-		JLabel lblNumStop = new JLabel("NUM Stops");
+		JLabel lblNumStop = new JLabel(num + " Stops");
 		lblNumStop.setBounds(327, 8, 100, 16);
 		panelLineSummaryAD.add(lblNumStop);
 
 		// Table
 
-		Object rowData[][] = new Object[20][2];
-		Object columnNames[] = { "Station", "Order" };
-		populateStationTable(line, order, rowData);
+		Object rowData[][] = new Object[20][5];
+		Object columnNames[] = { "Station", "Order", "", "", ""};
+		int numStats = populateStationTableAD(line, order, rowData);
 		//BELOW MODEL MAKES TABLE NOT EDITABLE
 		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
 		    @Override
@@ -1816,28 +1834,44 @@ public class GUI {
 		    }
 		};
 		
-		JTable table = new JTable(rowData, columnNames);
+		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(17, 50);
-		scrollPane.setSize(265, 163);
+		scrollPane.setSize(300, 163); //265
 		panelLineSummaryAD.add(scrollPane, BorderLayout.CENTER);
+		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow();
+		        int col = table.getSelectedColumn();
+		        if (col == 0 && row < numStats) {
+		        	int val = (Integer) table.getValueAt(row, col);
+		        	//panelViewReviews.setVisible(false);
+					makeEditReviewPanel(val);
+		        } else if (col == 1 && row < numStats) {
+		        	String val = (String) table.getValueAt(row, col);
+		        	//panelViewReviews.setVisible(false);
+		        	makeStationInfoPanel(val);
+		        }
+			}
+		});
 
-		// Button
+		/* Button
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.setBounds(327, 225, 117, 47);
 		panelLineSummaryAD.add(btnUpdate);
 
 		JButton btnDelete = new JButton("Delete");
-		btnDelete.setBounds(372, 62, 72, 29);
+		btnDelete.setBounds(372, 69, 72, 16);
 		panelLineSummaryAD.add(btnDelete);
 
-		JButton btnUp = new JButton("UP");
+		JButton btnUp = new JButton("^");
 		btnUp.setBounds(280, 62, 44, 29);
 		panelLineSummaryAD.add(btnUp);
 
-		JButton btnDown = new JButton("DOWN");
+		JButton btnDown = new JButton("V");
 		btnDown.setBounds(316, 62, 66, 29);
-		panelLineSummaryAD.add(btnDown);
+		panelLineSummaryAD.add(btnDown);*/
 
 		// Radio Buttons
 		ButtonGroup LineSummary = new ButtonGroup();
@@ -1845,10 +1879,18 @@ public class GUI {
 		JRadioButton rdbtnStationLineNum = new JRadioButton("");
 		rdbtnStationLineNum.setBounds(51, 25, 141, 23);
 		panelLineSummaryAD.add(rdbtnStationLineNum);
+		rdbtnStationLineNum.addActionListener(e -> {
+			panelLineSummaryAD.setVisible(false);
+			makeLineSummaryADPanel(line, "line_name");
+		});
 
 		JRadioButton rdbtnOrderLineNum = new JRadioButton("");
 		rdbtnOrderLineNum.setBounds(169, 27, 141, 23);
 		panelLineSummaryAD.add(rdbtnOrderLineNum);
+		rdbtnOrderLineNum.addActionListener(e -> {
+			panelLineSummaryAD.setVisible(false);
+			makeLineSummaryADPanel(line, "order_number");
+		});
 
 		LineSummary.add(rdbtnStationLineNum);
 		LineSummary.add(rdbtnOrderLineNum);
