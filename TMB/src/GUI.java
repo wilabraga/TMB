@@ -270,7 +270,6 @@ public class GUI {
 		panelRegistration.add(btnRegister_1);
 		btnRegister_1.addActionListener(e -> {
 			String first = txtFirst.getText();
-			System.out.println(first);
 			String mi = txtMi.getText();
 			String last = txtLast.getText();
 			String email = txtEmail.getText();
@@ -998,10 +997,8 @@ public class GUI {
 			else if ((first).matches("[a-zA-Z]+") == false || (last).matches("[a-zA-Z]+") == false ){
 				JOptionPane.showMessageDialog(panelEditProfile, "Enter a valid name.");
 			}
-			else if (mi.isEmpty() == false) {
-				if ((mi).matches("[a-zA-Z]+") == false ) {
+			else if (mi.isEmpty() == false && ((mi).matches("[a-zA-Z]+") == false)) {
 					JOptionPane.showMessageDialog(panelEditProfile, "Enter a valid name.");
-				}
 			}
 			else if (pw.contentEquals(pw2) == false) {
 				JOptionPane.showMessageDialog(panelEditProfile, "Passwords do not match!");
@@ -1200,7 +1197,6 @@ public class GUI {
 			Timestamp finalTimestamp = new Timestamp(calendar.getTime().getTime());
 			SimpleDateFormat dateFormat5 = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 			String tsstring  = dateFormat5.format(finalTimestamp);
-			System.out.println(tsstring);
 			Queries.embark(ID, tripTicketType, tsstring, Queries.getCurrentTimestamp2(), null, startStation, null);
 			JOptionPane.showMessageDialog(panelGoOnATrip, "Embark successful!");
 			panelGoOnATrip.setVisible(false);
@@ -1254,9 +1250,6 @@ public class GUI {
 		// Button
 		JButton btnUpdateTrip = new JButton("Update");
 		btnUpdateTrip.addActionListener(e -> {
-			System.out.println(purchaseDate2);
-			System.out.println(startDateTime);
-			System.out.println(type);
 			Queries.updateTrip(ID,type,purchaseDate2, startDateTime, Queries.getCurrentTimestamp(), comboBoxEndStation.getSelectedItem().toString());
 			JOptionPane.showMessageDialog(panelUpdateTrip, "Update successful!");
 			panelUpdateTrip.setVisible(false);
@@ -1507,12 +1500,6 @@ public class GUI {
 			String pw = txtPassword_3.getText();
 			String pw2 = txtPassword_4.getText();
 			String oldpw = (String)Queries.getUserInfo(ID,"password")[0];
-			if (pw.contentEquals(pw2) == false) {
-				JOptionPane.showMessageDialog(panelEditProfileAD, "Passwords do not match!");
-			}
-			if (pw.length() < 8 && !(oldpw.equals(pw))) {
-				JOptionPane.showMessageDialog(panelEditProfileAD, "Password must have at least 8 characters!");
-			}
 			ArrayList<String> ids = Queries.getUserIDs();
 			boolean idExists = false;
 			for (String id : ids) {
@@ -1520,10 +1507,20 @@ public class GUI {
 					idExists = true;
 				}
 			}
-			if (idExists && !(ID.equals(uid))) {
+			if (pw.contentEquals(pw2) == false) {
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Passwords do not match!");
+			}
+			else if (pw.length() < 8 && !(oldpw.equals(pw))) {
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Password must have at least 8 characters!");
+			}
+	
+			else if (idExists && !(ID.equals(uid))) {
 				JOptionPane.showMessageDialog(panelEditProfileAD, "User ID already exists!");
 			}
-			if (pw.contentEquals(pw2) && (pw.length() >= 8 || oldpw.equals(pw)) && (!idExists || ID.equals(uid))) {
+			else if (mi.isEmpty() == false && ((mi).matches("[a-zA-Z]+") == false)) {
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Enter a valid name.");
+			}
+			else {
 				Queries.updateUser(ID, uid, first, mi, last, pw, null);
 				Queries.updateAdminID(ID, uid);
 				fName = first;
