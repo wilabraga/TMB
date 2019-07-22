@@ -14,8 +14,7 @@ public class TMB {
 	public static void accessTMB() {
 		try {
 			Class.forName("com.mysql.cj.jdbc.Driver");
-			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/tmb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=Europe/Prague", "root", "");
-
+			conn = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/tmb?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC", "root", "root");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
