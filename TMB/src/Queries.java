@@ -248,9 +248,9 @@ public class Queries {
 		return new float[] {((BigDecimal) result[0]).floatValue(), ((BigDecimal) result[1]).floatValue()};
 	}
 	
-	public static int getNumStops(String lineName) {
+	public static long getNumStops(String lineName) {
 		String query = ""
-				+ "SELECT COUNT(station_name) AS num_stations"
+				+ "SELECT COUNT(station_name) AS num_stations "
 				+ "FROM station_on_line "
 				+ "WHERE line_name = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
@@ -260,7 +260,7 @@ public class Queries {
 			System.out.println(e.getMessage());
 		}
 		Object[] result = TMB.executePreparedQuery("num_stations").get(0);
-		return (int) result[0];
+		return (long) result[0];
 	}
 	
 	public static ArrayList<Object[]> getStationsFromLine(String lineName, String order) {

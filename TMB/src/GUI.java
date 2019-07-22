@@ -1806,7 +1806,7 @@ public class GUI {
 		JPanel panelLineSummaryAD = new JPanel();
 		initPanel(panelLineSummaryAD, "name_120586777795513");
 		
-		int num = Queries.getNumStops(line);
+		long num = Queries.getNumStops(line);
 
 		// Label
 		JLabel lblLineNum = new JLabel("Line: " + line);
