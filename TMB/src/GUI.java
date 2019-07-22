@@ -1498,6 +1498,23 @@ public class GUI {
 		JButton btnAddStation_1 = new JButton("Add Station");
 		btnAddStation_1.addActionListener(e -> {
 			String newStationName = txtStationName.getText();
+			ArrayList<String[]> badAddresses = Queries.getStationAddresses();
+			System.out.println(badAddresses.get(0));
+			String[] newAddress = {txtState.getText(), txtStreetAddress.getText(), txtPostalCode.getText(), txtCity.getText()};
+			System.out.println(newAddress);
+			boolean flag = true;
+			for (String[] str: badAddresses) {
+				int countingflag = 0;
+				for (int i=0; i<4; i++) {
+					if (str[i].equals(newAddress[i])) {
+						countingflag++;
+					}
+				}
+				if (countingflag==4) {
+					flag = false;
+					break;
+				}
+			}
 			if (Queries.getStationNames().contains(newStationName)) {
 				JOptionPane.showMessageDialog(panelAddStation, "Station Name not Unique.");
 			}
@@ -1507,11 +1524,17 @@ public class GUI {
 				JOptionPane.showMessageDialog(panelAddStation, "Enter Numeric PostalCode.");
 
 			}
+			else if (flag == false) {
+				JOptionPane.showMessageDialog(panelAddStation, "Address is not unique.");
+
+			}
+		
 			else {
 				Queries.addStation(newStationName, "Open", txtState.getText(), txtStreetAddress.getText(), Integer.valueOf(txtPostalCode.getText()), txtCity.getText(), ID, Queries.getCurrentTimestamp2());
 				for (int i=0; i<addinglines.size(); i++) {
 					Queries.addLineToStation(newStationName, addinglines.get(i), Integer.valueOf(addingstations.get(i)));
 				}
+				JOptionPane.showMessageDialog(panelAddStation, "Station Added!");
 			}
 		});
 		btnAddStation_1.setBounds(314, 243, 117, 29);

@@ -697,7 +697,7 @@ public class Queries {
 		ArrayList<Object[]> result = TMB.executeQuery(query, "state_province", "address", "zipcode", "city");
 		ArrayList<String[]> addresses = new ArrayList<>();
 		for(Object[] arr: result) {
-			addresses.add(new String[] {(String) arr[0], (String) arr[1], (String) arr[2], (String) arr[3]});
+			addresses.add(new String[] {(String) arr[0], (String) arr[1], Integer.toString((Integer)arr[2]), (String) arr[3]});
 		}
 		return addresses;
 	}
