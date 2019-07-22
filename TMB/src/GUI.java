@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JTable;
@@ -670,9 +671,25 @@ public class GUI {
 		panelStationInfo.add(lblReviews);
 
 		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4" } };
+		Object rowData[][] = new Object[20][4];
+		ArrayList<Object[]> reviews = Queries.getReviews("rid", "passenger_ID", "shopping", "connection_speed", "comment");
+		for (int i = 0; i < reviews.size(); i++) {
+			Object[] tuple = reviews.get(i);
+			rowData[i][0] = (String) tuple[0];
+			rowData[i][1] = (Integer) tuple[1];
+			rowData[i][2] = (Integer) tuple[2];
+			rowData[i][3] = (String) tuple[3];
+		}
+		
 		Object columnNames[] = { "User", "Shopping", "Connection Speed", "Comment" };
-		JTable table = new JTable(rowData, columnNames);
+		//BELOW MODEL MAKES TABLE NOT EDITABLE
+		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
+		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 142);
 		scrollPane.setSize(444, 130);
