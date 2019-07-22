@@ -997,10 +997,8 @@ public class GUI {
 			else if ((first).matches("[a-zA-Z]+") == false || (last).matches("[a-zA-Z]+") == false ){
 				JOptionPane.showMessageDialog(panelEditProfile, "Enter a valid name.");
 			}
-			else if (mi.isEmpty() == false) {
-				if ((mi).matches("[a-zA-Z]+") == false ) {
+			else if (mi.isEmpty() == false && ((mi).matches("[a-zA-Z]+") == false)) {
 					JOptionPane.showMessageDialog(panelEditProfile, "Enter a valid name.");
-				}
 			}
 			else if (pw.contentEquals(pw2) == false) {
 				JOptionPane.showMessageDialog(panelEditProfile, "Passwords do not match!");
