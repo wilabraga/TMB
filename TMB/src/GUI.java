@@ -1222,6 +1222,9 @@ public class GUI {
 	
 
 	private JPanel makeUpdateTripPanel(Timestamp startDateTime, String type, String startStation) {
+		ArrayList<Object[]> purchaseDate = Queries.getTripsFromStartTime(startDateTime, "card_purchase_date_time");
+		Timestamp purchaseDate2 = (Timestamp)(purchaseDate.get(0)[0]);
+		
 		JPanel panelUpdateTrip = new JPanel();
 		initPanel(panelUpdateTrip, "name_118936376777311");
 
@@ -1239,7 +1242,7 @@ public class GUI {
 		lblEndStation.setBounds(40, 106, 108, 16);
 		panelUpdateTrip.add(lblEndStation);
 
-		JLabel lblCardUsedUpdate = new JLabel("Card Used : "+ type);
+		JLabel lblCardUsedUpdate = new JLabel("Card Used : "+ type+ " (" + purchaseDate2 + ")");
 		lblCardUsedUpdate.setBounds(40, 180, 330, 16);
 		panelUpdateTrip.add(lblCardUsedUpdate);
 
@@ -1250,8 +1253,25 @@ public class GUI {
 
 		// Button
 		JButton btnUpdateTrip = new JButton("Update");
+		btnUpdateTrip.addActionListener(e -> {
+			System.out.println(purchaseDate2);
+			System.out.println(startDateTime);
+			System.out.println(type);
+			Queries.updateTrip(ID,type,purchaseDate2, startDateTime, Queries.getCurrentTimestamp(), comboBoxEndStation.getSelectedItem().toString());
+			JOptionPane.showMessageDialog(panelUpdateTrip, "Update successful!");
+			panelUpdateTrip.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
+		
+		});
 		btnUpdateTrip.setBounds(263, 222, 117, 50);
 		panelUpdateTrip.add(btnUpdateTrip);
+
+		
 
 		return panelUpdateTrip;
 	}
