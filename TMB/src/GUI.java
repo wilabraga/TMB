@@ -1356,7 +1356,6 @@ public class GUI {
 		
 		ArrayList<Object[]> reviews = populatePendingReviewTable(rData);
 		int revcount = reviews.size();
-		JOptionPane.showMessageDialog(panelPendingReviews, revcount + "");
 		
 		// Table
 		//BELOW MODEL MAKES TABLE NOT EDITABLE
