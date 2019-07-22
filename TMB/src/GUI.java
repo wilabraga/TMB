@@ -730,7 +730,7 @@ public class GUI {
 		        	if (!isAdmin) {
 		        		makeLineSummaryPanel(val, "order_number");
 		        	} else {
-		        		makeLineSummaryADPanel();
+		        		makeLineSummaryADPanel(val, "order_number");
 		        	}
 		        }
 			}
@@ -1403,7 +1403,15 @@ public class GUI {
 		Object columnNames[] = { "User", "Station", "Shopping", "Connection Speed", "Comment", "Approve", "Reject"};
 				
 		// Table
-		JTable table = new JTable(rData, columnNames);
+		//BELOW MODEL MAKES TABLE NOT EDITABLE
+		DefaultTableModel tableModel = new DefaultTableModel(rData, columnNames) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
+		
+		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(10, 23);
 		scrollPane.setSize(444, 249);
@@ -1813,7 +1821,7 @@ public class GUI {
 		return panelAddLine;
 	}
 
-	private JPanel makeLineSummaryADPanel() {
+	private JPanel makeLineSummaryADPanel(String line, String order) {
 		JPanel panelLineSummaryAD = new JPanel();
 		initPanel(panelLineSummaryAD, "name_120586777795513");
 
@@ -1828,8 +1836,17 @@ public class GUI {
 
 		// Table
 
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2" } };
+		Object rowData[][] = new Object[20][2];
 		Object columnNames[] = { "Station", "Order" };
+		populateStationTable(line, order, rowData);
+		//BELOW MODEL MAKES TABLE NOT EDITABLE
+		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
+		
 		JTable table = new JTable(rowData, columnNames);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(17, 50);
