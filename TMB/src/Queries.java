@@ -734,4 +734,31 @@ public class Queries {
 		}
 		return TMB.executePreparedQuery(attributes);
 	}
+	
+	public static void deleteAdminStationsAndLines(String id) {
+		String query = ""
+				+ "DELETE FROM station "
+				+ "WHERE (name IN (SELECT station_name "
+				+ "FROM admin_add_station "
+				+ "WHERE admin_ID = (?)));";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, id);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+		query = ""
+				+ "DELETE FROM line "
+				+ "WHERE (name IN (SELECT line_name "
+				+ "FROM admin_add_line "
+				+ "WHERE admin_ID = (?)));";
+		psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setString(1, id);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		TMB.executePreparedModification();
+	}
 }
