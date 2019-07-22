@@ -1658,7 +1658,7 @@ public class GUI {
 				model2.addRow(new Object[]{selectedLine,selectedOrder});
 				addinglines.add(selectedLine);
 				addingstations.add(selectedOrder);
-				
+
 			}
 			
 		});
@@ -1687,7 +1687,10 @@ public class GUI {
 			if (Queries.getStationNames().contains(newStationName)) {
 				JOptionPane.showMessageDialog(panelAddStation, "Station Name not Unique.");
 			}
-			
+			else if (addinglines.size()==0) {
+				JOptionPane.showMessageDialog(panelAddStation, "Station must be on a line.");
+
+			}
 			else if (isNumeric(txtPostalCode.getText()) == false)
 					{
 				JOptionPane.showMessageDialog(panelAddStation, "Enter Numeric PostalCode.");
