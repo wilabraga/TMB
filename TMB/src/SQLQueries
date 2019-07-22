@@ -181,7 +181,7 @@ WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?) AND st
 
 26. Get Current Timestamp
 
-SELECT current_timestamp();
+SELECT current_timestamp() AS timestamp;
 
 
 27. Get Pending Reviews
@@ -266,3 +266,9 @@ WHERE station_name = (?) AND line_name = (?);
 UPDATE station
 SET status = (?)
 WHERE name = (?);
+
+
+39. Get All Station Addresses
+
+SELECT state_province, address, zipcode, city
+FROM station;

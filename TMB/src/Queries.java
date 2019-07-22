@@ -463,9 +463,9 @@ public class Queries {
 	//"INDEX 0 out of bounds for length 0"
 	public static Timestamp getCurrentTimestamp() {	
 		String query = ""
-				+ "SELECT current_timestamp();";
+				+ "SELECT current_timestamp() AS timestamp;";
 		TMB.makeStatement();
-		return (Timestamp) TMB.executeQuery(query).get(0)[0];
+		return (Timestamp) TMB.executeQuery(query, "timestamp").get(0)[0];
 	}
 	
 	public static Timestamp getCurrentTimestamp2() {
@@ -687,5 +687,18 @@ public class Queries {
 			System.out.println(e.getMessage());
 		}
 		TMB.executePreparedModification();
+	}
+	
+	public static ArrayList<String[]> getStationAddresses() {	
+		String query = ""
+				+ "SELECT state_province, address, zipcode, city "
+				+ "FROM station;";
+		TMB.makeStatement();
+		ArrayList<Object[]> result = TMB.executeQuery(query, "state_province", "address", "zipcode", "city");
+		ArrayList<String[]> addresses = new ArrayList<>();
+		for(Object[] arr: result) {
+			addresses.add(new String[] {(String) arr[0], (String) arr[1], (String) arr[2], (String) arr[3]});
+		}
+		return addresses;
 	}
 }
