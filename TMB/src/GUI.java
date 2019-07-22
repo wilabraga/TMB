@@ -339,55 +339,14 @@ public class GUI {
 		int revcount = populateReviewTable(order, rData);
 		
 		//TABLE MODEL
-		class MyTModel extends AbstractTableModel {
-
-			@Override
-			public int getColumnCount() {
-				// TODO Auto-generated method stub
-				return columnNames.length;
-			}
-
-			@Override
-			public int getRowCount() {
-				// TODO Auto-generated method stub
-				return rData[0].length;
-			}
-
-			@Override
-			public Object getValueAt(int row, int col) {
-				// TODO Auto-generated method stub
-				return rData[row][col];
-			}
-			
-			public Class getColumnClass(int c) {
-				if (c == 0) {
-					return JButton.class;
-				}
-				if (rData[0][0] != null) {
-					return getValueAt(0, c).getClass();
-				} else {
-					return Object.class;
-				}
-	            
-	        }
-			
-			private void printDebugData() {
-	            int numRows = getRowCount();
-	            int numCols = getColumnCount();
-
-	            for (int i=0; i < numRows; i++) {
-	                System.out.print("    row " + i + ":");
-	                for (int j=0; j < numCols; j++) {
-	                    System.out.print("  " + rData[i][j]);
-	                }
-	                System.out.println();
-	            }
-	            System.out.println("--------------------------");
-	        }
-
-		}//END TABLE MODEL STUFF
+		DefaultTableModel tableModel = new DefaultTableModel(rData, columnNames) {
+		    @Override
+		    public boolean isCellEditable(int row, int column) {
+		       return false;
+		    }
+		};
 		
-		JTable table = new JTable(new MyTModel());
+		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 54);
 		scrollPane.setSize(444, 218);
