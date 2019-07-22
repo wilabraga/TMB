@@ -1760,14 +1760,20 @@ public class GUI {
 
 		JButton btnAddLine_2 = new JButton("Add Line");
 		btnAddLine_2.addActionListener(e -> {
+			
 			String newLineName = txtLineName.getText();	
-			Queries.addLine(newLineName, ID, Queries.getCurrentTimestamp2());
-			for (int i=0; i<addedstations.size(); i++) {
-				Queries.addLineToStation(addedstations.get(i), newLineName, Integer.valueOf(ordernums.get(i)));
+			if (Queries.getLineNames().contains(newLineName)) {
+				JOptionPane.showMessageDialog(panelAddLine, "Line Name not Unique.");
 			}
-			JOptionPane.showMessageDialog(panelAddLine, "Line Added!");
-			panelAddLine.setVisible(false);
-			makeAdminLandingPanel();
+			else {
+				Queries.addLine(newLineName, ID, Queries.getCurrentTimestamp2());
+				for (int i=0; i<addedstations.size(); i++) {
+					Queries.addLineToStation(addedstations.get(i), newLineName, Integer.valueOf(ordernums.get(i)));
+					JOptionPane.showMessageDialog(panelAddLine, "Line Added!");
+					panelAddLine.setVisible(false);
+					makeAdminLandingPanel();
+				}
+			}
 		});
 		btnAddLine_2.setBounds(314, 243, 117, 29);
 		panelAddLine.add(btnAddLine_2);
