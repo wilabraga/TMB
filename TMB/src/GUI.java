@@ -97,7 +97,6 @@ public class GUI {
 		// Creates Registration Button
 		JButton btnRegister = new JButton("Register");
 		btnRegister.addActionListener(e -> {
-			System.out.println("here");
 			panelLogin.setVisible(false);
 			makeRegistrationPanel();
 		});
@@ -271,19 +270,13 @@ public class GUI {
 		panelRegistration.add(btnRegister_1);
 		btnRegister_1.addActionListener(e -> {
 			String first = txtFirst.getText();
+			System.out.println(first);
 			String mi = txtMi.getText();
 			String last = txtLast.getText();
 			String email = txtEmail.getText();
 			String uid = txtUID.getText();
 			String pw = txtPassword.getText();
 			String pw2 = txtPasswordagain.getText();
-			if (!pw.contentEquals(pw2)) {
-				JOptionPane.showMessageDialog(panelRegistration, "Passwords do not match!");
-			}
-			if (pw.length() < 8) {
-				JOptionPane.showMessageDialog(panelRegistration, "Password must have at least 8 characters!");
-			}
-			// MAKE SURE ID DOESN'T EXIST
 			ArrayList<String> ids = Queries.getUserIDs();
 			boolean idExists = false;
 			for (String id : ids) {
@@ -291,10 +284,28 @@ public class GUI {
 					idExists = true;
 				}
 			}
-			if (idExists) {
+			if (first.isEmpty() || last.isEmpty() || email.isEmpty() || uid.isEmpty()) {
+				JOptionPane.showMessageDialog(panelRegistration, "All fields except middle initial required.");
+
+			}
+			else if (!pw.contentEquals(pw2)) {
+				JOptionPane.showMessageDialog(panelRegistration, "Passwords do not match!");
+			}
+			else if ((first).matches("[a-zA-Z]+") == false || (last).matches("[a-zA-Z]+") == false ){
+				JOptionPane.showMessageDialog(panelRegistration, "Enter a valid name.");
+			}
+			else if (mi.isEmpty() == false) {
+				if ((mi).matches("[a-zA-Z]+") == false ) {
+					JOptionPane.showMessageDialog(panelRegistration, "Enter a valid name.");
+				}
+			}
+			else if (pw.length() < 8) {
+				JOptionPane.showMessageDialog(panelRegistration, "Password must have at least 8 characters!");
+			}
+			else if (idExists) {
 				JOptionPane.showMessageDialog(panelRegistration, "User ID already exists!");
 			}
-			if (pw.contentEquals(pw2) && pw.length() >= 8 && !idExists) {
+			else {
 				Queries.addUser(uid, first, mi, last, pw, email);
 				fName = first;
 				lName = last;
@@ -958,7 +969,7 @@ public class GUI {
 		// Buttons
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.addActionListener(e -> {
-			Queries.deleteUser((String) Queries.getUserInfo(ID, "ID")[0]);
+			Queries.deleteUser(ID);
 			panelEditProfile.setVisible(false);
 			makeLoginPanel();
 		});
@@ -974,12 +985,6 @@ public class GUI {
 			String uid = txtUserid.getText();
 			String pw = txtPassword_1.getText();
 			String pw2 = txtPassword_2.getText();
-			if (pw.contentEquals(pw2) == false) {
-				JOptionPane.showMessageDialog(panelEditProfile, "Passwords do not match!");
-			}
-			if (pw.length() < 8 && (pw.equals((String)Queries.getUserInfo(ID, "password")[0]))== false) {
-				JOptionPane.showMessageDialog(panelEditProfile, "Password must have at least 8 characters!");
-			}
 			ArrayList<String> ids = Queries.getUserIDs();
 			boolean idExists = false;
 			for (String id : ids) {
@@ -987,10 +992,27 @@ public class GUI {
 					idExists = true;
 				}
 			}
-			if (idExists && (ID.equals(uid) == false)) {
+			if (first.isEmpty() || last.isEmpty() || email.isEmpty() || uid.isEmpty()) {
+				JOptionPane.showMessageDialog(panelEditProfile, "All fields except middle initial required.");
+			}
+			else if ((first).matches("[a-zA-Z]+") == false || (last).matches("[a-zA-Z]+") == false ){
+				JOptionPane.showMessageDialog(panelEditProfile, "Enter a valid name.");
+			}
+			else if (mi.isEmpty() == false) {
+				if ((mi).matches("[a-zA-Z]+") == false ) {
+					JOptionPane.showMessageDialog(panelEditProfile, "Enter a valid name.");
+				}
+			}
+			else if (pw.contentEquals(pw2) == false) {
+				JOptionPane.showMessageDialog(panelEditProfile, "Passwords do not match!");
+			}
+			else if (pw.length() < 8 && (pw.equals((String)Queries.getUserInfo(ID, "password")[0]))== false) {
+				JOptionPane.showMessageDialog(panelEditProfile, "Password must have at least 8 characters!");
+			}
+			else if (idExists && (ID.equals(uid) == false)) {
 				JOptionPane.showMessageDialog(panelEditProfile, "User ID already exists!");
 			}
-			if (pw.contentEquals(pw2) && (pw.length() >= 8 || (pw.equals((String)Queries.getUserInfo(ID, "password")[0]))== true) && (!idExists || ID.equals(uid))) {
+			else{
 				Queries.updateUser(ID, uid, first, mi, last, pw, email);
 				fName = first;
 				lName = last;
@@ -1155,6 +1177,10 @@ public class GUI {
 		// Button
 		JButton btnEmbark = new JButton("Embark");
 		btnEmbark.addActionListener(e -> {
+			if (validC.size() ==0) {
+				JOptionPane.showMessageDialog(panelGoOnATrip, "No valid cards!");
+			}
+			else {
 			String startStation = comboBoxStation.getSelectedItem().toString();
 			String tripTicket = comboBoxCard.getSelectedItem().toString();
 			String[] splitString = tripTicket.split("\\s+");
@@ -1184,6 +1210,7 @@ public class GUI {
 			else {
 				makePassengerLandingPanel();
 			}
+		}
 		});
 		btnEmbark.setBounds(235, 203, 153, 55);
 		panelGoOnATrip.add(btnEmbark);
