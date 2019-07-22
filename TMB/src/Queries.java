@@ -443,7 +443,7 @@ public class Queries {
 	public static void updateTrip(String ID, String type, Timestamp purchaseDate, Timestamp startDate, Timestamp endDate, String endStation) {
 		String query = ""
 				+ "UPDATE trip "
-				+ "SET end_date_time = (?) AND to_station_name = (?) "
+				+ "SET end_date_time = (?), to_station_name = (?) "
 				+ "WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?) AND start_date_time = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {

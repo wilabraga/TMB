@@ -1135,8 +1135,14 @@ public class GUI {
 		        	//UPDATE TRIP STUFF
 		        } else if (row < numTrips) {
 		        	String val = (String) table.getValueAt(row, col);
-		        	panelViewTrips.setVisible(false);
-		        	makeStationInfoPanel(val);
+		        	if (!val.equals("N/A")) {
+			        	panelViewTrips.setVisible(false);
+			        	if (!isAdmin) {
+			        		makeStationInfoPanel(val);
+			        	} else {
+			        		makeStationInfoADPanel();
+			        	}
+					}
 		        }
 			}
 		});
