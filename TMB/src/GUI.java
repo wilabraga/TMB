@@ -816,6 +816,13 @@ public class GUI {
 		btnTmes.addActionListener(e -> {
 			JOptionPane.showMessageDialog(panelBuyCard, "T-mes Card Purchased");
 			buyTmesCard();
+			panelBuyCard.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
 		});
 
 		JButton btnT = new JButton("T-10");
@@ -824,6 +831,13 @@ public class GUI {
 		btnT.addActionListener(e -> {
 			JOptionPane.showMessageDialog(panelBuyCard, "T-10 Card Purchased");
 			buyT10Card();
+			panelBuyCard.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
 		});
 
 		JButton btnT_1 = new JButton("T-50/30");
@@ -832,6 +846,13 @@ public class GUI {
 		btnT_1.addActionListener(e -> {
 			JOptionPane.showMessageDialog(panelBuyCard, "T-50/30 Card Purchased");
 			buyT5030Card();
+			panelBuyCard.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
 		});
 
 		JButton btnTjove = new JButton("T-jove");
@@ -840,6 +861,13 @@ public class GUI {
 		btnTjove.addActionListener(e -> {
 			JOptionPane.showMessageDialog(panelBuyCard, "T-jove Card Purchased");
 			buyTjoveCard();
+			panelBuyCard.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
 		});
 
 		return panelBuyCard;
@@ -1137,6 +1165,14 @@ public class GUI {
 			String tsstring  = dateFormat5.format(finalTimestamp);
 			
 			Queries.embark(ID, tripTicketType, tsstring, Queries.getCurrentTimestamp2(), null, startStation, null);
+			JOptionPane.showMessageDialog(panelGoOnATrip, "Embark successful!");
+			panelGoOnATrip.setVisible(false);
+			if (Queries.isAdmin(ID)) {
+				makeAdminLandingPanel();	
+			}
+			else {
+				makePassengerLandingPanel();
+			}
 		});
 		btnEmbark.setBounds(235, 203, 153, 55);
 		panelGoOnATrip.add(btnEmbark);
@@ -1531,6 +1567,8 @@ public class GUI {
 					Queries.addLineToStation(newStationName, addinglines.get(i), Integer.valueOf(addingstations.get(i)));
 				}
 				JOptionPane.showMessageDialog(panelAddStation, "Station Added!");
+				panelAddStation.setVisible(false);
+				makeAdminLandingPanel();
 			}
 		});
 		btnAddStation_1.setBounds(314, 243, 117, 29);
@@ -1629,6 +1667,8 @@ public class GUI {
 				Queries.addLineToStation(addedstations.get(i), newLineName, Integer.valueOf(ordernums.get(i)));
 			}
 			JOptionPane.showMessageDialog(panelAddLine, "Line Added!");
+			panelAddLine.setVisible(false);
+			makeAdminLandingPanel();
 		});
 		btnAddLine_2.setBounds(314, 243, 117, 29);
 		panelAddLine.add(btnAddLine_2);
