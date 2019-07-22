@@ -270,7 +270,6 @@ public class GUI {
 		panelRegistration.add(btnRegister_1);
 		btnRegister_1.addActionListener(e -> {
 			String first = txtFirst.getText();
-			System.out.println(first);
 			String mi = txtMi.getText();
 			String last = txtLast.getText();
 			String email = txtEmail.getText();
@@ -1200,7 +1199,6 @@ public class GUI {
 			Timestamp finalTimestamp = new Timestamp(calendar.getTime().getTime());
 			SimpleDateFormat dateFormat5 = new SimpleDateFormat("yyy-MM-dd HH:mm:ss");
 			String tsstring  = dateFormat5.format(finalTimestamp);
-			System.out.println(tsstring);
 			Queries.embark(ID, tripTicketType, tsstring, Queries.getCurrentTimestamp2(), null, startStation, null);
 			JOptionPane.showMessageDialog(panelGoOnATrip, "Embark successful!");
 			panelGoOnATrip.setVisible(false);
@@ -1254,9 +1252,6 @@ public class GUI {
 		// Button
 		JButton btnUpdateTrip = new JButton("Update");
 		btnUpdateTrip.addActionListener(e -> {
-			System.out.println(purchaseDate2);
-			System.out.println(startDateTime);
-			System.out.println(type);
 			Queries.updateTrip(ID,type,purchaseDate2, startDateTime, Queries.getCurrentTimestamp(), comboBoxEndStation.getSelectedItem().toString());
 			JOptionPane.showMessageDialog(panelUpdateTrip, "Update successful!");
 			panelUpdateTrip.setVisible(false);
