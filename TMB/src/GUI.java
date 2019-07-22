@@ -1297,25 +1297,58 @@ public class GUI {
 		lblPendingReviews.setBounds(6, 6, 128, 16);
 		panelPendingReviews.add(lblPendingReviews);
 
+		Object rData[][] = new Object[20][7];
+		Object columnNames[] = { "User", "Station", "Shopping", "Connection Speed", "Comment", "Approve", "Reject"};
+				
 		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2", "Row1-Column3", "R1C4", "R1C5" } };
-		Object columnNames[] = { "User", "Station", "Shopping", "Connection Speed", "Comment" };
-		JTable table = new JTable(rowData, columnNames);
+		JTable table = new JTable(rData, columnNames);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(6, 23);
 		scrollPane.setSize(356, 249);
 		panelPendingReviews.add(scrollPane, BorderLayout.CENTER);
-
-		// Buttons
-		JButton btnApprove = new JButton("AP");
-		btnApprove.setBounds(356, 35, 49, 29);
-		panelPendingReviews.add(btnApprove);
-
-		JButton btnRej = new JButton("REJ");
-		btnRej.setBounds(395, 35, 49, 29);
-		panelPendingReviews.add(btnRej);
+		
+		ArrayList<Object[]> reviews = populatePendingReviewTable(rData);
+		int revcount = reviews.size();
+		
+		table.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(MouseEvent e) {
+				int row = table.getSelectedRow();
+		        int col = table.getSelectedColumn();
+		        if (row < revcount) {
+		        	if (col == 5) {
+		        		int rid = (Integer) reviews.get(row)[0];
+		        		String userID = (String) rData[row][0];
+		        		Queries.updateReviewStatus(userID, rid, ID, "Approved");
+		        		panelPendingReviews.setVisible(false);
+		        		makePendingReviewsPanel();
+		        	} else if (col == 6) {
+		        		int rid = (Integer) reviews.get(row)[0];
+		        		String userID = (String) rData[row][0];
+		        		Queries.updateReviewStatus(userID, rid, ID, "Rejected");
+		        		panelPendingReviews.setVisible(false);
+		        		makePendingReviewsPanel();
+		        	}
+		        }
+			}
+		});
+		
 
 		return panelPendingReviews;
+	}
+	
+	private ArrayList<Object[]> populatePendingReviewTable(Object[][] rData) {
+		ArrayList<Object[]> revs = Queries.getPendingReviews("rid", "passenger_ID", "station_name", "shopping", "connection_speed", "comment");
+		for (int i = 0; i < revs.size(); i++) {
+			Object[] tuple = revs.get(i); //(Integer) tuple[1]
+			rData[i][0] = (String) tuple[1];
+			rData[i][1] = (String) tuple[2];
+			rData[i][2] = (Integer) tuple[3];
+			rData[i][3] = (Integer) tuple[4];
+			rData[i][4] = (String) tuple[5];
+			rData[i][5] = "Approve";
+			rData[i][6] = "Reject";
+		}
+		return revs;
 	}
 
 	

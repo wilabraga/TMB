@@ -194,7 +194,7 @@ WHERE approval_status = 'Pending';
 28. Update Review Status
 
 UPDATE review
-SET approval_status = (?)
+SET approval_status = (?), approver_ID = (?)
 WHERE passenger_ID = (?) AND rid = (?);
 
 
@@ -272,3 +272,10 @@ WHERE name = (?);
 
 SELECT state_province, address, zipcode, city
 FROM station;
+
+
+40. Get Trips From Start Time
+
+SELECT *
+FROM trip
+WHERE start_date_time = (?);

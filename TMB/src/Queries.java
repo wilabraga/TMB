@@ -482,16 +482,17 @@ public class Queries {
 		return TMB.executeQuery(query, attributes);
 	}
 	
-	public static void updateReviewStatus(String ID, int rid, String status) {
+	public static void updateReviewStatus(String reviewerID, int rid, String adminID, String status) {
 		String query = ""
 				+ "UPDATE review "
-				+ "SET approval_status = (?) "
+				+ "SET approval_status = (?), approver_ID = (?) "
 				+ "WHERE passenger_ID = (?) AND rid = (?);";
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setString(1, status);
-			psmt.setString(2, ID);
-			psmt.setInt(3, rid);
+			psmt.setString(2, adminID);
+			psmt.setString(3, reviewerID);
+			psmt.setInt(4, rid);
 		} catch(SQLException e) {
 			System.out.println(e.getMessage());
 		}
@@ -700,5 +701,19 @@ public class Queries {
 			addresses.add(new String[] {(String) arr[0], (String) arr[1], Integer.toString((Integer)arr[2]), (String) arr[3]});
 		}
 		return addresses;
+	}
+	
+	public static ArrayList<Object[]> getTripsFromStartTime(Timestamp date, String... attributes) {	
+		String query = ""
+				+ "SELECT * "
+				+ "FROM trip "
+				+ "WHERE start_date_time = (?);";
+		PreparedStatement psmt = TMB.makePreparedStatement(query);
+		try {
+			psmt.setTimestamp(1, date);
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return TMB.executePreparedQuery(attributes);
 	}
 }
