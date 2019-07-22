@@ -1081,10 +1081,42 @@ public class GUI {
 		       return false;
 		    }
 		};
+		ButtonGroup rdbtnMyTrips = new ButtonGroup();
+		
+		JRadioButton rdbtnStartDate = new JRadioButton();
+		rdbtnStartDate.addActionListener(e -> {
+			panelViewTrips.setVisible(false);
+			makeViewTripsPanel("start_date_time");
+		});
+		rdbtnStartDate.setBounds(40,25,37,23);
+		panelViewTrips.add(rdbtnStartDate);
+		
+		JRadioButton rdbtnFrom = new JRadioButton();
+		rdbtnFrom.addActionListener(e -> {
+			panelViewTrips.setVisible(false);
+			makeViewTripsPanel("from_station_name");
+		});
+		rdbtnFrom.setBounds(285,25,37,23);
+		panelViewTrips.add(rdbtnFrom);
+		
+		JRadioButton rdbtnTo = new JRadioButton();
+		rdbtnTo.addActionListener(e -> {
+			panelViewTrips.setVisible(false);
+			makeViewTripsPanel("to_station_name");
+		});
+		rdbtnTo.setBounds(375,25,37,23);
+		panelViewTrips.add(rdbtnTo);
+		
+		
+		rdbtnMyTrips.add(rdbtnStartDate);
+		rdbtnMyTrips.add(rdbtnFrom);
+		rdbtnMyTrips.add(rdbtnTo);
+
+		
 		
 		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setLocation(6, 23);
+		scrollPane.setLocation(6, 50);
 		scrollPane.setSize(444, 249);
 		panelViewTrips.add(scrollPane, BorderLayout.CENTER);
 		
@@ -1093,6 +1125,13 @@ public class GUI {
 				int row = table.getSelectedRow();
 		        int col = table.getSelectedColumn();
 		        if (col >= 0 && col <= 2 && row < numTrips) {
+		        	if (col==0 && table.getValueAt(row,1).equals("N/A")) {
+		        		String type = (String)table.getValueAt(row,2);
+		        		Timestamp startdatetime = (Timestamp)table.getValueAt(row, col);
+		        		String startStation = (String)table.getValueAt(row, 3);		        		
+		        		panelViewTrips.setVisible(false);
+		        		makeUpdateTripPanel(startdatetime, type, startStation);
+		        	}
 		        	//UPDATE TRIP STUFF
 		        } else if (row < numTrips) {
 		        	String val = (String) table.getValueAt(row, col);
@@ -1182,7 +1221,7 @@ public class GUI {
 
 	
 
-	private JPanel makeUpdateTripPanel() {
+	private JPanel makeUpdateTripPanel(Timestamp startDateTime, String type, String startStation) {
 		JPanel panelUpdateTrip = new JPanel();
 		initPanel(panelUpdateTrip, "name_118936376777311");
 
@@ -1191,20 +1230,22 @@ public class GUI {
 		lblUpdateTrip.setBounds(6, 6, 142, 16);
 		panelUpdateTrip.add(lblUpdateTrip);
 
-		JLabel lblStartStationUpdate = new JLabel("Start Station     STATION NAME");
+		JLabel lblStartStationUpdate = new JLabel("Start Station    :     "+ startStation);
 		lblStartStationUpdate.setBounds(40, 48, 223, 16);
 		panelUpdateTrip.add(lblStartStationUpdate);
 
+		
 		JLabel lblEndStation = new JLabel("End Station");
 		lblEndStation.setBounds(40, 106, 108, 16);
 		panelUpdateTrip.add(lblEndStation);
 
-		JLabel lblCardUsedUpdate = new JLabel("Card Used      CARD USED");
+		JLabel lblCardUsedUpdate = new JLabel("Card Used : "+ type);
 		lblCardUsedUpdate.setBounds(40, 180, 330, 16);
 		panelUpdateTrip.add(lblCardUsedUpdate);
 
-		JComboBox comboBoxEndStation = new JComboBox();
-		comboBoxEndStation.setBounds(237, 102, 52, 27);
+		ArrayList<String> stations = Queries.getStationNames();
+		JComboBox comboBoxEndStation = new JComboBox(stations.toArray());
+		comboBoxEndStation.setBounds(237, 102, 150, 27);
 		panelUpdateTrip.add(comboBoxEndStation);
 
 		// Button
