@@ -1470,7 +1470,6 @@ public class GUI {
 			String selectedLine = comboBox_3.getSelectedItem().toString();
 			String selectedOrder = txtOrder.getText();
 			ArrayList<Integer> linenums = Queries.getLineOrderNumbers(selectedLine);
-			System.out.println(linenums);
 			String newStationName = txtStationName.getText();
 			if (Queries.getStationNames().contains(newStationName)) {
 				JOptionPane.showMessageDialog(panelAddStation, "Station Name not Unique.");
@@ -1494,14 +1493,11 @@ public class GUI {
 		panelAddStation.add(btnAddLine_1);
 
 		
-		//ADDD MAKING SURE ADDRESS IS UNIQUE
 		JButton btnAddStation_1 = new JButton("Add Station");
 		btnAddStation_1.addActionListener(e -> {
 			String newStationName = txtStationName.getText();
 			ArrayList<String[]> badAddresses = Queries.getStationAddresses();
-			System.out.println(badAddresses.get(0));
 			String[] newAddress = {txtState.getText(), txtStreetAddress.getText(), txtPostalCode.getText(), txtCity.getText()};
-			System.out.println(newAddress);
 			boolean flag = true;
 			for (String[] str: badAddresses) {
 				int countingflag = 0;
@@ -1552,6 +1548,7 @@ public class GUI {
 		    return false;  
 		  }  
 		}
+	
 	private JPanel makeAddLinePanel() {
 		JPanel panelAddLine = new JPanel();
 		initPanel(panelAddLine, "name_120405071029218");
@@ -1575,25 +1572,64 @@ public class GUI {
 		txtOrder_1.setColumns(10);
 
 		// Table
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2" } };
-		Object columnNames[] = { "Station", "Order" };
-		JTable table = new JTable(rowData, columnNames);
+		
+		DefaultTableModel model = new DefaultTableModel();
+		model.addColumn("Station");
+		model.addColumn("Order");
+		JTable table = new JTable(model);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(26, 125);
 		scrollPane.setSize(353, 115);
 		panelAddLine.add(scrollPane, BorderLayout.CENTER);
 
+
 		// ComboBox
-		JComboBox comboBox = new JComboBox();
+		ArrayList<String> stationNames = Queries.getStationNames();
+		JComboBox comboBox = new JComboBox(stationNames.toArray());
 		comboBox.setBounds(6, 73, 140, 27);
 		panelAddLine.add(comboBox);
+		ArrayList<String> ordernums = new ArrayList<String>();
+		ArrayList<String> addedstations = new ArrayList<String>();
 
 		// Buttons
 		JButton btnAddStation_2 = new JButton("Add Station");
+		btnAddStation_2.addActionListener(e -> {
+			String newLineName = txtLineName.getText();	
+			String selectedStation = comboBox.getSelectedItem().toString();
+			String selectedOrder = txtOrder_1.getText();
+			if (Queries.getLineNames().contains(newLineName)) {
+				JOptionPane.showMessageDialog(panelAddLine, "Line Name not Unique.");
+			}
+			else if (isNumeric(selectedOrder) == false || Integer.valueOf(selectedOrder)<1) {
+				JOptionPane.showMessageDialog(panelAddLine, "Invalid Order Number");
+			}
+			else if (ordernums.contains(selectedOrder)) {
+				JOptionPane.showMessageDialog(panelAddLine, "Invalid Order Number");
+			}
+			else if (addedstations.contains(selectedStation)) {
+				JOptionPane.showMessageDialog(panelAddLine, "Station already added to Line");
+			}
+			else {
+				DefaultTableModel model2 = (DefaultTableModel) table.getModel();
+				model2.addRow(new Object[]{selectedStation,selectedOrder});
+				ordernums.add(selectedOrder);
+				addedstations.add(selectedStation);
+			}
+			
+			
+		});
 		btnAddStation_2.setBounds(327, 72, 117, 29);
 		panelAddLine.add(btnAddStation_2);
 
 		JButton btnAddLine_2 = new JButton("Add Line");
+		btnAddLine_2.addActionListener(e -> {
+			String newLineName = txtLineName.getText();	
+			Queries.addLine(newLineName, ID, Queries.getCurrentTimestamp2());
+			for (int i=0; i<addedstations.size(); i++) {
+				Queries.addLineToStation(addedstations.get(i), newLineName, Integer.valueOf(ordernums.get(i)));
+			}
+			JOptionPane.showMessageDialog(panelAddLine, "Line Added!");
+		});
 		btnAddLine_2.setBounds(314, 243, 117, 29);
 		panelAddLine.add(btnAddLine_2);
 
