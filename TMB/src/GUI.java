@@ -710,14 +710,14 @@ public class GUI {
 		initPanel(panelLineSummary, "name_116847732626867");
 		
 		ArrayList<Object[]> stations = Queries.getStationsFromLine(lnum, "order_number");
-		
+		long numstops = Queries.getNumStops(lnum);
 
 		// Labels
 		JLabel lblLineLine = new JLabel("Line : " + lnum);
 		lblLineLine.setBounds(6, 6, 145, 16);
 		panelLineSummary.add(lblLineLine);
 
-		JLabel lblStops = new JLabel("# Stops");
+		JLabel lblStops = new JLabel(numstops + " Stops");
 		lblStops.setBounds(366, 6, 61, 16);
 		panelLineSummary.add(lblStops);
 
@@ -1861,15 +1861,29 @@ public class GUI {
 		btnUpdate.setBounds(327, 225, 117, 47);
 		panelLineSummaryAD.add(btnUpdate);
 		btnUpdate.addActionListener(e -> { //delete and update in table
-			for(int i = 0; i < numStats; i++) {
-				if(table.getValueAt(i, 4).equals("(Will Delete)")) {
-					Queries.deleteStation((String) table.getValueAt(i, 0));
-				} else {
-					Queries.updateStationOrderNumber((String) table.getValueAt(i, 0), line, (Integer) table.getValueAt(i, 1));
+			boolean flag = true;
+			ArrayList<Integer> lineOrderNums = new ArrayList<Integer>();
+			for (int i = 0; i<numStats; i++) {
+				if (lineOrderNums.contains((Integer)table.getValueAt(i,1))) {
+					JOptionPane.showMessageDialog(panelLineSummaryAD, "Stations cannot have same order number.");
+					flag = false;
+				}
+				else {
+					lineOrderNums.add((Integer)table.getValueAt(i,1));
 				}
 			}
+			if (flag == true) {
+				for(int i = 0; i < numStats; i++) {
+					if(table.getValueAt(i, 4).equals("(Will Delete)")) {
+						Queries.deleteStation((String) table.getValueAt(i, 0));
+					} else {
+						Queries.updateStationOrderNumber((String) table.getValueAt(i, 0), line, (Integer) table.getValueAt(i, 1));
+					}
+				}
 			panelLineSummaryAD.setVisible(false);
 			makeLineSummaryADPanel(line, order);
+			JOptionPane.showMessageDialog(panelLineSummaryAD, "Line Updated!");
+			}
 		});
 
 		// Radio Buttons
