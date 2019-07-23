@@ -1806,7 +1806,7 @@ public class GUI {
 		JPanel panelLineSummaryAD = new JPanel();
 		initPanel(panelLineSummaryAD, "name_120586777795513");
 		
-		int num = Queries.getNumStops(line);
+		long num = Queries.getNumStops(line);
 
 		// Label
 		JLabel lblLineNum = new JLabel("Line: " + line);
@@ -1833,47 +1833,50 @@ public class GUI {
 		JTable table = new JTable(tableModel);
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setLocation(17, 50);
-		scrollPane.setSize(300, 163); //265
+		scrollPane.setSize(400, 163); //265
 		panelLineSummaryAD.add(scrollPane, BorderLayout.CENTER);
 		
 		table.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(MouseEvent e) {
 				int row = table.getSelectedRow();
 		        int col = table.getSelectedColumn();
-		        if (col == 0 && row < numStats) {
-		        	int val = (Integer) table.getValueAt(row, col);
-		        	//panelViewReviews.setVisible(false);
-					makeEditReviewPanel(val);
-		        } else if (col == 1 && row < numStats) {
+		        if (col == 0 && row < numStats) { //set values to be updated later
 		        	String val = (String) table.getValueAt(row, col);
-		        	//panelViewReviews.setVisible(false);
-		        	makeStationInfoPanel(val);
+		        	panelLineSummaryAD.setVisible(false);
+					makeStationInfoADPanel(val);
+		        } else if (col == 2 && row < numStats) {
+		        	Integer val = (Integer) table.getValueAt(row, col - 1);
+		        	table.setValueAt(val + 1, row, col - 1);
+		        } else if (col == 3 && row < numStats) {
+		        	Integer val = (Integer) table.getValueAt(row, col - 2);
+		        	table.setValueAt(val - 1, row, col - 2);
+		        } else if (col == 4 && row < numStats) {
+		        	table.setValueAt("(Will Delete)", row, col);
 		        }
 			}
 		});
 
-		/* Button
+		// Button
 		JButton btnUpdate = new JButton("Update");
 		btnUpdate.setBounds(327, 225, 117, 47);
 		panelLineSummaryAD.add(btnUpdate);
-
-		JButton btnDelete = new JButton("Delete");
-		btnDelete.setBounds(372, 69, 72, 16);
-		panelLineSummaryAD.add(btnDelete);
-
-		JButton btnUp = new JButton("^");
-		btnUp.setBounds(280, 62, 44, 29);
-		panelLineSummaryAD.add(btnUp);
-
-		JButton btnDown = new JButton("V");
-		btnDown.setBounds(316, 62, 66, 29);
-		panelLineSummaryAD.add(btnDown);*/
+		btnUpdate.addActionListener(e -> { //delete and update in table
+			for(int i = 0; i < numStats; i++) {
+				if(table.getValueAt(i, 4).equals("(Will Delete)")) {
+					Queries.deleteStation((String) table.getValueAt(i, 0));
+				} else {
+					Queries.updateStationOrderNumber((String) table.getValueAt(i, 0), line, (Integer) table.getValueAt(i, 1));
+				}
+			}
+			panelLineSummaryAD.setVisible(false);
+			makeLineSummaryADPanel(line, order);
+		});
 
 		// Radio Buttons
 		ButtonGroup LineSummary = new ButtonGroup();
 
 		JRadioButton rdbtnStationLineNum = new JRadioButton("");
-		rdbtnStationLineNum.setBounds(51, 25, 141, 23);
+		rdbtnStationLineNum.setBounds(45, 20, 20, 20);
 		panelLineSummaryAD.add(rdbtnStationLineNum);
 		rdbtnStationLineNum.addActionListener(e -> {
 			panelLineSummaryAD.setVisible(false);
@@ -1881,7 +1884,7 @@ public class GUI {
 		});
 
 		JRadioButton rdbtnOrderLineNum = new JRadioButton("");
-		rdbtnOrderLineNum.setBounds(169, 27, 141, 23);
+		rdbtnOrderLineNum.setBounds(120, 20, 20, 20);
 		panelLineSummaryAD.add(rdbtnOrderLineNum);
 		rdbtnOrderLineNum.addActionListener(e -> {
 			panelLineSummaryAD.setVisible(false);
