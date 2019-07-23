@@ -293,10 +293,8 @@ public class GUI {
 			else if ((first).matches("[a-zA-Z]+") == false || (last).matches("[a-zA-Z]+") == false ){
 				JOptionPane.showMessageDialog(panelRegistration, "Enter a valid name.");
 			}
-			else if (mi.isEmpty() == false) {
-				if ((mi).matches("[a-zA-Z]+") == false ) {
+			else if ((mi.isEmpty() == false) && (mi).matches("[a-zA-Z]") == false){
 					JOptionPane.showMessageDialog(panelRegistration, "Enter a valid name.");
-				}
 			}
 			else if (pw.length() < 8) {
 				JOptionPane.showMessageDialog(panelRegistration, "Password must have at least 8 characters!");
