@@ -1055,7 +1055,7 @@ public class GUI {
 			else if ((first).matches("[a-zA-Z]+") == false || (last).matches("[a-zA-Z]+") == false ){
 				JOptionPane.showMessageDialog(panelEditProfile, "Enter a valid name.");
 			}
-			else if (mi.isEmpty() == false && ((mi).matches("[a-zA-Z]+") == false)) {
+			else if (mi.isEmpty() == false && ((mi).matches("[a-zA-Z]") == false)) {
 					JOptionPane.showMessageDialog(panelEditProfile, "Enter a valid name.");
 			}
 			else if (pw.contentEquals(pw2) == false) {
@@ -1594,11 +1594,17 @@ public class GUI {
 			else if (pw.length() < 8 && !(oldpw.equals(pw))) {
 				JOptionPane.showMessageDialog(panelEditProfileAD, "Password must have at least 8 characters!");
 			}
-	
 			else if (idExists && !(ID.equals(uid))) {
 				JOptionPane.showMessageDialog(panelEditProfileAD, "User ID already exists!");
 			}
-			else if (mi.isEmpty() == false && ((mi).matches("[a-zA-Z]+") == false)) {
+			else if ((first).matches("[a-zA-Z]+") == false || (last).matches("[a-zA-Z]+") == false ){
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Enter a valid name.");
+			}
+			else if (mi.isEmpty() == false && ((mi).matches("[a-zA-Z]") == false)) {
+				JOptionPane.showMessageDialog(panelEditProfileAD, "Enter a valid name.");
+			}
+
+			else if (mi.isEmpty() == false && ((mi).matches("[a-zA-Z]") == false)) {
 				JOptionPane.showMessageDialog(panelEditProfileAD, "Enter a valid name.");
 			}
 			else {
