@@ -56,7 +56,7 @@ ORDER BY %s ASC;
 SELECT *
 FROM review
 WHERE passenger_id = (?)
-ORDER BY %s ASC;
+ORDER BY %s %s;
 
 
 9. Get Review

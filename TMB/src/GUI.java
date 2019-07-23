@@ -318,10 +318,10 @@ public class GUI {
 	}
 
 	private JPanel makeViewReviewPanel() {
-		return makeViewReviewPanel("rid");
+		return makeViewReviewPanel("rid", "ASC");
 	}
 
-	private JPanel makeViewReviewPanel(String order) {
+	private JPanel makeViewReviewPanel(String order, String direction) {
 		JPanel panelViewReviews = new JPanel();
 		initPanel(panelViewReviews, "name_76504429508073");
 
@@ -335,7 +335,7 @@ public class GUI {
 		Object columnNames[] = { "ID", "Station", "Shopping", "Connection Speed", "Comment", "Approval Status" }; //rData, columnNames
 		
 		// Initial Data
-		int revcount = populateReviewTable(order, rData);
+		int revcount = populateReviewTable(order, direction, rData);
 		
 		//TABLE MODEL
 		DefaultTableModel tableModel = new DefaultTableModel(rData, columnNames) {
@@ -373,7 +373,15 @@ public class GUI {
 		JRadioButton rdbtnID = new JRadioButton();
 		rdbtnID.addActionListener(e -> {
 			panelViewReviews.setVisible(false);
-			makeViewReviewPanel("rid");
+			if (order.equals("rid")) {
+				if (direction.equals("ASC")) {
+					makeViewReviewPanel("rid", "DESC");
+				} else {
+					makeViewReviewPanel("rid", "ASC");
+				}
+			} else {
+				makeViewReviewPanel("rid", "ASC");
+			}
 		});
 		rdbtnID.setBounds(26, 34, 37, 23);
 		panelViewReviews.add(rdbtnID);
@@ -381,7 +389,15 @@ public class GUI {
 		JRadioButton rdbtnStation = new JRadioButton();
 		rdbtnStation.addActionListener(e -> {
 			panelViewReviews.setVisible(false);
-			makeViewReviewPanel("station_name");
+			if (order.equals("station_name")) {
+				if (direction.equals("ASC")) {
+					makeViewReviewPanel("station_name", "DESC");
+				} else {
+					makeViewReviewPanel("station_name", "ASC");
+				}
+			} else {
+				makeViewReviewPanel("station_name", "ASC");
+			}
 		});
 		rdbtnStation.setBounds(90, 34, 51, 23);
 		panelViewReviews.add(rdbtnStation);
@@ -389,7 +405,15 @@ public class GUI {
 		JRadioButton rdbtnShopping = new JRadioButton();
 		rdbtnShopping.addActionListener(e -> {
 			panelViewReviews.setVisible(false);
-			makeViewReviewPanel("shopping");
+			if (order.equals("shopping")) {
+				if (direction.equals("ASC")) {
+					makeViewReviewPanel("shopping", "DESC");
+				} else {
+					makeViewReviewPanel("shopping", "ASC");
+				}
+			} else {
+				makeViewReviewPanel("shopping", "ASC");
+			}
 		});
 		rdbtnShopping.setBounds(170, 34, 37, 23);
 		panelViewReviews.add(rdbtnShopping);
@@ -397,7 +421,17 @@ public class GUI {
 		JRadioButton rdbtnConnectionSpeed = new JRadioButton();
 		rdbtnConnectionSpeed.addActionListener(e -> {
 			panelViewReviews.setVisible(false);
-			makeViewReviewPanel("connection_speed");
+			if (order.equals("connection_speed")) {
+				if (direction.equals("ASC")) {
+					if (direction.equals("ASC")) {
+						makeViewReviewPanel("connection_speed", "DESC");
+					} else {
+						makeViewReviewPanel("connection_speed", "ASC");
+					}
+				}
+			} else {
+				makeViewReviewPanel("connection_speed", "ASC");
+			}
 		});
 		rdbtnConnectionSpeed.setBounds(242, 34, 28, 23);
 		panelViewReviews.add(rdbtnConnectionSpeed);
@@ -405,7 +439,15 @@ public class GUI {
 		JRadioButton rdbtnApprovalStatus = new JRadioButton();
 		rdbtnApprovalStatus.addActionListener(e -> {
 			panelViewReviews.setVisible(false);
-			makeViewReviewPanel("approval_status");
+			if (order.equals("approval_status")) {
+				if (direction.equals("ASC")) {
+					makeViewReviewPanel("approval_status", "DESC");
+				} else {
+					makeViewReviewPanel("approval_status", "ASC");
+				}
+			} else {
+				makeViewReviewPanel("approval_status", "ASC");
+			}
 		});
 		rdbtnApprovalStatus.setBounds(394, 34, 28, 23);
 		panelViewReviews.add(rdbtnApprovalStatus);
@@ -419,8 +461,8 @@ public class GUI {
 		return panelViewReviews;
 	}
 
-	private int populateReviewTable(String sort, Object[][] rData) {
-		ArrayList<Object[]> revs = Queries.getReviewsByUser(ID, sort, "passenger_ID", "rid", "station_name", "shopping",
+	private int populateReviewTable(String sort, String direction, Object[][] rData) {
+		ArrayList<Object[]> revs = Queries.getReviewsByUser(ID, sort, direction, "passenger_ID", "rid", "station_name", "shopping",
 				"connection_speed", "comment", "approval_status");
 		for (int i = 0; i < revs.size(); i++) {
 			Object[] tuple = revs.get(i); //(Integer) tuple[1]
@@ -502,7 +544,7 @@ public class GUI {
 		btnDeleteReview.addActionListener(e -> {
 			Queries.deleteReview(ID, revID);
 			panelEditReview.setVisible(false);
-			makeViewReviewPanel("rid");
+			makeViewReviewPanel("rid", "ASC");
 		});
 		btnDeleteReview.setBounds(45, 244, 117, 29);
 		panelEditReview.add(btnDeleteReview);
@@ -520,7 +562,7 @@ public class GUI {
 				int conn = Integer.parseInt(speed);
 				Queries.updateReview(ID, revID, shopp, conn, newCom, null, "Pending", d);
 				panelEditReview.setVisible(false);
-				makeViewReviewPanel("rid");
+				makeViewReviewPanel("rid", "ASC");
 			}
 		});
 		btnSaveReview.setBounds(245, 244, 117, 29);

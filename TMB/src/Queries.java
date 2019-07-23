@@ -129,13 +129,13 @@ public class Queries {
 		return TMB.executeQuery(query, attributes);
 	}
 	
-	public static ArrayList<Object[]> getReviewsByUser(String ID, String order, String... attributes) {
+	public static ArrayList<Object[]> getReviewsByUser(String ID, String order, String direction, String... attributes) {
 		String query = ""
 				+ "SELECT * "
 				+ "FROM review "
 				+ "WHERE passenger_ID = (?) "
-				+ "ORDER BY %s ASC;";
-		query = String.format(query, order);
+				+ "ORDER BY %s %s;";
+		query = String.format(query, order, direction);
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setString(1, ID);
