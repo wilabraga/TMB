@@ -112,7 +112,7 @@ WHERE line_name = (?);
 SELECT station_name, order_number
 FROM station_on_line
 WHERE line_name = (?)
-ORDER BY %s ASC;
+ORDER BY %s %s;
 
 
 17. Get User Info
@@ -163,7 +163,7 @@ VALUES ((?), (?), (?), (?), (?), (?), (?));
 SELECT *
 FROM trip
 WHERE user_ID = (?) AND card_type = (?) AND card_purchase_date_time = (?)
-ORDER BY %s ASC;
+ORDER BY %s %s;
 
 
 24. Get Trip Start Station

@@ -263,13 +263,13 @@ public class Queries {
 		return (long) result[0];
 	}
 	
-	public static ArrayList<Object[]> getStationsFromLine(String lineName, String order) {
+	public static ArrayList<Object[]> getStationsFromLine(String lineName, String order, String direction) {
 		String query = ""
 				+ "SELECT station_name, order_number "
 				+ "FROM station_on_line "
 				+ "WHERE line_name = (?) "
-				+ "ORDER BY %s ASC;";
-		query = String.format(query, order);
+				+ "ORDER BY %s %s;";
+		query = String.format(query, order, direction);
 		ArrayList<Object[]> stations = new ArrayList<>();
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
@@ -393,13 +393,13 @@ public class Queries {
 		TMB.executePreparedModification();
 	}
 	
-	public static ArrayList<Object[]> getAllTrips(String ID, String order, String... attributes) {
+	public static ArrayList<Object[]> getAllTrips(String ID, String order, String direction, String... attributes) {
 		String query = ""
 				+ "SELECT * "
 				+ "FROM trip "
 				+ "WHERE user_ID = (?) "
-				+ "ORDER BY %s ASC;";
-		query = String.format(query, order);
+				+ "ORDER BY %s %s;";
+		query = String.format(query, order, direction);
 		PreparedStatement psmt = TMB.makePreparedStatement(query);
 		try {
 			psmt.setString(1, ID);

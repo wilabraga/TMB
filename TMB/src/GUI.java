@@ -193,7 +193,7 @@ public class GUI {
 		JButton btnViewTrips = new JButton("View Trips");
 		btnViewTrips.addActionListener(e -> {
 			panelPassengerLanding.setVisible(false);
-			makeViewTripsPanel("start_date_time");
+			makeViewTripsPanel("start_date_time", "ASC");
 		});
 		btnViewTrips.setBounds(245, 119, 117, 70);
 		panelPassengerLanding.add(btnViewTrips);
@@ -728,17 +728,17 @@ public class GUI {
 		        if (val != null) {
 		        	panel.setVisible(false);
 		        	if (!isAdmin) {
-		        		makeLineSummaryPanel(val, "order_number");
+		        		makeLineSummaryPanel(val, "order_number", "ASC");
 		        	} else {
-		        		makeLineSummaryADPanel(val, "order_number");
+		        		makeLineSummaryADPanel(val, "order_number", "ASC");
 		        	}
 		        }
 			}
 		});
 	}
 	
-	private int populateStationTable(String line, String sort, Object[][] rData) {
-		ArrayList<Object[]> stations = Queries.getStationsFromLine(line, sort);
+	private int populateStationTable(String line, Object[][] rData, String sort, String direction) {
+		ArrayList<Object[]> stations = Queries.getStationsFromLine(line, sort, direction);
 		for (int i = 0; i < stations.size(); i++) {
 			Object[] tuple = stations.get(i);
 			rData[i][0] = (String) tuple[0];
@@ -747,11 +747,11 @@ public class GUI {
 		return stations.size();
 	}
 
-	private JPanel makeLineSummaryPanel(String lnum, String order) {
+	private JPanel makeLineSummaryPanel(String lnum, String order, String direction) {
 		JPanel panelLineSummary = new JPanel();
 		initPanel(panelLineSummary, "name_116847732626867");
 		
-		ArrayList<Object[]> stations = Queries.getStationsFromLine(lnum, "order_number");
+		ArrayList<Object[]> stations = Queries.getStationsFromLine(lnum, "order_number", "ASC");
 		long numstops = Queries.getNumStops(lnum);
 
 		// Labels
@@ -765,7 +765,7 @@ public class GUI {
 
 		// Table
 		Object rowData[][] = new Object[20][2];
-		int numstats = populateStationTable(lnum, order, rowData);
+		int numstats = populateStationTable(lnum, rowData, order, direction);
 		Object columnNames[] = { "Station", "Order" };
 		//BELOW MODEL MAKES TABLE NOT EDITABLE
 		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
@@ -802,7 +802,15 @@ public class GUI {
 		panelLineSummary.add(rdbtnStationLS);
 		rdbtnStationLS.addActionListener(e -> {
 			panelLineSummary.setVisible(false);
-			makeLineSummaryPanel(lnum, "line_name");
+			if (order.equals("station_name")) {
+				if (direction.equals("ASC")) {
+					makeLineSummaryPanel(lnum, "station_name", "DESC");
+				} else {
+					makeLineSummaryPanel(lnum, "station_name", "ASC");
+				}
+			} else {
+				makeLineSummaryPanel(lnum, "station_name", "ASC");
+			}
 		});
 
 		JRadioButton rdbtnOrder = new JRadioButton("");
@@ -810,7 +818,15 @@ public class GUI {
 		panelLineSummary.add(rdbtnOrder);
 		rdbtnOrder.addActionListener(e -> {
 			panelLineSummary.setVisible(false);
-			makeLineSummaryPanel(lnum, "order_number");
+			if (order.equals("order_number")) {
+				if (direction.equals("ASC")) {
+					makeLineSummaryPanel(lnum, "order_number", "DESC");
+				} else {
+					makeLineSummaryPanel(lnum, "order_number", "ASC");
+				}
+			} else {
+				makeLineSummaryPanel(lnum, "order_number", "ASC");
+			}
 		});
 
 		rdbtnLineSummary.add(rdbtnStationLS);
@@ -1066,8 +1082,8 @@ public class GUI {
 		return panelEditProfile;
 	}
 
-	private int populateTripTable(String sort, Object[][] rData) {
-		ArrayList<Object[]> trips = Queries.getAllTrips(ID, sort, "start_date_time", "end_date_time", "card_type", "from_station_name", "to_station_name");
+	private int populateTripTable(String sort, String direction, Object[][] rData) {
+		ArrayList<Object[]> trips = Queries.getAllTrips(ID, sort, direction, "start_date_time", "end_date_time", "card_type", "from_station_name", "to_station_name");
 		for (int i = 0; i < trips.size(); i++) {
 			Object[] tuple = trips.get(i);
 			rData[i][0] = (Timestamp) tuple[0];
@@ -1089,7 +1105,7 @@ public class GUI {
 		return trips.size();
 	}
 
-	private JPanel makeViewTripsPanel(String order) {
+	private JPanel makeViewTripsPanel(String order, String direction) {
 		JPanel panelViewTrips = new JPanel();
 		initPanel(panelViewTrips, "name_118708450389034");
 
@@ -1100,7 +1116,7 @@ public class GUI {
 
 		// Table
 		Object rowData[][] = new Object[20][5];
-		int numTrips = populateTripTable(order, rowData);
+		int numTrips = populateTripTable(order, direction, rowData);
 		Object columnNames[] = { "Start DateTime", "End DateTime", "CardUsed", "From", "To" };
 		//BELOW MODEL MAKES TABLE NOT EDITABLE
 		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
@@ -1114,7 +1130,15 @@ public class GUI {
 		JRadioButton rdbtnStartDate = new JRadioButton();
 		rdbtnStartDate.addActionListener(e -> {
 			panelViewTrips.setVisible(false);
-			makeViewTripsPanel("start_date_time");
+			if (order.equals("start_date_time")) {
+				if (direction.equals("ASC")) {
+					makeViewTripsPanel("start_date_time", "DESC");
+				} else {
+					makeViewTripsPanel("start_date_time", "ASC");
+				}
+			} else {
+				makeViewTripsPanel("start_date_time", "ASC");
+			}
 		});
 		rdbtnStartDate.setBounds(40,25,37,23);
 		panelViewTrips.add(rdbtnStartDate);
@@ -1122,7 +1146,15 @@ public class GUI {
 		JRadioButton rdbtnFrom = new JRadioButton();
 		rdbtnFrom.addActionListener(e -> {
 			panelViewTrips.setVisible(false);
-			makeViewTripsPanel("from_station_name");
+			if (order.equals("from_station_name")) {
+				if (direction.equals("ASC")) {
+					makeViewTripsPanel("from_station_name", "DESC");
+				} else {
+					makeViewTripsPanel("from_station_name", "ASC");
+				}
+			} else {
+				makeViewTripsPanel("from_station_name", "ASC");
+			}
 		});
 		rdbtnFrom.setBounds(285,25,37,23);
 		panelViewTrips.add(rdbtnFrom);
@@ -1130,7 +1162,15 @@ public class GUI {
 		JRadioButton rdbtnTo = new JRadioButton();
 		rdbtnTo.addActionListener(e -> {
 			panelViewTrips.setVisible(false);
-			makeViewTripsPanel("to_station_name");
+			if (order.equals("to_station_name")) {
+				if (direction.equals("ASC")) {
+					makeViewTripsPanel("to_station_name", "DESC");
+				} else {
+					makeViewTripsPanel("to_station_name", "ASC");
+				}
+			} else {
+				makeViewTripsPanel("to_station_name", "ASC");
+			}
 		});
 		rdbtnTo.setBounds(375,25,37,23);
 		panelViewTrips.add(rdbtnTo);
@@ -1328,7 +1368,7 @@ public class GUI {
 		JButton btnViewTripsAD = new JButton("View Trips");
 		btnViewTripsAD.addActionListener(e -> {
 			panelAdminLanding.setVisible(false);
-			makeViewTripsPanel("start_date_time");
+			makeViewTripsPanel("start_date_time", "ASC");
 		});
 		btnViewTripsAD.setBounds(31, 34, 117, 51);
 		panelAdminLanding.add(btnViewTripsAD);
@@ -1831,8 +1871,8 @@ public class GUI {
 		return panelAddLine;
 	}
 	
-	private int populateStationTableAD(String line, String sort, Object[][] rData) {
-		ArrayList<Object[]> stations = Queries.getStationsFromLine(line, sort);
+	private int populateStationTableAD(String line, Object[][] rData, String sort, String direction) {
+		ArrayList<Object[]> stations = Queries.getStationsFromLine(line, sort, direction);
 		for (int i = 0; i < stations.size(); i++) {
 			Object[] tuple = stations.get(i);
 			rData[i][0] = (String) tuple[0];
@@ -1844,7 +1884,7 @@ public class GUI {
 		return stations.size();
 	}
 
-	private JPanel makeLineSummaryADPanel(String line, String order) {
+	private JPanel makeLineSummaryADPanel(String line, String order, String direction) {
 		JPanel panelLineSummaryAD = new JPanel();
 		initPanel(panelLineSummaryAD, "name_120586777795513");
 		
@@ -1863,7 +1903,7 @@ public class GUI {
 
 		Object rowData[][] = new Object[20][5];
 		Object columnNames[] = { "Station", "Order", "", "", ""};
-		int numStats = populateStationTableAD(line, order, rowData);
+		int numStats = populateStationTableAD(line, rowData, order, direction);
 		//BELOW MODEL MAKES TABLE NOT EDITABLE
 		DefaultTableModel tableModel = new DefaultTableModel(rowData, columnNames) {
 		    @Override
@@ -1923,7 +1963,7 @@ public class GUI {
 					}
 				}
 			panelLineSummaryAD.setVisible(false);
-			makeLineSummaryADPanel(line, order);
+			makeLineSummaryADPanel(line, order, direction);
 			JOptionPane.showMessageDialog(panelLineSummaryAD, "Line Updated!");
 			}
 		});
@@ -1936,7 +1976,15 @@ public class GUI {
 		panelLineSummaryAD.add(rdbtnStationLineNum);
 		rdbtnStationLineNum.addActionListener(e -> {
 			panelLineSummaryAD.setVisible(false);
-			makeLineSummaryADPanel(line, "line_name");
+			if (order.equals("station_name")) {
+				if (direction.equals("ASC")) {
+					makeLineSummaryADPanel(line, "station_name", "DESC");
+				} else {
+					makeLineSummaryADPanel(line, "station_name", "ASC");
+				}
+			} else {
+				makeLineSummaryADPanel(line, "station_name", "ASC");
+			}
 		});
 
 		JRadioButton rdbtnOrderLineNum = new JRadioButton("");
@@ -1944,7 +1992,15 @@ public class GUI {
 		panelLineSummaryAD.add(rdbtnOrderLineNum);
 		rdbtnOrderLineNum.addActionListener(e -> {
 			panelLineSummaryAD.setVisible(false);
-			makeLineSummaryADPanel(line, "order_number");
+			if (order.equals("order_number")) {
+				if (direction.equals("ASC")) {
+					makeLineSummaryADPanel(line, "order_number", "DESC");
+				} else {
+					makeLineSummaryADPanel(line, "order_number", "ASC");
+				}
+			} else {
+				makeLineSummaryADPanel(line, "order_number", "ASC");
+			}
 		});
 
 		LineSummary.add(rdbtnStationLineNum);
